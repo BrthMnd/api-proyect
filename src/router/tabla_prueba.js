@@ -1,7 +1,7 @@
 const express = require('express');
 const routes = express.Router()
-
 const mysql = require('../BD/db');
+
 routes.get("/", (req, res) => {
     mysql.query('SELECT * FROM tabla_prueba', function (error, results, fields) {
         if (error) throw error;
