@@ -13,7 +13,4 @@ router.use("/", (req, res) => {
 router.use((req, res, next) => {
     res.status(404).send('Lo siento, no se encontró la página solicitada');
 });
-
-
-
 module.exports = router;
