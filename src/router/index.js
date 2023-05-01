@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const router_dePrueba = require("./tabla_prueba");
+const Propietario = require("./Propietario");
 
 router.use("/rutaPrueba", router_dePrueba);
+router.use("/propietario", Propietario);
 
 router.use("/", (req, res) => {
     res.send("Raiz")

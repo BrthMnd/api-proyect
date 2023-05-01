@@ -3,7 +3,7 @@
 1. Usuario - Brandon
 2. Servicio - Santiago
 3. Inmueble - jeni
-4. Propietario - duf
+4. Propietario - duf - Cumplido.
 5. Ubicacion - Cris
 6. Ofertas - Brandon
 
