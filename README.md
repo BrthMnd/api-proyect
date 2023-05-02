@@ -1,11 +1,11 @@
 ## Crud para
 
-1. Usuario - Brandon
+1. Usuario - Brandon - Cumplido.
 2. Servicio - Santiago
 3. Inmueble - jeni
 4. Propietario - duf - Cumplido.
 5. Ubicacion - Cris
-6. Ofertas - Brandon
+6. Ofertas - Brandon - Cumplido.
 
 ### Midlewares -> Funcionalidades
 
