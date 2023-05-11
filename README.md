@@ -7,6 +7,8 @@
 5. Ubicacion - Cris
 6. Ofertas - Brandon - Cumplido.
 
+7. -> Proveedor de servicio - Dufainer.
+
 ### Midlewares -> Funcionalidades
 
 - estados de servicio
