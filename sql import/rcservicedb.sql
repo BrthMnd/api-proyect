@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-05-2023 a las 06:48:02
+-- Tiempo de generación: 11-05-2023 a las 20:37:29
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.0.28
 
@@ -20,6 +20,36 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `rcservicedb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ofertas`
+--
+
+CREATE TABLE `ofertas` (
+  `id` int(11) NOT NULL,
+  `servicios` varchar(255) DEFAULT NULL,
+  `descripcion` text DEFAULT NULL,
+  `inmueble` varchar(255) DEFAULT NULL,
+  `OfertaEstado` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `ofertas`
+--
+
+INSERT INTO `ofertas` (`id`, `servicios`, `descripcion`, `inmueble`, `OfertaEstado`) VALUES
+(1, 'Mantenimiento', 'Hermoso apartamento en el centro de la ciudad. Incluye servicio de mantenimiento y seguridad las 24 horas.', 'Apartamento', 'Disponible'),
+(2, 'Limpieza', 'Amplia bodega en zona industrial con servicio de limpieza incluido. Ideal para almacenamiento de productos.', 'Bodega', 'Disponible'),
+(3, 'Jardinería', 'Oficina moderna y elegante con hermosa vista a la ciudad. Incluye servicio de jardinería y mantenimiento.', 'Oficina', 'Reservada'),
+(4, 'Electricidad', 'Local comercial en el corazón de la ciudad. Incluye servicio de electricidad y aire acondicionado.', 'Local', 'Vendida'),
+(5, 'Seguridad', 'Casa amplia y cómoda en zona residencial exclusiva. Incluye servicio de seguridad las 24 horas y mantenimiento.', 'Casa', 'Disponible'),
+(6, 'Mantenimiento', 'Oficina amplia y luminosa en edificio de lujo. Incluye servicio de mantenimiento y limpieza.', 'Oficina', 'Reservada'),
+(7, 'Jardinería', 'Apartamento acogedor y moderno en zona tranquila. Incluye servicio de jardinería y mantenimiento.', 'Apartamento', 'Disponible'),
+(8, 'Limpieza', 'Local comercial en zona turística de la ciudad. Incluye servicio de limpieza y electricidad.', 'Local', 'Vendida'),
+(9, 'Electricidad', 'Casa espaciosa y elegante en zona exclusiva. Incluye servicio de electricidad y seguridad las 24 horas.', 'Casa', 'Reservada'),
+(10, 'Seguridad', 'Oficina amplia y luminosa en zona empresarial. Incluye servicio de seguridad las 24 horas y mantenimiento.', 'Oficina', 'Disponible');
 
 -- --------------------------------------------------------
 
@@ -63,9 +93,42 @@ INSERT INTO `tabla_prueba` (`id`, `nombre`, `edad`) VALUES
 (1, 'Vetulio Alcaheda', 20),
 (2, 'Petronilo', 43);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `apellido` varchar(255) NOT NULL,
+  `NumeroIdentificacionPersonal` varchar(50) NOT NULL,
+  `telefono` varchar(50) DEFAULT NULL,
+  `direccion` varchar(255) DEFAULT NULL,
+  `fechaRegistro` varchar(50) NOT NULL,
+  `estadoUsuario` tinyint(1) NOT NULL DEFAULT 1,
+  `rol` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `NumeroIdentificacionPersonal`, `telefono`, `direccion`, `fechaRegistro`, `estadoUsuario`, `rol`) VALUES
+(1, 'Juan', 'Pérez', '123456789', '1234567', 'Calle 123, Ciudad', '', 1, 'Admin'),
+(2, 'María', 'González', '987654321', '7654321', 'Avenida 456, Ciudad', '', 1, 'Usuario'),
+(4, 'Karla Darlery', 'Salcedo', '128763213', '3001231234', 'Copacabana, Ciudad', '20/12/2022', 1, 'Empleado');
+
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `ofertas`
+--
+ALTER TABLE `ofertas`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `propietario`
@@ -80,14 +143,32 @@ ALTER TABLE `tabla_prueba`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `ofertas`
+--
+ALTER TABLE `ofertas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `tabla_prueba`
 --
 ALTER TABLE `tabla_prueba`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
