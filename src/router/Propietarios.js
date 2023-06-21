@@ -15,9 +15,9 @@ routes.get('/', (req, res) => {
 })
 
 
-routes.get('/:Id_propietario', (req, res) => {
-    const Id_propietario = req.params.Id_propietario
-    const sql = `SELECT * FROM propietario WHERE Id_propietario = ${Id_propietario}`
+routes.get('/:id', (req, res) => {
+    const id = req.params.id
+    const sql = `SELECT * FROM propietario WHERE id = ${id}`
 
     mysql.query(sql, (error, results) => {
         if (error) throw error
@@ -34,7 +34,7 @@ routes.post('/', (req, res) => {
     const sql = 'INSERT INTO propietario SET ?'
     const Arreglo =
         {
-            Id_propietario,
+            id,
             Numero_Identificacion_D,
             Nombres,
             Apellidos,
@@ -49,11 +49,11 @@ routes.post('/', (req, res) => {
 
 
 
-routes.put('/:Id_propietario', (req, res) => {
+routes.put('/:id', (req, res) => {
 
     const { Numero_Identificacion_D, Nombres, Apellidos, TelefonoUCelular } = req.body
-    const Id_propietario = req.params.Id_propietario
-    const sql = `UPDATE propietario SET Numero_Identificacion_D='${Numero_Identificacion_D}', Nombres = '${Nombres}', Apellidos = '${Apellidos}', TelefonoUCelular = '${TelefonoUCelular}' WHERE Id_propietario = ${Id_propietario}`
+    const id = req.params.id
+    const sql = `UPDATE propietario SET Numero_Identificacion_D='${Numero_Identificacion_D}', Nombres = '${Nombres}', Apellidos = '${Apellidos}', TelefonoUCelular = '${TelefonoUCelular}' WHERE id = ${id}`
     mysql.query(sql, error => {
         if (error) throw error
         res.send("Actualizado exitosamente")
@@ -61,9 +61,9 @@ routes.put('/:Id_propietario', (req, res) => {
 })
 
 
-routes.delete('/:Id_propietario', (req, res) => {
-    const Id_propietario = req.params.Id_propietario
-    const sql = `DELETE FROM propietario WHERE Id_propietario = ${Id_propietario}`;
+routes.delete('/:id', (req, res) => {
+    const id = req.params.id
+    const sql = `DELETE FROM propietario WHERE id = ${id}`;
 
     mysql.query(sql, error => {
         if (error) throw error

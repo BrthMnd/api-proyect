@@ -5,7 +5,7 @@ const db = require("../BD/db");
 
 
 router.get("/", (req, res) => {
-  const sql = "SELECT * FROM inmuebles";
+  const sql = "SELECT * FROM inmueble";
   db.query(sql, (error, result) => {
     if (error) {
       throw error;
@@ -16,9 +16,9 @@ router.get("/", (req, res) => {
 
 //get2
 
-router.get('/:id_inmuebles', (req, res) => {
-  const id_inmuebles = req.params.id_inmuebles
-  const sql = `SELECT * FROM inmuebles WHERE id = ${id_inmuebles}`
+router.get('/:id_inmueble', (req, res) => {
+  const id_inmueble = req.params.id_inmueble
+  const sql = `SELECT * FROM inmueble WHERE id = ${id_inmueble}`
 
   mysql.query(sql, (error, results) => {
     if (error) throw error
@@ -32,8 +32,9 @@ router.get('/:id_inmuebles', (req, res) => {
 
 // Insertar un nuevo registro.
 router.post("/", (req, res) => {
-  const { direccion, tipo, precio } = req.body;
-  const sql = `INSERT INTO inmuebles (direccion, tipo, precio) VALUES ('${direccion}', '${tipo}', '${precio}')`;
+  const { direccion, tipo, propietarioName, email, estado, documento } = req.body;
+
+  const sql = `INSERT INTO inmueble (direccion, tipo, precio) VALUES ('${direccion}', '${tipo}', '${propietarioName}','${email}', '${estado}', '${documento}')`;
   db.query(sql, (error, result) => {
     if (error) {
       throw error;
@@ -43,10 +44,10 @@ router.post("/", (req, res) => {
 });
 
 // Actualizar un registro.
-router.put("/inmuebles/:id", (req, res) => {
+router.put("/inmueble/:id", (req, res) => {
   const id = req.params.id;
-  const { direccion, tipo, precio } = req.body;
-  const sql = `UPDATE inmuebles SET direccion = '${direccion}', tipo = '${tipo}', precio = '${precio}' WHERE id = ${id}`;
+  const { direccion, tipo, propietarioName, email, estado, documento } = req.body;
+  const sql = `UPDATE inmueble SET direccion = '${direccion}', tipo = '${tipo}', precio = '${precio}', propietarioName = '${propietarioName}', email = '${email}', estado = '${estado}', documento = '${documento}', WHERE id = ${id}`;
   db.query(sql, (error, result) => {
     if (error) {
       throw error;
@@ -58,7 +59,7 @@ router.put("/inmuebles/:id", (req, res) => {
 // Eliminar un registro.
 router.delete("/:id", (req, res) => {
   const id = req.params.id;
-  const sql = `DELETE FROM inmuebles WHERE id = ${id}`;
+  const sql = `DELETE FROM inmueble WHERE id = ${id}`;
   db.query(sql, (error, result) => {
     if (error) {
       throw error;
