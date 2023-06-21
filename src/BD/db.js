@@ -7,6 +7,12 @@ const connection = mysql.createConnection({
     database: 'bfkcx6cfxz485dhjdtev',
     password: 'OKKoynkYWTwMVlNzNcJ'
 });
+// const connection = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     database: 'rcservicedb',
+//     password: ''
+// });
 
 connection.connect((error) => {
     if (error) {
