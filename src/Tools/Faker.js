@@ -18,7 +18,7 @@ const dataFaker = async () => {
     await Arreglo.push(data);
   }
   //   console.log(Arreglo);
-  //   subirDatosfalsos(Arreglo);
+  subirDatosfalsos(Arreglo);
 };
 
 const subirDatosfalsos = async (data) => {
@@ -48,5 +48,5 @@ const borrarDatosFalsos = async () => {
   console.log(`Se han eliminado ${result.length} documentos`);
 };
 
-// dataFaker();
+dataFaker();
 // borrarDatosFalsos();

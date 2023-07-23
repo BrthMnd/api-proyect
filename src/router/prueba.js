@@ -6,6 +6,7 @@ const routes = express.Router();
 
 routes.get("/", async (req, res, next) => {
   const collection = "prueba";
+
   try {
     client = await connectDB(collection);
     const result = await client.find({}).toArray();
@@ -14,6 +15,7 @@ routes.get("/", async (req, res, next) => {
     client.close;
   }
 });
+
 routes.get("/:id", async (req, res, next) => {
   const id = req.params.id;
   console.log(id + "<- id");

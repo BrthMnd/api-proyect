@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 
 async function connectDB(collection) {
-  const Db = "rcservice";
+  const Db = "rcservice"; // <- Base de datos
   const uri =
     "mongodb+srv://rcservicewebcontrol:rcservice2023@db.tpg4eln.mongodb.net/?retryWrites=true&w=majority";
 
@@ -9,12 +9,14 @@ async function connectDB(collection) {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   };
+
   const client = new MongoClient(uri, options);
   try {
     // Conectar a la base de datos
     await client.connect();
     console.log("Conexión exitosa a la base de datos");
-    return client.db(Db).collection(collection);
+
+    return client.db(Db).collection(collection); // <-
   } catch (error) {
     console.error("Error al conectar a la base de datos:", error);
   }
