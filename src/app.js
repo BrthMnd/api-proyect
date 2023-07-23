@@ -1,22 +1,26 @@
 // * Require
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
 const app = express();
-const route = require('./router/index');
-const port = 3030;
 const bodyParser = require("body-parser");
-// const path = require("path");
 
+const route = require("./router/index");
+const port = 3030;
+
+// const path = require("path");
 
 // * Configuration
 app.use(bodyParser.json());
-app.use((req,res,next)=>{
-    res.append('Access-Control-Allow-Origin', ['*']);
-    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    next();
-})
+app.use((req, res, next) => {
+  res.append("Access-Control-Allow-Origin", ["*"]);
+  res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+  next();
+});
 // * Routes
-app.use('/', route);
 
+app.use("/", route);
 
 // * Listen -> Port
-app.listen(port, () => { console.log("localhost:" + port) })
+app.listen(port, () => {
+  console.log("localhost:" + port);
+});

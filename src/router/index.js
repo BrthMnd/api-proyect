@@ -1,16 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const Propietario = require("./Propietarios");
-const Oferta = require("./Ofertas");
-const Usuario = require("./Usuarios");
-const Inmueble = require("./inmuebles");
+const Prueba = require("./prueba.js");
 
-router.use("/propietario", Propietario);
-router.use("/oferta", Oferta);
-router.use("/usuario", Usuario);
-router.use("/inmueble", Inmueble);
-
-
+router.use("/prueba", Prueba);
+// router.use("/oferta", Oferta);
+// router.use("/usuario", Usuario);
+// router.use("/inmueble", Inmueble);
 
 module.exports = router;
