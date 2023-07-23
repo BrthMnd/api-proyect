@@ -16,11 +16,11 @@ app.use((req, res, next) => {
   res.append("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
   next();
 });
-// * Routes
 
+// * Routes
 app.use("/", route);
 
 // * Listen -> Port
 app.listen(port, () => {
-  console.log("localhost:" + port);
+  console.log(`https://localhost:${port}`);
 });
