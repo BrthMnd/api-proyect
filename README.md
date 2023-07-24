@@ -29,3 +29,7 @@ bool EstadoUsuario
 varchar Rol
 
 - Buen empaquetado -> buena construcion del codigo en sus respectivos archivos y exportarlos e importarlos
+
+
+usuario 
+contrasela incrictada, mayus min,  

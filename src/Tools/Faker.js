@@ -1,7 +1,7 @@
 const faker = require("faker");
 const { connectDB } = require("../database/db");
 
-// Codigos reutilizables 🔄
+// Codigos reutilizables 🔄 
 const pruebaDatos = () => {
   data = {
     name: faker.name.firstName(),
