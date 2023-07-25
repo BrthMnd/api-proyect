@@ -1,11 +1,11 @@
 ## Crud para
 
-1. Usuario - Brandon - Cumplido.
-2. Servicio - Santiago
-3. Inmueble - jeni
-4. Propietario - duf - Cumplido.
+1. Usuario - Brandon -
+2. Servicio - Santiago -
+3. Inmueble - jeni -
+4. Propietario - duf -
 5. Ubicacion - Cris
-6. Ofertas - Brandon - Cumplido.
+6. Ofertas - Brandon -
 
 7. -> Proveedor de servicio - Dufainer.
 
@@ -30,6 +30,5 @@ varchar Rol
 
 - Buen empaquetado -> buena construcion del codigo en sus respectivos archivos y exportarlos e importarlos
 
-
-usuario 
-contrasela incrictada, mayus min,  
+usuario
+contrasela incrictada, mayus min,
