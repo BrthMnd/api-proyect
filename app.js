@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
-const route = require("./router/index"); // <- Rutas
+const route = require("./src/router/index"); // <- Rutas
 
 const port = 3030;
 
@@ -19,9 +19,7 @@ app.use((req, res, next) => {
 });
 
 // * Routes
-app.use("/", route);
+app.use("/api", route);
 
-// * Listen -> Port
-app.listen(port, () => {
-  console.log(`https://localhost:${port}`);
-});
+module.exports = app
+

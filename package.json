@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/app.js",
+    "dev": "node index.js",
     "mon": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tools": "node src/Tools/Faker.js"
