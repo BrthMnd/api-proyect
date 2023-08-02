@@ -1,26 +1,41 @@
 const { MongoClient } = require("mongodb");
 
-async function connectDB(collection) {
-  const Db = "rcservice"; // <- Base de datos
-  const uri =
-    "mongodb+srv://rcservicewebcontrol:rcservice2023@db.tpg4eln.mongodb.net/?retryWrites=true&w=majority";
-
-  const options = {
+class DatabaseConnector {
+  options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   };
+  constructor(options) {
+    this.database = process.env.DATABASE_NAME;
+    this.uri = process.env.DATABASE_URL;
+    this.options = options;
+    this.client = new MongoClient(this.uri, this.options);
+  }
 
-  const client = new MongoClient(uri, options);
-  try {
-    // Conectar a la base de datos
-    await client.connect();
-    console.log("Conexión exitosa a la base de datos");
+  async connect() {
+    try {
+      await this.client.connect();
+      console.log("Conexión exitosa a la base de datos");
+      this.db = this.client.db(this.database);
+    } catch (error) {
+      console.error("Error al conectar a la base de datos:", error);
+      throw error;
+    }
+  }
 
-    return client.db(Db).collection(collection); // <-
-  } catch (error) {
-    console.error("Error al conectar a la base de datos:", error);
+  getCollection(collection) {
+    if (!this.db) {
+      throw new Error(
+        "Debes conectar a la base de datos primero antes de acceder a las colecciones"
+      );
+    }
+    return this.db.collection(collection);
+  }
+
+  async close() {
+    await this.client.close;
+    console.log("Conexión a la base de datos cerrada");
   }
 }
-
 // Llamar a la función para conectarse a la base de datos
-module.exports = { connectDB };
+module.exports = { DatabaseConnector };

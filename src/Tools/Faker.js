@@ -1,7 +1,7 @@
 const faker = require("faker");
-const { connectDB } = require("../database/db");
+const { DatabaseConnector } = require("../database/db");
 
-// Codigos reutilizables 🔄 
+// Codigos reutilizables 🔄
 const pruebaDatos = () => {
   data = {
     name: faker.name.firstName(),
@@ -25,7 +25,7 @@ const subirDatosfalsos = async (data) => {
   // WARNING ⬇️
   const collection_actual = "prueba";
   // WARNING ⬆️
-  const client = await connectDB(collection_actual);
+  const client = await DatabaseConnector(collection_actual);
   const result = await client.insertMany(data);
   if (result) {
     console.log("Datos Subidos con Exit ✅");
@@ -36,7 +36,7 @@ const subirDatosfalsos = async (data) => {
 // WARNING ⚠️ extremo peligro ⬇️
 const borrarDatosFalsos = async () => {
   const collection_actual = "prueba";
-  const client = await connectDB(collection_actual);
+  const client = await DatabaseConnector(collection_actual);
   const result = await client.aggregate([{ $sample: { size: 10 } }]).toArray();
   let i = 1;
 

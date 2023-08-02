@@ -3,12 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-
 const route = require("./src/router/index"); // <- Rutas
-
-const port = 3030;
-
-// const path = require("path");
 
 // * Configuration
 app.use(bodyParser.json());
@@ -21,5 +16,4 @@ app.use((req, res, next) => {
 // * Routes
 app.use("/api", route);
 
-module.exports = app
-
+module.exports = app;

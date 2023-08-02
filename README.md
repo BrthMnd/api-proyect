@@ -1,13 +1,11 @@
 ## Crud para
 
-1. Usuario - Brandon -
-2. Servicio - Santiago -
-3. Inmueble - jeni -
-4. Propietario - duf -
-5. Ubicacion - Cris
-6. Ofertas - Brandon -
+1. Ofertas - Brandon, Cristian
+2. usuarios - Santiago -
+3. Servicios,Provedoores - jeni -
+4. Inmueble - duf -
 
-7. -> Proveedor de servicio - Dufainer.
+5. -> Proveedor de servicio - Dufainer.
 
 ### Midlewares -> Funcionalidades
 
