@@ -1,52 +1,20 @@
-const faker = require("faker");
+require("dotenv").config();
+
 const { DatabaseConnector } = require("../database/db");
+const { middlewaresUpData, middlewaresDeleteData } = require("./middlewares");
+const { pruebaDatos } = require("./modelsBlock.Offers");
 
-// Codigos reutilizables 🔄
-const pruebaDatos = () => {
-  data = {
-    name: faker.name.firstName(),
-    lastname: faker.name.lastName(),
-  };
-  return data;
-};
+const db = new DatabaseConnector();
 
-//faker
-const dataFaker = async () => {
+const executeFaker = async () => {
   let Arreglo = [];
-  for (let i = 0; i < 50; i++) {
-    let data = pruebaDatos();
+  for (let i = 0; i < 1; i++) {
+    let { data } = pruebaDatos();
     await Arreglo.push(data);
   }
-  //   console.log(Arreglo);
-  subirDatosfalsos(Arreglo);
+  let { collection } = pruebaDatos();
+  middlewaresUpData(Arreglo, collection, db);
 };
 
-const subirDatosfalsos = async (data) => {
-  // WARNING ⬇️
-  const collection_actual = "prueba";
-  // WARNING ⬆️
-  const client = await DatabaseConnector(collection_actual);
-  const result = await client.insertMany(data);
-  if (result) {
-    console.log("Datos Subidos con Exit ✅");
-  } else {
-    console.error("no lograron subirse los datos ❌");
-  }
-};
-// WARNING ⚠️ extremo peligro ⬇️
-const borrarDatosFalsos = async () => {
-  const collection_actual = "prueba";
-  const client = await DatabaseConnector(collection_actual);
-  const result = await client.aggregate([{ $sample: { size: 10 } }]).toArray();
-  let i = 1;
-
-  for (let documento of result) {
-    console.log(i);
-    await client.deleteOne({ _id: documento._id });
-    i++;
-  }
-  console.log(`Se han eliminado ${result.length} documentos`);
-};
-
-dataFaker();
-// borrarDatosFalsos();
+executeFaker();
+// middlewaresDeleteData("status", db);
