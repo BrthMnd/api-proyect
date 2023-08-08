@@ -1,36 +1,35 @@
 const { ObjectId } = require("mongodb");
 const { DatabaseConnector } = require("../config/db");
 const { PruebaModels } = require("../models/prueba.models");
-const db = new DatabaseConnector();
+
 class pruebaController {
   async getPrueba(req, res) {
+    const db = new DatabaseConnector();
     try {
       await db.connect();
       const result = await PruebaModels.find({}).exec();
-      console.log(result);
 
       res.status(200).send(result);
     } catch (error) {
       console.log(error);
     } finally {
-      await db.close();
     }
   }
 
   async getIdPrueba(req, res, next) {
-    const id = req.params.id;
     const db = new DatabaseConnector();
-    const collection = "prueba";
+    const id = req.params.id;
+
     try {
       await db.connect();
-      const client = await db.getCollection(collection);
-      const result = await client.find({ _id: new ObjectId(id) }).toArray();
+      const result = await PruebaModels.find({
+        _id: new ObjectId(id),
+      });
 
-      res.send(result);
+      res.status(200).send(result);
     } catch (error) {
-      console.log(error);
+      console.log("eeeror" + error);
     } finally {
-      db.close();
     }
   }
   async postPrueba(req, res) {
