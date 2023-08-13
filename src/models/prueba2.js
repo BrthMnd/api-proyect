@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const { PruebaModels } = require("./prueba.models");
 console.log(PruebaModels.modelName);
+
 const Prueba2 = new Schema(
   {
     firstname: { type: String, required: true },

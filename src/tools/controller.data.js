@@ -7,6 +7,10 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+
+// cambia el modelo segun lo quieras eliminar 🔽 OJO modelo sin parentesis
+// para que pueda funcionar tanto en el require como en model que se envia
+// en la funcion deletedata()
 const models = Prueba2Models;
 
 console.log(`

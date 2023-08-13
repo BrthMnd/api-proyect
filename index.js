@@ -4,12 +4,15 @@ const { DatabaseConnector } = require("./src/config/db");
 const db = new DatabaseConnector();
 const PORT = process.env.PORT || 3002;
 
-// * Listen -> Port
+
 const server = app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`);
 });
 
-process.on("exit", () => {
-  db.close();
-  console.log("hola");
+process.on('SIGINT', () => {
+  console.log('Proceso terminado');
+  server.close(() => {
+    console.log('Servidor cerrado.');
+    process.exit(0);
+  });
 });
