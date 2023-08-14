@@ -1,6 +1,6 @@
 const { Prueba2Models } = require("../models/prueba2.js");
 const { DatabaseConnector } = require("../config/db");
-const db = new DatabaseConnector();
+
 const { deleteData } = require("./delete.data");
 const readline = require("readline");
 const rl = readline.createInterface({

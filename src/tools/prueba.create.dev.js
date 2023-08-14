@@ -1,7 +1,6 @@
 const faker = require("faker");
 const { PruebaModels } = require("../models/prueba.models");
 const { DatabaseConnector } = require("../config/db");
-const db = new DatabaseConnector();
 
 const CrearPrueba = async () => {
   try {

@@ -1,23 +1,19 @@
 const { ObjectId } = require("mongodb");
-const { DatabaseConnector } = require("../config/db");
 const { PruebaModels } = require("../models/prueba.models");
 
 class pruebaController {
-  async getPrueba(req, res) {
-    const db = new DatabaseConnector();
-    try {
-      await db.connect();
-      const result = await PruebaModels.find({}).exec();
-
-      res.status(200).send(result);
-    } catch (error) {
-      console.log(error);
-    } finally {
-    }
+  getPrueba(req, res) {
+    User.find()
+      .then((users) => {
+        res.status(200).json(users);
+      })
+      .catch((error) => {
+        res.status(500).json({ error: "Error al obtener usuarios" });
+      })
+      .finally();
   }
 
   async getIdPrueba(req, res, next) {
-    const db = new DatabaseConnector();
     const id = req.params.id;
 
     try {
@@ -34,7 +30,7 @@ class pruebaController {
   }
   async postPrueba(req, res) {
     const { name, lastname } = req.body;
-    const db = new DatabaseConnector();
+
     const collection = "prueba";
     try {
       await db.connect();
@@ -59,7 +55,7 @@ class pruebaController {
   async putPrueba(req, res, next) {
     const { name, lastname } = req.body;
     const id = req.params.id;
-    const db = new DatabaseConnector();
+
     const collection = "prueba";
     try {
       await db.connect();
@@ -83,7 +79,7 @@ class pruebaController {
   }
   async deletePrueba(req, res, next) {
     const id = req.params.id;
-    const db = new DatabaseConnector();
+
     const collection = "prueba";
     try {
       await db.connect();
