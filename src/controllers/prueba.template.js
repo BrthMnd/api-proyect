@@ -4,27 +4,6 @@ const { PruebaModels } = require("../models/prueba.models");
 class pruebaController {
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   async getPrueba(req, res) {
     const db = new DatabaseConnector();
     try {
