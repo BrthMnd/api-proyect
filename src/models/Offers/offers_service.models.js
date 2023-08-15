@@ -9,9 +9,9 @@ let ServiceOffersSchema = new Schema({
 });
 
 let ServiceOffersModel = mongoose.model(
-  "relationsOffersService",
+  "Relationship_OffersService",
   ServiceOffersSchema,
-  "relationsOffersService"
+  "Relationship_OffersService"
 );
 
 module.exports = { ServiceOffersModel };

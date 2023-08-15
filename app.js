@@ -2,7 +2,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const route = require("./src/routes/index.routes"); // <- Rutas
+const route = require("./src/routes/"); // <- Rutas
 const { connect, disconnect, notFound } = require("./src/middlewares");
 
 // * Configuration
