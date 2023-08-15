@@ -1,12 +1,16 @@
 const { Prueba2Models } = require("../models/prueba2.js");
 const { DatabaseConnector } = require("../config/db");
-const db = new DatabaseConnector();
+
 const { deleteData } = require("./delete.data");
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+
+// cambia el modelo segun lo quieras eliminar 🔽 OJO modelo sin parentesis
+// para que pueda funcionar tanto en el require como en model que se envia
+// en la funcion deletedata()
 const models = Prueba2Models;
 
 console.log(`

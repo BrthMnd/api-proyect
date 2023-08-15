@@ -1,5 +1,4 @@
 const { ObjectId } = require("mongodb");
-const { DatabaseConnector } = require("../config/db");
 const { PruebaModels } = require("../models/prueba.models");
 
 class pruebaController {
@@ -58,7 +57,6 @@ class pruebaController {
   
 
   async getIdPrueba(req, res, next) {
-    const db = new DatabaseConnector();
     const id = req.params.id;
 
     try {
@@ -75,7 +73,7 @@ class pruebaController {
   }
   async postPrueba(req, res) {
     const { name, lastname } = req.body;
-    const db = new DatabaseConnector();
+
     const collection = "prueba";
     try {
       await db.connect();
@@ -100,7 +98,7 @@ class pruebaController {
   async putPrueba(req, res, next) {
     const { name, lastname } = req.body;
     const id = req.params.id;
-    const db = new DatabaseConnector();
+
     const collection = "prueba";
     try {
       await db.connect();
@@ -124,7 +122,7 @@ class pruebaController {
   }
   async deletePrueba(req, res, next) {
     const id = req.params.id;
-    const db = new DatabaseConnector();
+
     const collection = "prueba";
     try {
       await db.connect();

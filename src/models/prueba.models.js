@@ -3,20 +3,19 @@ const Schema = mongoose.Schema;
 
 const PruebaSchema = new Schema(
   {
-    firstname: { type: String, required: true },
-    lastname: { type: String, required: true },
-    email: { type: String, required: true },
-    age: { type: Number, required: true },
+    firstname: { type: String },
+    lastname: { type: String },
+    email: { type: String },
+    age: { type: Number },
     address: { type: String },
     phone: { type: String },
-    createdAt: { type: Date, default: Date.now },
   },
   {
     versionKey: false, // quita el __v: 0
   }
 );
 
-const PruebaModels = mongoose.model("Prueba", PruebaSchema);
+const PruebaModels = mongoose.model("Prueba", PruebaSchema, "pruebas");
 
 module.exports = {
   PruebaModels,

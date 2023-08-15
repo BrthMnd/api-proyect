@@ -1,25 +1,32 @@
 const mongoose = require("mongoose");
-
 class DatabaseConnector {
-  connect() {
-    mongoose.connect(
-      "mongodb+srv://rcservicewebcontrol:rcservice2023@db.tpg4eln.mongodb.net/rcservice?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
-
-    const db = mongoose.connection;
-    db.on("error", console.error.bind(console, "*** connection error:"));
-    db.once("open", () => {
-      console.log("*** Connected to the database ***");
-    });
+  connect(req, res, next) {
+    mongoose
+      .connect(
+        "mongodb+srv://rcservicewebcontrol:rcservice2023@db.tpg4eln.mongodb.net/rcservice?retryWrites=true&w=majority",
+        {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        }
+      )
+      .then(() => {
+        console.log("\n*** Conexión a la base de datos establecida. ***\n\n");
+      })
+      .catch((error) => {
+        console.error("Error al conectar a la base de datos:", error);
+        res.status(500).send({ error: "Error en el servidor" });
+      })
+      .finally(() => next()); // continuar con la solicitud
   }
 
-  close() {
-    mongoose.disconnect();
-    console.log("*** Connection to the db close ***");
+  close(req, res, next) {
+    try {
+      mongoose.connection.close();
+      console.log("Cerrado");
+    } catch (error) {
+      console.error("Error al cerrar la conexión a la base de datos:", error);
+      res.status(500).send({ error: "Error en el servidor" });
+    }
   }
 }
 
