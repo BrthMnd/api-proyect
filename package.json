@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/app.js",
+    "dev": "node index.js",
     "mon": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tools": "node src/Tools/Faker.js"
+    "create-prueba": "node src/tools/prueba.create.dev.js",
+    "create-prueba2": "node src/tools/prueba2.create.dev.js",
+    "delete": "node src/tools/controller.data.js"
   },
   "author": "Brandon Quintero",
   "license": "ISC",
@@ -16,7 +18,9 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "faker": "^5.5.3",
+    "lodash": "^4.17.21",
     "mongodb": "^5.7.0",
+    "mongoose": "^7.4.2",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.22"
   }
