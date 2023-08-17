@@ -1,10 +1,6 @@
 ## Crud para
 
-<<<<<<< HEAD
 1. Ofertas - Brandon, Cristian 👌
-=======
-1. Ofertas - Brandon, Cristian -> 👌
->>>>>>> Brandon
 2. usuarios - Santiago -
 3. Servicios,Provedoores - jeni -
 4. Inmueble - duf -
