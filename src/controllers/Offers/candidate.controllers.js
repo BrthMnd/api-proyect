@@ -12,8 +12,7 @@ class CandidateControllers {
       })
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Estados" });
-      })
-      .finally(() => next());
+      });
   }
 
   postStatus(req, res, next) {
