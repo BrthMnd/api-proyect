@@ -1,7 +1,7 @@
 const route = require("express").Router();
 const {
   propietarioController,
-} = require("../../controllers/Propietarios/propietario.controller");
+} = require("../../controllers/Inmuebles/propietario.controller");
 
 const Propietario = new propietarioController();
 

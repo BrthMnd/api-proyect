@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const { PropietarioModels } = require("../Propietario/propietario.models");
-const { EncargadoModels } = require("../Encargado/encargado.models");
+const { PropietarioModels } = require("./propietario.models");
+const { EncargadoModels } = require("./encargado.models");
 
 const InmuebleSchema = new Schema(
   {
@@ -24,7 +24,7 @@ const InmuebleSchema = new Schema(
     versionKey: false,
   }
 );
-const InmuebleModels = mongoose.model("Inmuebles", InmuebleSchema, "inmubles");
+const InmuebleModels = mongoose.model("Inmuebles", InmuebleSchema, "inmuebles"); // 
 
 module.exports = {
   InmuebleModels,

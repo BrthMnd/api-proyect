@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb");
-const { EncargadoModels } = require("../../models/Encargado/encargado.models");
+const { EncargadoModels } = require("../../models/Inmueble/encargado.models");
 
 class EncargadoControllers {
   getEncargado(req, res, next) {

@@ -2,7 +2,7 @@ const { ObjectId } = require("mongodb");
 
 const {
   PropietarioModels,
-} = require("../../models/Propietario/propietario.models");
+} = require("../../models/Inmueble/propietario.models");
 
 class propietarioController {
   getPropietario(req, res, next) {

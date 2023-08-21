@@ -2,7 +2,7 @@ const route = require("express").Router();
 
 const {
   EncargadoControllers,
-} = require("../../controllers/Encargados/encargado.controllers");
+} = require("../../controllers/Inmuebles/encargado.controllers");
 
 const Encargado = new EncargadoControllers();
 
