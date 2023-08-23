@@ -10,9 +10,9 @@ const { CORS } = require("./src/config/cors.config");
 app.use(bodyParser.json());
 app.use(CORS);
 
-//middlewares
+//middleware
 app.use(connect);
-app.use("/api", route);
+app.use("/api", route); 
 app.use(disconnect);
 app.use(notFound);
 
