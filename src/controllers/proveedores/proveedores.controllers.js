@@ -55,7 +55,7 @@ class ProveedoresController {
       console.log(error);
       res.send(error);
     } finally {
-      db.close();
+    
     }
   }
 
