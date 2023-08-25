@@ -38,23 +38,19 @@ class ServiciosController {
 
 //   ______________________________________________________________________________________
 
-  async postServicio(req, res, next) {
-    const collection = "servicio";
-    try {
-      const result = new ServicioModels(req.body);
-      result.save()
+async postServicio(req, res, next) {
+  try {
+    const result = new ServicioModels(req.body);
+    await result.save(); 
 
-      if (result) {
-        res.status(200).json({ message: "Documento creado exitosamente" });
-      } else {
-        res.status(500).json({ error: "Error al crear el documento" });
-      }
-    } catch (error) {
-      console.log(error);
-      res.send(error);
-    } finally {
-    }
+    res.status(200).json({ message: "Documento creado exitosamente" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error al crear el documento" });
+  } finally {
+    next();
   }
+}
 
 //______________________________________________________________________________________
 
@@ -62,9 +58,8 @@ class ServiciosController {
   async putServicio(req, res, next) {
     const { Nombre_Servicio, Descripcion, estado, Categoria_Servicios } = req.body;
     const id = req.params.id;
-    const collection = "servicio";
     try {
-      const result = await ServicioModels.updateOne(
+      const result = await ServicioModels(
         { _id: new ObjectId(id) },
         {
           $set: {
@@ -83,7 +78,7 @@ class ServiciosController {
     } catch (error) {
       console.log(error);
     } finally {
-      db.close();
+      next()
     }
   }
 
@@ -92,7 +87,6 @@ class ServiciosController {
 
   async deleteServicio(req, res, next) {
     const id = req.params.id;
-    const collection = "servicio";
     try {
       const result = await ServicioModels.deleteOne({ _id: new ObjectId(id) });
 
@@ -104,7 +98,7 @@ class ServiciosController {
     } catch (error) {
       console.log(error);
     } finally {
-      db.close();
+      next()
     }
   }
 }

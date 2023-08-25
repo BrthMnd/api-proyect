@@ -5,7 +5,7 @@ const categoriaServicioSchema = new Schema({
   Nombre_Categoria: { type: String },
   Descripcion: String,
   Fecha_Creacion: { type: Date, default: Date.now },
-  Estado: { type: Boolean, default: true }
+  Estado: { type: Boolean }
 });
 
 const CategoriaServicio = model('CategoriaServicio', categoriaServicioSchema);

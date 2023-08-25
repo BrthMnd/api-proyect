@@ -17,7 +17,6 @@ class CalificacionesController {
 
   async getCalificacionPorId(req, res, next) {
     const id = req.params.id;
-
     try {
       const result = await CalificacionModel.find({
         _id: new ObjectId(id),
@@ -32,12 +31,11 @@ class CalificacionesController {
     }
   }
 
-  async postCalificacion(req, res,next) {
+  async postCalificacion(req, res, next) {
     try {
       const result = new CalificacionModel(req.body);
-      result.save()
-
-
+      await result.save(); 
+  
       if (result) {
         res.status(200).json({ message: "Calificación creada exitosamente" });
       } else {
@@ -47,9 +45,10 @@ class CalificacionesController {
       console.log(error);
       res.status(500).json({ error: "Error al crear la calificación" });
     } finally {
-      next(); 
+      next();
     }
   }
+  
 
   async putCalificacion(req, res, next) {
     const { Comentarios, CalificacionesFloat } = req.body;
@@ -93,7 +92,7 @@ class CalificacionesController {
       console.log(error);
       res.status(500).send({ error: "Error al eliminar la calificación" });
     } finally {
-      db.close();
+      next();
     }
   }
 }

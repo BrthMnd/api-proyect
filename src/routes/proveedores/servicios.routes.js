@@ -6,7 +6,7 @@ const Servicios = new ServiciosController()
 router.get('/', Servicios.getServicios.bind())
 router.get('/:id', Servicios.getServicioPorId.bind())
 router.post('/',Servicios.postServicio.bind())
-router.delete('/:id',Servicios.putServicio.bind())
-router.put('/:id',Servicios.deleteServicio.bind())
+router.put('/:id',Servicios.putServicio.bind())
+router.delete('/:id',Servicios.deleteServicio.bind())
 
 module.exports = router

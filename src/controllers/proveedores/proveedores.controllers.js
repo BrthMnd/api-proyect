@@ -20,7 +20,7 @@ class ProveedoresController {
     const id = req.params.id;
 
     try {
-      const result = await ProveedorModels.find({
+      const result = await ProveedoresModels.find({
         _id: new ObjectId(id),
       });
 
@@ -34,31 +34,25 @@ class ProveedoresController {
 
     //_____________________________________________________________________________________
 
-  async postProveedor(req, res) {
-    const { Nombre, Apellido, Telefono, Email, Direccion } = req.body;
-    const collection = "proveedor";
-    try {
-      const result = await ProveedoresModels.insertOne({
-        Nombre: Nombre,
-        Apellido: Apellido,
-        Telefono: Telefono,
-        Email: Email,
-        Direccion: Direccion
-      });
-
-      if (result) {
-        res.status(200).json({ message: "Documento creado exitosamente" });
-      } else {
-        res.status(500).json({ error: "Error al crear el documento" });
-      }
-    } catch (error) {
-      console.log(error);
-      res.send(error);
-    } finally {
+    async postProveedor(req, res) {
+      const { Nombre, Apellido, Telefono, Email, Direccion } = req.body;
+      try {
+        const proveedor = new ProveedoresModels({
+          Nombre: Nombre,
+          Apellido: Apellido,
+          Telefono: Telefono,
+          Email: Email,
+          Direccion: Direccion,
+        });
     
+        await proveedor.save(); 
+    
+        res.status(200).json({ message: "Proveedor creado exitosamente" });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Error al crear el proveedor" });
+      }
     }
-  }
-
 
 //_____________________________________________________________________________________
 
@@ -87,7 +81,7 @@ class ProveedoresController {
     } catch (error) {
       console.log(error);
     } finally {
-      db.close();
+      next()
     }
   }
 
@@ -107,7 +101,7 @@ class ProveedoresController {
     } catch (error) {
       console.log(error);
     } finally {
-      db.close();
+      next()
     }
   }
 }
