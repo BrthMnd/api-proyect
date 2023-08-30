@@ -1,36 +1,25 @@
-## Crud para
+# Notas de Brandon
 
-<<<<<<< HEAD
-1. Ofertas - Brandon, Cristian 👌
-=======
-1. Ofertas - Brandon, Cristian -> 👌
->>>>>>> Brandon
-2. usuarios - Santiago -
-3. Servicios,Provedoores - jeni -
-4. Inmueble - duf -
+---
 
-5. -> Proveedor de servicio - Dufainer.
+## commit que estoy revisando
 
-### Midlewares -> Funcionalidades
+Author: jeni bejarano <jenimena0708@gmail.com>
+Date: Wed Aug 23 15:39:35 2023 -0500
 
-- estados de servicio
+    ver servicios
 
-### Requisitos
+---
 
-- Enviar al chat privado de Brandon el analisis de el modulo que le toco, Ejemplo: verifique con su criterio que si su modulo le hace falta colocar o eliminar una propiedad tipo; Nombre, Fecha, Edad, etc.
+## puntos a arreglar
 
-Usuario
-primary key id
-varchar nombre
-varchar apellido
-varchar NumeroIdentificacionPersonal
-varchar Telefono
-varchar Direccion
-varchar fechaRegistro
-bool EstadoUsuario
-varchar Rol
+- Quitar los **db** que aun aparecen en en todos los controladores menos **servicio**.
+- arreglar todas las funcionalidades de los controladores teniendo en cuenta como lo hice en el controlador de **servicio**
 
-- Buen empaquetado -> buena construcion del codigo en sus respectivos archivos y exportarlos e importarlos
+---
 
-usuario
-contrasela incrictada, mayus min,
+## Ultimos detalles
+
+recomiendo quitar todos los _require:true_ de los modelos.
+
+> Att:_Brandon_

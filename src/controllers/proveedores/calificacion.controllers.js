@@ -1,11 +1,12 @@
 const { ObjectId } = require("mongodb");
-const { CalificacionModel } = require("../../models/Proveedores/calificacion.models");
+const {
+  CalificacionModel,
+} = require("../../models/Proveedores/calificacion.models");
 
 class CalificacionesController {
   async getCalificaciones(req, res) {
     //const db = new DatabaseConnector();
     try {
-      await db.connect();
       const result = await CalificacionModel.find({}).exec();
 
       res.status(200).send(result);
@@ -69,11 +70,13 @@ class CalificacionesController {
           $set: {
             Comentarios: Comentarios,
             CalificacionesFloat: CalificacionesFloat,
-          }
+          },
         }
       );
       if (result.modifiedCount === 1) {
-        res.status(200).json({ message: "Calificación actualizada exitosamente" });
+        res
+          .status(200)
+          .json({ message: "Calificación actualizada exitosamente" });
       } else {
         res.status(500).json({ error: "Error al actualizar la calificación" });
       }
@@ -89,7 +92,9 @@ class CalificacionesController {
     const id = req.params.id;
     const collection = "calificacion";
     try {
-      const result = await CalificacionModel.deleteOne({ _id: new ObjectId(id) });
+      const result = await CalificacionModel.deleteOne({
+        _id: new ObjectId(id),
+      });
 
       if (result) {
         res.status(200).send({ message: "Calificación borrada con éxito" });
@@ -106,5 +111,5 @@ class CalificacionesController {
 }
 
 module.exports = {
-    CalificacionesController
+  CalificacionesController,
 };

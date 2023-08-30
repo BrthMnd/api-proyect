@@ -1,6 +1,5 @@
 const router = require("express").Router();
 
-
 const Calificacion = require("./calificacion.routes");
 const Categoria = require("./categoria.routes");
 const Proveedor = require("./proveedor.routes");
@@ -16,7 +15,5 @@ router.use("/proveedor", Proveedor);
 router.use("/proveedores", Proveedores);
 
 router.use("/servicios", Servicios);
-
-
 
 module.exports = router;

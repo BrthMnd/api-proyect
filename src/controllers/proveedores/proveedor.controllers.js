@@ -1,30 +1,32 @@
 const { ObjectId } = require("mongodb");
-const { ProveedorModel } = require("../../models/Proveedores/proveedor.models");
+const {
+  ProveedorModels,
+} = require("../../models/Proveedores/proveedor.models");
 
 class ProveedorController {
-  async getProveedor(req, res) {
-    // const db = new DatabaseConnector();
+  async getProveedor(req, res, next) {
     try {
-      await db.connect();
-      const result = await ProveedorModel.find({}).exec();
+      const result = await ProveedorModels.find({});
 
       res.status(200).send(result);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "Error al obtener los proveedores" });
+    } catch (erro) {
+      console.log(erro);
+      res
+        .status(500)
+        .json({ error: "Error al obtener los proveedores", message: erro });
     } finally {
+      next();
     }
   }
 
-//__________________________________________________________________________________________
-
+  //__________________________________________________________________________________________
 
   async getProveedorPorId(req, res, next) {
     const id = req.params.id;
 
     try {
       await db.connect();
-      const result = await ProveedorModel.find({
+      const result = await ProveedorModels.find({
         _id: new ObjectId(id),
       });
 
@@ -36,7 +38,7 @@ class ProveedorController {
     }
   }
 
-//__________________________________________________________________________________________
+  //__________________________________________________________________________________________
 
   async postProveedor(req, res) {
     const { ID_Proveedor, ID_Servicio } = req.body;
@@ -44,7 +46,7 @@ class ProveedorController {
     try {
       await db.connect();
       const client = await db.getCollection(collection);
-      const result = await ProveedorModel.insertOne({
+      const result = await ProveedorModels.insertOne({
         ID_Proveedor: ID_Proveedor,
         ID_Servicio: ID_Servicio,
       });
@@ -62,7 +64,7 @@ class ProveedorController {
     }
   }
 
-//__________________________________________________________________________________________
+  //__________________________________________________________________________________________
 
   async putProveedor(req, res, next) {
     const { ID_Proveedor, ID_Servicio } = req.body;
@@ -70,13 +72,13 @@ class ProveedorController {
     const collection = "proveedor";
     try {
       await db.connect();
-      const result = await ProveedorModel.updateOne(
+      const result = await ProveedorModels.updateOne(
         { _id: new ObjectId(id) },
         {
           $set: {
             ID_Proveedor: ID_Proveedor,
             ID_Servicio: ID_Servicio,
-          }
+          },
         }
       );
       if (result.modifiedCount === 1) {
@@ -92,13 +94,12 @@ class ProveedorController {
     }
   }
 
-
-//__________________________________________________________________________________________
+  //__________________________________________________________________________________________
 
   async deleteProveedor(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await ProveedorModel.deleteOne({ _id: new ObjectId(id) });
+      const result = await ProveedorModels.deleteOne({ _id: new ObjectId(id) });
 
       if (result) {
         res.status(200).send({ message: "Proveedor borrado con éxito" });
@@ -114,4 +115,4 @@ class ProveedorController {
   }
 }
 
-module.exports = {ProveedorController};
+module.exports = { ProveedorController };
