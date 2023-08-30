@@ -1,11 +1,11 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const StatusSchema = new Schema({
-    name: {type: String, },
-    description:{type: String, }, 
+  name: { type: String },
+  description: { type: String },
 });
 
-const StatusModel = mongoose.model('StatusOffers', StatusSchema );
+const StatusModel = mongoose.model("StatusOffers", StatusSchema);
 
-module.exports = { StatusModel }
+module.exports = { StatusModel };
