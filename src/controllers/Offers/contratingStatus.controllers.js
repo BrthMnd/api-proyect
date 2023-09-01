@@ -6,6 +6,9 @@ const {
 class ContractingStatusController {
   getStatus(req, res, next) {
     ContractingStatusModel.find()
+      // .populate("id_offers")
+      // .populate("id_ServiceProvider")
+      // .populate("id_ContratingStatus")
       .then((result) => {
         res.status(200).json(result);
       })

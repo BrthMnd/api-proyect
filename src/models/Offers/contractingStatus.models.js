@@ -8,7 +8,8 @@ const ContractingStatusSchema = new Schema({
 
 const ContractingStatusModel = mongoose.model(
   "ContratingStatus",
-  ContractingStatusSchema
+  ContractingStatusSchema,
+  "contratingstatuses"
 );
 
 module.exports = { ContractingStatusModel };
