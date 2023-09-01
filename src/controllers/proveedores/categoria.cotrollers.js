@@ -35,29 +35,26 @@ class CategoriasController {
 
 //__________________________________________________________________________________________
 
-  async postCategoria(req, res) {
-    const { Nombre_Categoria, Descripcion, Estado } = req.body;
-    const collection = "categoria";
-    try {
-      
-      const result = await CategoriaServicio.insertOne({
-        Nombre_Categoria: Nombre_Categoria,
-        Descripcion: Descripcion,
-        Estado: Estado,
-      });
+  
+async postCategoria(req, res, next) {
+  const { Nombre_Categoria, Descripcion, Estado } = req.body;
+  try {
+    const categoria = new CategoriaServicio({
+      Nombre_Categoria: Nombre_Categoria,
+      Descripcion: Descripcion,
+      Estado: Estado,
+    });
 
-      if (result) {
-        res.status(200).json({ message: "Categoría creada exitosamente" });
-      } else {
-        res.status(500).json({ error: "Error al crear la categoría" });
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "Error al crear la categoría" });
-    } finally {
-      db.close();
-    }
+    await categoria.save(); 
+
+    res.status(200).json({ message: "Categoría creada exitosamente" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error al crear la categoría" });
+  } finally {
+    next();
   }
+}
 
 //__________________________________________________________________________________________
 
@@ -85,7 +82,7 @@ class CategoriasController {
       console.log(error);
       res.status(500).json({ error: "Error al actualizar la categoría" });
     } finally {
-      db.close();
+      next()
     }
   }
 
@@ -106,7 +103,7 @@ class CategoriasController {
       console.log(error);
       res.status(500).send({ error: "Error al eliminar la categoría" });
     } finally {
-      db.close();
+      next()
     }
   }
 }

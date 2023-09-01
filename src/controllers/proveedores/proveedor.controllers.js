@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const {
+  ProveedorModel,
   ProveedorModels,
 } = require("../../models/Proveedores/proveedor.models");
 
@@ -25,7 +26,6 @@ class ProveedorController {
     const id = req.params.id;
 
     try {
-      await db.connect();
       const result = await ProveedorModels.find({
         _id: new ObjectId(id),
       });
@@ -35,32 +35,28 @@ class ProveedorController {
       console.log("Error: " + error);
       res.status(500).json({ error: "Error al obtener el proveedor" });
     } finally {
+      next();
     }
   }
 
   //__________________________________________________________________________________________
 
-  async postProveedor(req, res) {
+  async postProveedor(req, res, next) {
     const { ID_Proveedor, ID_Servicio } = req.body;
-    const collection = "proveedor";
     try {
-      await db.connect();
-      const client = await db.getCollection(collection);
-      const result = await ProveedorModels.insertOne({
+      const proveedor = new ProveedorModels({
         ID_Proveedor: ID_Proveedor,
         ID_Servicio: ID_Servicio,
       });
 
-      if (result) {
-        res.status(200).json({ message: "Proveedor creado exitosamente" });
-      } else {
-        res.status(500).json({ error: "Error al crear el proveedor" });
-      }
+      await proveedor.save();
+
+      res.status(200).json({ message: "Proveedor creado exitosamente" });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Error al crear el proveedor" });
     } finally {
-      db.close();
+      next();
     }
   }
 
@@ -71,7 +67,6 @@ class ProveedorController {
     const id = req.params.id;
     const collection = "proveedor";
     try {
-      await db.connect();
       const result = await ProveedorModels.updateOne(
         { _id: new ObjectId(id) },
         {
@@ -90,7 +85,7 @@ class ProveedorController {
       console.log(error);
       res.status(500).json({ error: "Error al actualizar el proveedor" });
     } finally {
-      db.close();
+      next();
     }
   }
 
@@ -110,7 +105,7 @@ class ProveedorController {
       console.log(error);
       res.status(500).send({ error: "Error al eliminar el proveedor" });
     } finally {
-      db.close();
+      next();
     }
   }
 }

@@ -4,10 +4,9 @@ const {
 } = require("../../models/Proveedores/calificacion.models");
 
 class CalificacionesController {
-  async getCalificaciones(req, res) {
-    //const db = new DatabaseConnector();
+  async getCalificaciones(req, res, next) {
     try {
-      const result = await CalificacionModel.find({}).exec();
+      const result = await CalificacionModel.find({});
 
       res.status(200).send(result);
     } catch (error) {
@@ -19,9 +18,7 @@ class CalificacionesController {
   }
 
   async getCalificacionPorId(req, res, next) {
-    // const db = new DatabaseConnector();
     const id = req.params.id;
-
     try {
       const result = await CalificacionModel.find({
         _id: new ObjectId(id),
@@ -32,19 +29,14 @@ class CalificacionesController {
       console.log("Error: " + error);
       res.status(500).json({ error: "Error al obtener la calificación" });
     } finally {
+      next();
     }
   }
 
-  async postCalificacion(req, res) {
-    const { Comentarios, CalificacionesFloat } = req.body;
-    // const db = new DatabaseConnector();
-    const collection = "calificacion";
+  async postCalificacion(req, res, next) {
     try {
-      await db.connect();
-      const result = await CalificacionModel.insertOne({
-        Comentarios: Comentarios,
-        CalificacionesFloat: CalificacionesFloat,
-      });
+      const result = new CalificacionModel(req.body);
+      await result.save();
 
       if (result) {
         res.status(200).json({ message: "Calificación creada exitosamente" });
@@ -55,14 +47,13 @@ class CalificacionesController {
       console.log(error);
       res.status(500).json({ error: "Error al crear la calificación" });
     } finally {
-      db.close();
+      next();
     }
   }
 
   async putCalificacion(req, res, next) {
     const { Comentarios, CalificacionesFloat } = req.body;
     const id = req.params.id;
-    // const db = new DatabaseConnector();
     const collection = "calificacion";
     try {
       const result = await CalificacionModel.updateOne(
@@ -85,7 +76,7 @@ class CalificacionesController {
       console.log(error);
       res.status(500).json({ error: "Error al actualizar la calificación" });
     } finally {
-      db.close();
+      next();
     }
   }
 
@@ -106,7 +97,7 @@ class CalificacionesController {
       console.log(error);
       res.status(500).send({ error: "Error al eliminar la calificación" });
     } finally {
-      db.close();
+      next();
     }
   }
 }
