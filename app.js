@@ -18,9 +18,9 @@ app.use(connect);
 
 // * api
 app.use("/api", route);
+// 404
 
 // Cerrar
 app.use(disconnect);
-// 404
 app.use(notFound);
 module.exports = app;

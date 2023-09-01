@@ -4,7 +4,7 @@ const {
 } = require("../../controllers/Offers/candidate.controllers");
 const candidate = new CandidateControllers();
 
-router.get("/", candidate.getStatus.bind());
+router.get("/", candidate.getStatus.bind()); 
 router.get("/:id", candidate.getIdStatus.bind());
 router.post("/", candidate.postStatus.bind());
 router.put("/:id", candidate.putStatus.bind());

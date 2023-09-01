@@ -15,7 +15,6 @@ class CandidateControllers {
       })
       .finally(() => next());
   }
-
   postStatus(req, res, next) {
     const result = new CandidateModel(req.body);
     result

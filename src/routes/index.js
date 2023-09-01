@@ -8,12 +8,5 @@ const ofertas_estados = require("./Offers/offers_status.routes");
 const Candidato = require("./Offers/candidate.routes");
 const ofertas_servicios = require("./Offers/offers_service.routes");
 
-router.use("/prueba", Prueba);
-router.use("/estado", estados);
-router.use("/oferta", oferta);
-router.use("/estadosdecontrato", EstadosDeContrato);
-router.use("/oferta_estado", ofertas_estados);
 router.use("/candidato", Candidato);
-router.use("/oferta_servicio", ofertas_servicios);
-
 module.exports = router;
