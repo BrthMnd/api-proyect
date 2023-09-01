@@ -4,7 +4,11 @@ const connect = (req, res, next) => {
   Db.connect(req, res, next);
 };
 const disconnect = (req, res, next) => {
-  Db.close(req, res, next);
+  if (res.headersSent) {
+    Db.close(req, res, next);
+  } else {
+    next();
+  }
 };
 
 module.exports = {

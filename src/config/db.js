@@ -21,13 +21,13 @@ class DatabaseConnector {
   }
 
   close(req, res, next) {
-    try {
-      mongoose.connection.close();
-      console.log("Cerrado");
-    } catch (error) {
-      console.error("Error al cerrar la conexión a la base de datos:", error);
-      res.status(500).send({ error: "Error en el servidor" });
-    }
+    mongoose.connection
+      .close()
+      .then(() => console.log("*** Cerrando ***"))
+      .catch((e) => {
+        console.error("Error al cerrar la conexión a la base de datos:", error);
+        res.status(500).send({ error: "Error en el servidor" });
+      });
   }
 }
 

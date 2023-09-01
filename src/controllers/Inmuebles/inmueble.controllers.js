@@ -1,36 +1,36 @@
 const { ObjectId } = require("mongodb");
-const { CandidateModel } = require("../../models/Offers/candidate.models");
+const { InmuebleModels } = require("../../models/Inmueble/inmueble.models");
 
-class CandidateControllers {
-  getStatus(req, res, next) {
-    CandidateModel.find()
-      .populate("id_offers")
-      .populate("id_ServiceProvider")
-      .populate("id_ContratingStatus")
+class InmuebleControllers {
+  getInmueble(req, res, next) {
+    InmuebleModels.find({})
+      .populate("id_propietario")
+      .populate("id_encargado")
       .then((result) => {
         res.status(200).json(result);
       })
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Estados" });
-      });
+      })
+      .finally(() => next());
   }
-  postStatus(req, res, next) {
-    const result = new CandidateModel(req.body);
+
+  postInmueble(req, res, next) {
+    const result = new InmuebleModels(req.body);
     result
       .save()
       .then((result) => res.status(201).json(result))
       .catch((error) => res.status(500).json({ Error: "ERROR CON ESTADO ***" }))
       .finally(() => next());
   }
-  async getIdStatus(req, res, next) {
+  async getIdInmueble(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await CandidateModel.find({
+      const result = await InmuebleModels.find({
         _id: new ObjectId(id),
       })
-        .populate("id_offers")
-        .populate("id_ServiceProvider")
-        .populate("id_ContratingStatus");
+        .populate("id_propietario")
+        .populate("id_encargado");
       if (result) {
         res.status(200).send(result);
       } else {
@@ -39,16 +39,16 @@ class CandidateControllers {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("eeeror" + error);
+      console.log("error" + error);
     } finally {
       next();
     }
   }
-  async putStatus(req, res, next) {
+  async putInmueble(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
     try {
-      const result = await CandidateModel.findOneAndUpdate(
+      const result = await InmuebleModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
         { new: true } // Para obtener el documento actualizado en lugar del antiguo
@@ -67,10 +67,10 @@ class CandidateControllers {
       next();
     }
   }
-  async deleteStatus(req, res, next) {
+  async deleteInmueble(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await CandidateModel.findOneAndDelete({
+      const result = await InmuebleModels.findOneAndDelete({
         _id: new ObjectId(id),
       });
 
@@ -86,4 +86,4 @@ class CandidateControllers {
     }
   }
 }
-module.exports = { CandidateControllers };
+module.exports = { InmuebleControllers };
