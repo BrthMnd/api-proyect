@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
 const Encargado = require('./encargado.routes');
 const Propietario = require('./propietario.routes');
