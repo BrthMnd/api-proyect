@@ -15,6 +15,8 @@ class CalificacionesController {
     }
   }
 
+  //__________________________________________________________________________________________ 
+
   async getCalificacionPorId(req, res, next) {
     const id = req.params.id;
     try {
@@ -30,6 +32,8 @@ class CalificacionesController {
       next();
     }
   }
+
+   //__________________________________________________________________________________________ 
 
   async postCalificacion(req, res, next) {
     try {
@@ -49,7 +53,7 @@ class CalificacionesController {
     }
   }
   
-
+ //__________________________________________________________________________________________ 
   async putCalificacion(req, res, next) {
     const { Comentarios, CalificacionesFloat } = req.body;
     const id = req.params.id;
@@ -76,6 +80,8 @@ class CalificacionesController {
       next();
     }
   }
+  
+ //__________________________________________________________________________________________ 
 
   async deleteCalificacion(req, res, next) {
     const id = req.params.id;
