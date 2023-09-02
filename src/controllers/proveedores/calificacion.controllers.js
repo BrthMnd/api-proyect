@@ -1,8 +1,10 @@
 const { ObjectId } = require("mongodb");
-const { CalificacionModel } = require("../../models/Proveedores/calificacion.models");
+const {
+  CalificacionModel,
+} = require("../../models/Proveedores/calificacion.models");
 
 class CalificacionesController {
-  async getCalificaciones(req, res,next) {
+  async getCalificaciones(req, res, next) {
     try {
       const result = await CalificacionModel.find({});
 
@@ -11,11 +13,11 @@ class CalificacionesController {
       console.log(error);
       res.status(500).json({ error: "Error al obtener las calificaciones" });
     } finally {
-      next()
+      next();
     }
   }
 
-  //__________________________________________________________________________________________ 
+  //__________________________________________________________________________________________
 
   async getCalificacionPorId(req, res, next) {
     const id = req.params.id;
@@ -33,13 +35,13 @@ class CalificacionesController {
     }
   }
 
-   //__________________________________________________________________________________________ 
+  //__________________________________________________________________________________________
 
   async postCalificacion(req, res, next) {
     try {
       const result = new CalificacionModel(req.body);
-      await result.save(); 
-  
+      await result.save();
+
       if (result) {
         res.status(200).json({ message: "Calificación creada exitosamente" });
       } else {
@@ -52,8 +54,8 @@ class CalificacionesController {
       next();
     }
   }
-  
- //__________________________________________________________________________________________ 
+
+  //__________________________________________________________________________________________
   async putCalificacion(req, res, next) {
     const { Comentarios, CalificacionesFloat } = req.body;
     const id = req.params.id;
@@ -65,11 +67,13 @@ class CalificacionesController {
           $set: {
             Comentarios: Comentarios,
             CalificacionesFloat: CalificacionesFloat,
-          }
+          },
         }
       );
       if (result.modifiedCount === 1) {
-        res.status(200).json({ message: "Calificación actualizada exitosamente" });
+        res
+          .status(200)
+          .json({ message: "Calificación actualizada exitosamente" });
       } else {
         res.status(500).json({ error: "Error al actualizar la calificación" });
       }
@@ -80,14 +84,16 @@ class CalificacionesController {
       next();
     }
   }
-  
- //__________________________________________________________________________________________ 
+
+  //__________________________________________________________________________________________
 
   async deleteCalificacion(req, res, next) {
     const id = req.params.id;
     const collection = "calificacion";
     try {
-      const result = await CalificacionModel.deleteOne({ _id: new ObjectId(id) });
+      const result = await CalificacionModel.deleteOne({
+        _id: new ObjectId(id),
+      });
 
       if (result) {
         res.status(200).send({ message: "Calificación borrada con éxito" });
@@ -104,5 +110,5 @@ class CalificacionesController {
 }
 
 module.exports = {
-    CalificacionesController
+  CalificacionesController,
 };

@@ -7,6 +7,5 @@ const Proveedores = require("./proveedores");
 router.use("/ofertas", Ofertas);
 router.use("/inmuebles", Inmuebles);
 router.use("/proveedores", Proveedores);
-// router.use("/pruebas", Prueba); // <-
 
 module.exports = router;

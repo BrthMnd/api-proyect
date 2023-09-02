@@ -1,7 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { ServicioModels } = require("../../models/Proveedores/servicios.models");
 
-
 // ______________________________________________________________________________________
 
 class ServiciosController {
@@ -13,13 +12,9 @@ class ServiciosController {
     } catch (error) {
       console.log(error);
     } finally {
-      next()
+      next();
     }
   }
-
-
-  //______________________________________________________________________________________
-
 
   async getServicioPorId(req, res, next) {
     const id = req.params.id;
@@ -33,41 +28,42 @@ class ServiciosController {
     } catch (error) {
       console.log("Error: " + error);
     } finally {
+      next();
     }
   }
 
-//   ______________________________________________________________________________________
+  //   ______________________________________________________________________________________
 
-async postServicio(req, res, next) {
-  try {
-    const result = new ServicioModels(req.body);
-    await result.save(); 
+  async postServicio(req, res, next) {
+    try {
+      const result = new ServicioModels(req.body);
+      await result.save();
 
-    res.status(200).json({ message: "Documento creado exitosamente" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Error al crear el documento" });
-  } finally {
-    next();
+      res.status(200).json({ message: "Documento creado exitosamente" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Error al crear el documento" });
+    } finally {
+      next();
+    }
   }
-}
 
-//______________________________________________________________________________________
-
+  //______________________________________________________________________________________
 
   async putServicio(req, res, next) {
-    const { Nombre_Servicio, Descripcion, estado, Categoria_Servicios } = req.body;
+    const { Nombre_Servicio, Descripcion, estado, Categoria_Servicios } =
+      req.body;
     const id = req.params.id;
     try {
-      const result = await ServicioModels(
+      const result = await ServicioModels.updateOne(
         { _id: new ObjectId(id) },
         {
           $set: {
             Nombre_Servicio: Nombre_Servicio,
             Descripcion: Descripcion,
             estado: estado,
-            Categoria_Servicios: Categoria_Servicios
-          }
+            Categoria_Servicios: Categoria_Servicios,
+          },
         }
       );
       if (result.modifiedCount === 1) {
@@ -78,12 +74,11 @@ async postServicio(req, res, next) {
     } catch (error) {
       console.log(error);
     } finally {
-      next()
+      next();
     }
   }
 
   //______________________________________________________________________________________
-
 
   async deleteServicio(req, res, next) {
     const id = req.params.id;
@@ -98,10 +93,9 @@ async postServicio(req, res, next) {
     } catch (error) {
       console.log(error);
     } finally {
-      next()
+      next();
     }
   }
 }
 
-
-module.exports = {ServiciosController};
+module.exports = { ServiciosController };
