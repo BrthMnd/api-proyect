@@ -5,12 +5,12 @@ const { EncargadoModels } = require("./encargado.models");
 
 const InmuebleSchema = new Schema(
   {
-    tipoPropiedad: { type: String, required: true },
-    direccion: { type: String, required: true },
-    metrosCuadrados: { type: Number, required: true },
-    nHabitaciones: { type: Number, required: true },
-    nBanos: { type: Number, required: true },
-    fechConstruccion: { type: Date, required: false },
+    tipoPropiedad: { type: String},
+    direccion: { type: String},
+    metrosCuadrados: { type: Number},
+    nHabitaciones: { type: Number },
+    nBanos: { type: Number},
+    fechConstruccion: { type: Date},
     plano: {
       type: String,
       deafault:
