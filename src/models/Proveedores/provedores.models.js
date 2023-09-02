@@ -1,13 +1,12 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 const proveedoresSchema = new Schema({
   Nombre: { type: String, required: true },
   Apellido: { type: String, required: true },
   Telefono: String,
   Email: { type: String, required: true },
-  Direccion: String
+  Direccion: String,
 });
-console.log("FLAG 🚩");
-const ProveedoresModels = model('Proveedores', proveedoresSchema);
+const ProveedoresModels = model("Proveedores", proveedoresSchema);
 
-module.exports = {ProveedoresModels};
+module.exports = { ProveedoresModels };

@@ -1,9 +1,8 @@
-const mongoose = require("mongoose");
 const { Schema, model } = require("mongoose");
 
 const calificacionSchema = new Schema({
   Comentarios: String,
-  CalificacionesFloat: { type: Number, min: 0, max: 5 },
+  CalificacionesFloat: { type: Number },
 });
 
 const CalificacionModel = model(
