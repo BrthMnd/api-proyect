@@ -14,7 +14,6 @@ class CandidateControllers {
         res.status(500).json({ error: "Error al obtener Estados" });
       });
   }
-
   postStatus(req, res, next) {
     const result = new CandidateModel(req.body);
     result

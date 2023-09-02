@@ -11,7 +11,7 @@ const PruebaSchema = new Schema(
     phone: { type: String },
   },
   {
-    versionKey: false, // quita el __v
+    versionKey: false, // quita el __v: 0
   }
 );
 

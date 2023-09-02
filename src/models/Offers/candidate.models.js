@@ -5,7 +5,7 @@ const { ContractingStatusModel } = require("./contractingStatus.models");
 const Schema = mongoose.Schema;
 
 const CandidateSchema = new Schema({
-  id_offers: { type: Schema.Types.ObjectId, ref: OffersModel.modelName },
+  id_offers: { type: Schema.Types.ObjectId, ref: OffersModel.modelName},
   id_ServiceProvider: {
     type: Schema.Types.ObjectId,
     ref: PruebaModels.modelName,

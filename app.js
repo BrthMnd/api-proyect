@@ -12,7 +12,7 @@ app.use(CORS);
 
 //middleware
 app.use(connect);
-app.use("/api", route); 
+app.use("/api", route);
 app.use(disconnect);
 app.use(notFound);
 

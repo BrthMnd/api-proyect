@@ -2,16 +2,38 @@ const { ObjectId } = require("mongodb");
 const { PruebaModels } = require("../models/prueba.models");
 
 class pruebaController {
-  getPrueba(req, res) {
-    User.find()
-      .then((users) => {
-        res.status(200).json(users);
-      })
-      .catch((error) => {
-        res.status(500).json({ error: "Error al obtener usuarios" });
-      })
-      .finally();
+
+
+  async getPrueba(req, res) {
+    const db = new DatabaseConnector();
+    try {
+      await db.connect();
+      const result = await PruebaModels.find({}).exec();
+
+      res.status(200).send(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
   async getIdPrueba(req, res, next) {
     const id = req.params.id;
