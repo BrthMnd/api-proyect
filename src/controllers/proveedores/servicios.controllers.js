@@ -16,8 +16,6 @@ class ServiciosController {
     }
   }
 
-  //______________________________________________________________________________________
-
   async getServicioPorId(req, res, next) {
     const id = req.params.id;
 
@@ -53,13 +51,20 @@ class ServiciosController {
   //______________________________________________________________________________________
 
   async putServicio(req, res, next) {
-    const Update = req.body;
+    const { Nombre_Servicio, Descripcion, estado, Categoria_Servicios } =
+      req.body;
     const id = req.params.id;
     try {
-      const result = await ServicioModels(
+      const result = await ServicioModels.updateOne(
         { _id: new ObjectId(id) },
-        Update,
-        { new: true } // Para obtener el documento actualizado en lugar del antiguo
+        {
+          $set: {
+            Nombre_Servicio: Nombre_Servicio,
+            Descripcion: Descripcion,
+            estado: estado,
+            Categoria_Servicios: Categoria_Servicios,
+          },
+        }
       );
 
       if (result) {

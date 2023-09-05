@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const { Schema, model } = require("mongoose");
 
 const calificacionSchema = new Schema({
@@ -11,7 +10,5 @@ const CalificacionModel = model(
   calificacionSchema,
   "calificacion"
 );
-
-module.exports = { CalificacionModel };
 
 module.exports = { CalificacionModel };

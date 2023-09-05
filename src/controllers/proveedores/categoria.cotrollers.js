@@ -1,26 +1,26 @@
 const { ObjectId } = require("mongodb");
-const { CategoriaServicio } = require("../../models/Proveedores/categoria.models");
+const {
+  CategoriaServicio,
+} = require("../../models/Proveedores/categoria.models");
 
 class CategoriasController {
   getCategorias(req, res, next) {
     CategoriaServicio.find({})
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: "Error al obtener Cartergorias" });
-    })
-    .finally(() => next());
-  } 
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((error) => {
+        res.status(500).json({ error: "Error al obtener Cartegorias" });
+      })
+      .finally(() => next());
+  }
 
-
-//__________________________________________________________________________________________ 
+  //__________________________________________________________________________________________
 
   async getCategoriaPorId(req, res, next) {
     const id = req.params.id;
 
     try {
-      await db.connect();
       const result = await CategoriaServicio.find({
         _id: new ObjectId(id),
       });
@@ -33,30 +33,29 @@ class CategoriasController {
     }
   }
 
-//__________________________________________________________________________________________
+  //__________________________________________________________________________________________
 
-  
-async postCategoria(req, res, next) {
-  const { Nombre_Categoria, Descripcion, Estado } = req.body;
-  try {
-    const categoria = new CategoriaServicio({
-      Nombre_Categoria: Nombre_Categoria,
-      Descripcion: Descripcion,
-      Estado: Estado,
-    });
+  async postCategoria(req, res, next) {
+    const { Nombre_Categoria, Descripcion, Estado } = req.body;
+    try {
+      const categoria = new CategoriaServicio({
+        Nombre_Categoria: Nombre_Categoria,
+        Descripcion: Descripcion,
+        Estado: Estado,
+      });
 
-    await categoria.save(); 
+      await categoria.save();
 
-    res.status(200).json({ message: "Categoría creada exitosamente" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Error al crear la categoría" });
-  } finally {
-    next();
+      res.status(200).json({ message: "Categoría creada exitosamente" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Error al crear la categoría" });
+    } finally {
+      next();
+    }
   }
-}
 
-//__________________________________________________________________________________________
+  //__________________________________________________________________________________________
 
   async putCategoria(req, res, next) {
     const { Nombre_Categoria, Descripcion, Estado } = req.body;
@@ -70,7 +69,7 @@ async postCategoria(req, res, next) {
             Nombre_Categoria: Nombre_Categoria,
             Descripcion: Descripcion,
             Estado: Estado,
-          }
+          },
         }
       );
       if (result.modifiedCount === 1) {
@@ -82,17 +81,19 @@ async postCategoria(req, res, next) {
       console.log(error);
       res.status(500).json({ error: "Error al actualizar la categoría" });
     } finally {
-      next()
+      next();
     }
   }
 
-//__________________________________________________________________________________________
+  //__________________________________________________________________________________________
 
   async deleteCategoria(req, res, next) {
     const id = req.params.id;
     const collection = "categoria";
     try {
-      const result = await CategoriaServicio.deleteOne({ _id: new ObjectId(id) });
+      const result = await CategoriaServicio.deleteOne({
+        _id: new ObjectId(id),
+      });
 
       if (result) {
         res.status(200).send({ message: "Categoría borrada con éxito" });
@@ -103,9 +104,9 @@ async postCategoria(req, res, next) {
       console.log(error);
       res.status(500).send({ error: "Error al eliminar la categoría" });
     } finally {
-      next()
+      next();
     }
   }
 }
 
-module.exports = {CategoriasController};
+module.exports = { CategoriasController };

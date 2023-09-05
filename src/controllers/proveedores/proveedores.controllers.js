@@ -1,29 +1,26 @@
 const { ObjectId } = require("mongodb");
-const { ProveedoresModels } = require("../../models/Proveedores/provedores.models");
-
+const {
+  ProveedoresModels,
+} = require("../../models/Proveedores/provedores.models");
 
 class ProveedoresController {
-  getProveedores(req,res, next) {
+  getProveedores(req, res, next) {
     ProveedoresModels.find({})
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: "Error al obtener Proveedores" });
-    })
-    .finally(() => next());
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((error) => {
+        res.status(500).json({ error: "Error al obtener Proveedores" });
+      })
+      .finally(() => next());
   }
-
-  //_____________________________________________________________________________________
 
   async getProveedorPorId(req, res, next) {
     const id = req.params.id;
-
     try {
       const result = await ProveedoresModels.find({
         _id: new ObjectId(id),
       });
-
       res.status(200).send(result);
     } catch (error) {
       console.log("Error: " + error);
@@ -32,29 +29,29 @@ class ProveedoresController {
     }
   }
 
-    //_____________________________________________________________________________________
+  //_____________________________________________________________________________________
 
-    async postProveedor(req, res) {
-      const { Nombre, Apellido, Telefono, Email, Direccion } = req.body;
-      try {
-        const proveedor = new ProveedoresModels({
-          Nombre: Nombre,
-          Apellido: Apellido,
-          Telefono: Telefono,
-          Email: Email,
-          Direccion: Direccion,
-        });
-    
-        await proveedor.save(); 
-    
-        res.status(200).json({ message: "Proveedor creado exitosamente" });
-      } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: "Error al crear el proveedor" });
-      }
+  async postProveedor(req, res) {
+    const { Nombre, Apellido, Telefono, Email, Direccion } = req.body;
+    try {
+      const proveedor = new ProveedoresModels({
+        Nombre: Nombre,
+        Apellido: Apellido,
+        Telefono: Telefono,
+        Email: Email,
+        Direccion: Direccion,
+      });
+
+      await proveedor.save();
+
+      res.status(200).json({ message: "Proveedor creado exitosamente" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Error al crear el proveedor" });
     }
+  }
 
-//_____________________________________________________________________________________
+  //_____________________________________________________________________________________
 
   async putProveedor(req, res, next) {
     const { Nombre, Apellido, Telefono, Email, Direccion } = req.body;
@@ -69,8 +66,8 @@ class ProveedoresController {
             Apellido: Apellido,
             Telefono: Telefono,
             Email: Email,
-            Direccion: Direccion
-          }
+            Direccion: Direccion,
+          },
         }
       );
       if (result.modifiedCount === 1) {
@@ -81,17 +78,19 @@ class ProveedoresController {
     } catch (error) {
       console.log(error);
     } finally {
-      next()
+      next();
     }
   }
 
-    //_____________________________________________________________________________________
+  //_____________________________________________________________________________________
 
   async deleteProveedor(req, res, next) {
     const id = req.params.id;
     const collection = "proveedor";
     try {
-      const result = await ProveedoresModels.deleteOne({ _id: new ObjectId(id) });
+      const result = await ProveedoresModels.deleteOne({
+        _id: new ObjectId(id),
+      });
 
       if (result) {
         res.status(200).send({ message: "Borrado con éxito" });
@@ -101,11 +100,11 @@ class ProveedoresController {
     } catch (error) {
       console.log(error);
     } finally {
-      next()
+      next();
     }
   }
 }
 
 module.exports = {
-  ProveedoresController
+  ProveedoresController,
 };
