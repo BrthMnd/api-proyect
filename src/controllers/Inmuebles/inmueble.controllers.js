@@ -2,6 +2,7 @@ const { ObjectId } = require("mongodb");
 const { InmuebleModels } = require("../../models/Inmueble/inmueble.models");
 
 class InmuebleControllers {
+  
   getInmueble(req, res, next) {
     InmuebleModels.find({})
       .populate("id_propietario")
