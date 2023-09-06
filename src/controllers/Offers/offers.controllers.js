@@ -5,6 +5,7 @@ class OffersControllers {
   getStatus(req, res, next) {
     OffersModel.find()
       .populate("id_property")
+      .populate("id_status")
       .then((result) => {
         res.status(200).json(result);
       })

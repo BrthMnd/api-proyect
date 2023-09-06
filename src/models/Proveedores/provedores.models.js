@@ -1,10 +1,10 @@
 const { Schema, model } = require("mongoose");
 
 const proveedoresSchema = new Schema({
-  Nombre: { type: String, required: true },
-  Apellido: { type: String, required: true },
+  Nombre: { type: String },
+  Apellido: { type: String },
   Telefono: String,
-  Email: { type: String, required: true },
+  Email: { type: String },
   Direccion: String,
 });
 const ProveedoresModels = model("Proveedores", proveedoresSchema);

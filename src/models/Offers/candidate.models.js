@@ -9,7 +9,7 @@ const CandidateSchema = new Schema({
   id_ServiceProvider: {
     type: Schema.Types.ObjectId,
     ref: ProveedoresModels.modelName,
-  }, //<- prueba
+  },
   id_ContratingStatus: {
     type: Schema.Types.ObjectId,
     ref: ContractingStatusModel.modelName,
