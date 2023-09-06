@@ -19,7 +19,9 @@ class InmuebleControllers {
     const result = new InmuebleModels(req.body);
     result
       .save()
-      .then((result) => res.status(201).json(result))
+      .then((data) =>
+        res.status(201).json({ result: data, message: "Created" })
+      )
       .catch((error) => res.status(500).json({ Error: "ERROR CON ESTADO ***" }))
       .finally(() => next());
   }
