@@ -25,7 +25,7 @@ class EncargadoControllers {
   async getIdEncargado(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await EncargadoModels({
+      const result = await EncargadoModels.findOne({
         _id: new ObjectId(id),
       });
       if (result) {
@@ -41,13 +41,13 @@ class EncargadoControllers {
   }
 
   async putEncargado(req, res, next) {
-    const update = require.body;
+    const update = req.body;
     const id = req.params.id;
 
     try {
       const result = await EncargadoModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
-        update,
+        req.body,
         { new: true }
       );
       if (result) {

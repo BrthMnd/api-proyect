@@ -46,7 +46,7 @@ class propietarioController {
   }
 
   async putPropietario(req, res, next) {
-    const update = require.body;
+    
     const id = req.params.id;
 
     try {
