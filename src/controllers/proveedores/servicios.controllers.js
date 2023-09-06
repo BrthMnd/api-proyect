@@ -1,12 +1,12 @@
 const { ObjectId } = require("mongodb");
 const { ServicioModels } = require("../../models/Proveedores/servicios.models");
 
-// ______________________________________________________________________________________
-
 class ServiciosController {
   async getServicios(req, res, next) {
     try {
-      const result = await ServicioModels.find({});
+      const result = await ServicioModels.find({}).populate(
+        "Categoria_Servicio"
+      );
 
       res.status(200).send(result);
     } catch (error) {
@@ -22,7 +22,7 @@ class ServiciosController {
     try {
       const result = await ServicioModels.find({
         _id: new ObjectId(id),
-      });
+      }).populate("Categoria_Servicio");
 
       res.status(200).send(result);
     } catch (error) {

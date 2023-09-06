@@ -1,13 +1,13 @@
 const { ObjectId } = require("mongodb");
 const {
-  CategoriaServicio,
-} = require("../../models/Proveedores/categoria.models");
+  CategoriaModel,
+} = require("../../models/Proveedores/categoria.models.js");
 
 class CategoriasController {
   getCategorias(req, res, next) {
-    CategoriaServicio.find({})
+    CategoriaModel.find({})
       .then((result) => {
-        res.status(200).json(result);
+        res.status(200).send(result);
       })
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Cartegorias" });
@@ -15,13 +15,13 @@ class CategoriasController {
       .finally(() => next());
   }
 
-  //__________________________________________________________________________________________
+  // //__________________________________________________________________________________________
 
   async getCategoriaPorId(req, res, next) {
     const id = req.params.id;
 
     try {
-      const result = await CategoriaServicio.find({
+      const result = await CategoriaModel.find({
         _id: new ObjectId(id),
       });
 
@@ -30,6 +30,7 @@ class CategoriasController {
       console.log("Error: " + error);
       res.status(500).json({ error: "Error al obtener la categoría" });
     } finally {
+      next();
     }
   }
 
@@ -38,15 +39,17 @@ class CategoriasController {
   async postCategoria(req, res, next) {
     const { Nombre_Categoria, Descripcion, Estado } = req.body;
     try {
-      const categoria = new CategoriaServicio({
+      const categoria = new CategoriaModel({
         Nombre_Categoria: Nombre_Categoria,
         Descripcion: Descripcion,
         Estado: Estado,
       });
 
-      await categoria.save();
+      const result = await categoria.save();
 
-      res.status(200).json({ message: "Categoría creada exitosamente" });
+      res
+        .status(200)
+        .json({ message: "Categoría creada exitosamente", Resultado: result });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Error al crear la categoría" });
@@ -58,18 +61,13 @@ class CategoriasController {
   //__________________________________________________________________________________________
 
   async putCategoria(req, res, next) {
-    const { Nombre_Categoria, Descripcion, Estado } = req.body;
     const id = req.params.id;
     const collection = "categoria";
     try {
-      const result = await CategoriaServicio.updateOne(
+      const result = await CategoriaModel.updateOne(
         { _id: new ObjectId(id) },
         {
-          $set: {
-            Nombre_Categoria: Nombre_Categoria,
-            Descripcion: Descripcion,
-            Estado: Estado,
-          },
+          $set: req.body,
         }
       );
       if (result.modifiedCount === 1) {
@@ -91,7 +89,7 @@ class CategoriasController {
     const id = req.params.id;
     const collection = "categoria";
     try {
-      const result = await CategoriaServicio.deleteOne({
+      const result = await CategoriaModel.deleteOne({
         _id: new ObjectId(id),
       });
 
