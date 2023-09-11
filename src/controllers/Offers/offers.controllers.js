@@ -6,11 +6,12 @@ class OffersControllers {
     OffersModel.find()
       .populate("id_property")
       .populate("id_status")
+      .populate("id_service")
       .then((result) => {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Estados" });
+        res.status(500).json({ error: "Error al obtener Ofertas" });
       })
       .finally(() => next());
   }
@@ -20,7 +21,9 @@ class OffersControllers {
     result
       .save()
       .then((result) => res.status(201).json(result))
-      .catch((error) => res.status(500).json({ Error: "ERROR CON ESTADO ***" }))
+      .catch((error) =>
+        res.status(500).json({ Error: "ERROR CON ESTADO ***", err: error })
+      )
       .finally(() => next());
   }
   async getIdStatus(req, res, next) {
@@ -28,7 +31,10 @@ class OffersControllers {
     try {
       const result = await OffersModel.find({
         _id: new ObjectId(id),
-      }).populate("id_property");
+      })
+        .populate("id_property")
+        .populate("id_status")
+        .populate("id_service");
       if (result) {
         res.status(200).send(result);
       } else {
