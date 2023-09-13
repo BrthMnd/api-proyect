@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { OffersModel } = require("./offers.models");
 const { ProveedoresModels } = require("../Proveedores/provedores.models");
 const { ContractingStatusModel } = require("./contractingStatus.models");
+const { FechaActual } = require("../../tools/date.tools");
 const Schema = mongoose.Schema;
 
 const CandidateSchema = new Schema({
@@ -14,7 +15,7 @@ const CandidateSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: ContractingStatusModel.modelName,
   },
-  DateApplied: { type: Date, default: Date.now() },
+  DateApplied: { type: Date, default: FechaActual },
 });
 
 const CandidateModel = mongoose.model("Candidate", CandidateSchema);
