@@ -15,7 +15,7 @@ const CandidateSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: ContractingStatusModel.modelName,
   },
-  DateApplied: { type: Date, default: FechaActual },
+  DateApplied: { type: String, default: FechaActual },
 });
 
 const CandidateModel = mongoose.model("Candidate", CandidateSchema);
