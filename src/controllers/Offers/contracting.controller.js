@@ -1,22 +1,30 @@
 const { ObjectId } = require("mongodb");
-const { CandidateModel } = require("../../models/Offers/candidate.models");
+// const {
+//   ContractingStatusModel,
+// } = require("../../models/Offers/contractingStatus.models");
 
-class CandidateControllers {
+class ContractingStatusController {
   getStatus(req, res, next) {
-    CandidateModel.find()
-      .populate("id_offers")
-      .populate("id_ServiceProvider")
-      .populate("id_ContratingStatus")
+    ContractingStatusModel.find()
+      // .populate("id_offers")
+      // .populate("id_ServiceProvider")
+      // .populate("id_ContratingStatus")
       .then((result) => {
         res.status(200).json(result);
       })
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Estados" });
-      });
+      })
+      .finally(() => next());
   }
 
   postStatus(req, res, next) {
-    const result = new CandidateModel(req.body);
+    const { name, description } = req.body;
+
+    const result = new ContractingStatusModel({
+      name,
+      description,
+    });
     result
       .save()
       .then((result) => res.status(201).json(result))
@@ -26,12 +34,9 @@ class CandidateControllers {
   async getIdStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await CandidateModel.find({
+      const result = await ContractingStatusModel.find({
         _id: new ObjectId(id),
-      })
-        .populate("id_offers")
-        .populate("id_ServiceProvider")
-        .populate("id_ContratingStatus");
+      });
       if (result) {
         res.status(200).send(result);
       } else {
@@ -49,7 +54,7 @@ class CandidateControllers {
     const Update = req.body;
     const id = req.params.id;
     try {
-      const result = await CandidateModel.findOneAndUpdate(
+      const result = await ContractingStatusModel.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
         { new: true } // Para obtener el documento actualizado en lugar del antiguo
@@ -71,7 +76,7 @@ class CandidateControllers {
   async deleteStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await CandidateModel.findOneAndDelete({
+      const result = await ContractingStatusModel.findOneAndDelete({
         _id: new ObjectId(id),
       });
 
@@ -87,4 +92,4 @@ class CandidateControllers {
     }
   }
 }
-module.exports = { CandidateControllers };
+module.exports = { ContractingStatusController };

@@ -1,12 +1,12 @@
 const { ObjectId } = require("mongodb");
 const { ServicioModels } = require("../../models/Proveedores/servicios.models");
 
-// ______________________________________________________________________________________
-
 class ServiciosController {
   async getServicios(req, res, next) {
     try {
-      const result = await ServicioModels.find({});
+      const result = await ServicioModels.find({}).populate(
+        "Categoria_Servicio"
+      );
 
       res.status(200).send(result);
     } catch (error) {
@@ -16,15 +16,13 @@ class ServiciosController {
     }
   }
 
-  //______________________________________________________________________________________
-
   async getServicioPorId(req, res, next) {
     const id = req.params.id;
 
     try {
       const result = await ServicioModels.find({
         _id: new ObjectId(id),
-      });
+      }).populate("Categoria_Servicio");
 
       res.status(200).send(result);
     } catch (error) {
@@ -39,11 +37,12 @@ class ServiciosController {
   async postServicio(req, res, next) {
     try {
       const result = new ServicioModels(req.body);
-      const data = await result.save();
-      res.status(201).send({ create: data, message: "Servicio Creado" });
+      await result.save();
+
+      res.status(200).json({ message: "Documento creado exitosamente" });
     } catch (error) {
       console.log(error);
-      res.status(500).send({ message: " Error al crear ", err: error });
+      res.status(500).json({ error: "Error al crear el documento" });
     } finally {
       next();
     }
@@ -52,13 +51,20 @@ class ServiciosController {
   //______________________________________________________________________________________
 
   async putServicio(req, res, next) {
-    const Update = req.body;
+    const { Nombre_Servicio, Descripcion, estado, Categoria_Servicios } =
+      req.body;
     const id = req.params.id;
     try {
       const result = await ServicioModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
-        Update,
-        { new: true } // Para obtener el documento actualizado en lugar del antiguo
+        {
+          $set: {
+            Nombre_Servicio: Nombre_Servicio,
+            Descripcion: Descripcion,
+            estado: estado,
+            Categoria_Servicios: Categoria_Servicios,
+          },
+        }
       );
 
       if (result) {

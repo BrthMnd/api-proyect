@@ -1,21 +1,24 @@
 const { ObjectId } = require("mongodb");
-const { OffersModel } = require("../../models/Offers/offers.models");
+// const { CandidateModel } = require("../../models/Offers/candidate.model.js");
 
-class OffersControllers {
+class CandidateControllers {
   getStatus(req, res, next) {
-    OffersModel.find()
-      .populate("id_property")
+    CandidateModel.find()
+      .populate("id_offers")
+      .populate("id_ServiceProvider")
+      .populate("id_ContratingStatus")
       .then((result) => {
         res.status(200).json(result);
       })
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Estados" });
       })
-      .finally(() => next());
+      .finally(() => {
+        next();
+      });
   }
-
   postStatus(req, res, next) {
-    const result = new OffersModel(req.body);
+    const result = new CandidateModel(req.body);
     result
       .save()
       .then((result) => res.status(201).json(result))
@@ -25,9 +28,12 @@ class OffersControllers {
   async getIdStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await OffersModel.find({
+      const result = await CandidateModel.find({
         _id: new ObjectId(id),
-      }).populate("id_property");
+      })
+        .populate("id_offers")
+        .populate("id_ServiceProvider")
+        .populate("id_ContratingStatus");
       if (result) {
         res.status(200).send(result);
       } else {
@@ -45,7 +51,7 @@ class OffersControllers {
     const Update = req.body;
     const id = req.params.id;
     try {
-      const result = await OffersModel.findOneAndUpdate(
+      const result = await CandidateModel.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
         { new: true } // Para obtener el documento actualizado en lugar del antiguo
@@ -67,7 +73,7 @@ class OffersControllers {
   async deleteStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await OffersModel.findOneAndDelete({
+      const result = await CandidateModel.findOneAndDelete({
         _id: new ObjectId(id),
       });
 
@@ -83,4 +89,4 @@ class OffersControllers {
     }
   }
 }
-module.exports = { OffersControllers };
+module.exports = { CandidateControllers };

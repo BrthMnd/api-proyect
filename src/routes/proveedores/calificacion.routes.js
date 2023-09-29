@@ -1,13 +1,13 @@
-const {CalificacionesController} = require("../../controllers/proveedores/calificacion.controllers");
-const router = require('express').Router();
+const router = require("express").Router();
+const {
+  CalificacionesController,
+} = require("../../controllers/proveedores/calificacion.controllers");
 const Calificacion = new CalificacionesController();
 
-router.get('/', Calificacion.getCalificaciones.bind())
-router.get('/:id', Calificacion.getCalificacionPorId.bind())
-router.post('/', Calificacion.postCalificacion.bind())
-router.delete('/:id', Calificacion.deleteCalificacion.bind())
-router.put('/:id',Calificacion.putCalificacion.bind())
+router.get("/", Calificacion.getCalificaciones.bind());
+router.get("/:id", Calificacion.getCalificacionPorId.bind());
+router.post("/", Calificacion.postCalificacion.bind());
+router.delete("/:id", Calificacion.deleteCalificacion.bind());
+router.put("/:id", Calificacion.putCalificacion.bind());
 
-
-module.exports  = router
-
+module.exports = router;

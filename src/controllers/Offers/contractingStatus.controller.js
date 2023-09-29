@@ -1,19 +1,19 @@
 const { ObjectId } = require("mongodb");
 const {
   ContractingStatusModel,
-} = require("../../models/Offers/contractingStatus.models");
+} = require("../../models/Offers/contractingStatus.modal");
 
-class ContractingStatusController {
+class ContractingStatus_Controller {
   getStatus(req, res, next) {
     ContractingStatusModel.find()
-      // .populate("id_offers")
-      // .populate("id_ServiceProvider")
-      // .populate("id_ContratingStatus")
       .then((result) => {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Estados" });
+        res.status(500).json({
+          error: "Error al obtener estados de contrato",
+          err: error.message,
+        });
       })
       .finally(() => next());
   }
@@ -28,7 +28,11 @@ class ContractingStatusController {
     result
       .save()
       .then((result) => res.status(201).json(result))
-      .catch((error) => res.status(500).json({ Error: "ERROR CON ESTADO ***" }))
+      .catch((error) =>
+        res
+          .status(500)
+          .json({ Error: "error-> estado de Contrato ***", err: error.message })
+      )
       .finally(() => next());
   }
   async getIdStatus(req, res, next) {
@@ -37,15 +41,9 @@ class ContractingStatusController {
       const result = await ContractingStatusModel.find({
         _id: new ObjectId(id),
       });
-      if (result) {
-        res.status(200).send(result);
-      } else {
-        res
-          .status(404)
-          .send("No se encontró ningún documento con el ID proporcionado.");
-      }
+      res.status(200).send(result);
     } catch (error) {
-      console.log("eeeror" + error);
+      console.log("*** El Error es: ***" + error.message);
     } finally {
       next();
     }
@@ -68,7 +66,7 @@ class ContractingStatusController {
         res.status(500).json({ error: "Error al actualizar el documento" });
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error -> " + error.message);
     } finally {
       next();
     }
@@ -81,15 +79,15 @@ class ContractingStatusController {
       });
 
       if (result) {
-        res.status(200).send({ message: "Borrado con exito", result });
+        res.status(200).send({ message: "Borrado con éxito", result });
       } else {
-        res.status(500).send({ error: "Error al eliminar el archivo" });
+        res.status(500).send({ error: "Error al eliminar el documento" });
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     } finally {
       next();
     }
   }
 }
-module.exports = { ContractingStatusController };
+module.exports = { ContractingStatus_Controller };
