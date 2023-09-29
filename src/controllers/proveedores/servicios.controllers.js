@@ -50,21 +50,45 @@ class ServiciosController {
 
   //______________________________________________________________________________________
 
+  // async putServicio(req, res, next) {
+  //   const { Nombre_Servicio, Descripcion, estado, Categoria_Servicios } =
+  //     req.body;
+  //   const id = req.params.id;
+  //   try {
+  //     const result = await ServicioModels.findOneAndUpdate(
+  //       { _id: new ObjectId(id) },
+  //       {
+  //         $set: {
+  //           Nombre_Servicio: Nombre_Servicio,
+  //           Descripcion: Descripcion,
+  //           estado: estado,
+  //           Categoria_Servicios: Categoria_Servicios,
+  //         },
+  //       }
+  //     );
+
+  //     if (result) {
+  //       res
+  //         .status(200)
+  //         .json({ message: "Documento actualizado exitosamente\n", result });
+  //     } else {
+  //       res.status(500).json({ error: "Error al actualizar el documento" });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     next();
+  //   }
+  // }
+
   async putServicio(req, res, next) {
-    const { Nombre_Servicio, Descripcion, estado, Categoria_Servicios } =
-      req.body;
+    const Update = req.body;
     const id = req.params.id;
     try {
       const result = await ServicioModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
-        {
-          $set: {
-            Nombre_Servicio: Nombre_Servicio,
-            Descripcion: Descripcion,
-            estado: estado,
-            Categoria_Servicios: Categoria_Servicios,
-          },
-        }
+        Update,
+        { new: true } // Para obtener el documento actualizado en luxgar del antiguo
       );
 
       if (result) {
@@ -80,6 +104,8 @@ class ServiciosController {
       next();
     }
   }
+
+
 
   //______________________________________________________________________________________
 
