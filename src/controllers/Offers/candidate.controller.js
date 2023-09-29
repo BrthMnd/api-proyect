@@ -1,24 +1,24 @@
 const { ObjectId } = require("mongodb");
-const {
-  ServiceOffersModel,
-} = require("../../models/Offers/offers_service.models");
+// const { CandidateModel } = require("../../models/Offers/candidate.model.js");
 
-class ServiceOffersControllers {
+class CandidateControllers {
   getStatus(req, res, next) {
-    ServiceOffersModel.find()
-      .populate("id_status")
+    CandidateModel.find()
       .populate("id_offers")
+      .populate("id_ServiceProvider")
+      .populate("id_ContratingStatus")
       .then((result) => {
         res.status(200).json(result);
       })
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Estados" });
       })
-      .finally(() => next());
+      .finally(() => {
+        next();
+      });
   }
-
   postStatus(req, res, next) {
-    const result = new ServiceOffersModel(req.body);
+    const result = new CandidateModel(req.body);
     result
       .save()
       .then((result) => res.status(201).json(result))
@@ -28,11 +28,12 @@ class ServiceOffersControllers {
   async getIdStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await ServiceOffersModel.find({
+      const result = await CandidateModel.find({
         _id: new ObjectId(id),
       })
-        .populate("id_status")
-        .populate("id_offers");
+        .populate("id_offers")
+        .populate("id_ServiceProvider")
+        .populate("id_ContratingStatus");
       if (result) {
         res.status(200).send(result);
       } else {
@@ -50,7 +51,7 @@ class ServiceOffersControllers {
     const Update = req.body;
     const id = req.params.id;
     try {
-      const result = await ServiceOffersModel.findOneAndUpdate(
+      const result = await CandidateModel.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
         { new: true } // Para obtener el documento actualizado en lugar del antiguo
@@ -72,7 +73,7 @@ class ServiceOffersControllers {
   async deleteStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await ServiceOffersModel.findOneAndDelete({
+      const result = await CandidateModel.findOneAndDelete({
         _id: new ObjectId(id),
       });
 
@@ -88,4 +89,4 @@ class ServiceOffersControllers {
     }
   }
 }
-module.exports = { ServiceOffersControllers };
+module.exports = { CandidateControllers };

@@ -1,9 +1,14 @@
 const { ObjectId } = require("mongodb");
-const { StatusModel } = require("../../models/Offers/status.models");
+// const {
+//   ContractingStatusModel,
+// } = require("../../models/Offers/contractingStatus.models");
 
-class StatusController {
+class ContractingStatusController {
   getStatus(req, res, next) {
-    StatusModel.find()
+    ContractingStatusModel.find()
+      // .populate("id_offers")
+      // .populate("id_ServiceProvider")
+      // .populate("id_ContratingStatus")
       .then((result) => {
         res.status(200).json(result);
       })
@@ -16,7 +21,7 @@ class StatusController {
   postStatus(req, res, next) {
     const { name, description } = req.body;
 
-    const result = new StatusModel({
+    const result = new ContractingStatusModel({
       name,
       description,
     });
@@ -29,7 +34,7 @@ class StatusController {
   async getIdStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await StatusModel.find({
+      const result = await ContractingStatusModel.find({
         _id: new ObjectId(id),
       });
       if (result) {
@@ -49,7 +54,7 @@ class StatusController {
     const Update = req.body;
     const id = req.params.id;
     try {
-      const result = await StatusModel.findOneAndUpdate(
+      const result = await ContractingStatusModel.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
         { new: true } // Para obtener el documento actualizado en lugar del antiguo
@@ -71,7 +76,7 @@ class StatusController {
   async deleteStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await StatusModel.findOneAndDelete({
+      const result = await ContractingStatusModel.findOneAndDelete({
         _id: new ObjectId(id),
       });
 
@@ -87,4 +92,4 @@ class StatusController {
     }
   }
 }
-module.exports = { StatusController };
+module.exports = { ContractingStatusController };

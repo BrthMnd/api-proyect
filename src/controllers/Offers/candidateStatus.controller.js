@@ -1,49 +1,49 @@
 const { ObjectId } = require("mongodb");
-const { OffersModel } = require("../../models/Offers/offers.models");
+const {
+  CandidateStatusModel,
+} = require("../../models/Offers/candidateStatus.model");
 
-class OffersControllers {
+class CandidateStatus_Controller {
   getStatus(req, res, next) {
-    OffersModel.find()
-      .populate("id_property")
-      .populate("id_status")
-      .populate("id_service")
+    CandidateStatusModel.find()
       .then((result) => {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Ofertas" });
+        res.status(500).json({
+          error: "Error al obtener estados de candidato",
+          err: error.message,
+        });
       })
       .finally(() => next());
   }
 
   postStatus(req, res, next) {
-    const result = new OffersModel(req.body);
+    const { name, description } = req.body;
+
+    const result = new CandidateStatusModel({
+      name,
+      description,
+    });
     result
       .save()
       .then((result) => res.status(201).json(result))
       .catch((error) =>
-        res.status(500).json({ Error: "ERROR CON ESTADO ***", err: error })
+        res
+          .status(500)
+          .json({ Error: "ERROR ESTADO DE CANDIDATO ***", err: error.message })
       )
       .finally(() => next());
   }
   async getIdStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await OffersModel.find({
+      const result = await CandidateStatusModel.find({
         _id: new ObjectId(id),
-      })
-        .populate("id_property")
-        .populate("id_status")
-        .populate("id_service");
-      if (result) {
-        res.status(200).send(result);
-      } else {
-        res
-          .status(404)
-          .send("No se encontró ningún documento con el ID proporcionado.");
-      }
+      });
+      res.status(200).send(result);
     } catch (error) {
-      console.log("eeeror" + error);
+      console.log("*** El Error es: ***" + error.message);
     } finally {
       next();
     }
@@ -52,7 +52,7 @@ class OffersControllers {
     const Update = req.body;
     const id = req.params.id;
     try {
-      const result = await OffersModel.findOneAndUpdate(
+      const result = await CandidateStatusModel.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
         { new: true } // Para obtener el documento actualizado en lugar del antiguo
@@ -66,7 +66,7 @@ class OffersControllers {
         res.status(500).json({ error: "Error al actualizar el documento" });
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error -> " + error.message);
     } finally {
       next();
     }
@@ -74,20 +74,20 @@ class OffersControllers {
   async deleteStatus(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await OffersModel.findOneAndDelete({
+      const result = await CandidateStatusModel.findOneAndDelete({
         _id: new ObjectId(id),
       });
 
       if (result) {
-        res.status(200).send({ message: "Borrado con exito", result });
+        res.status(200).send({ message: "Borrado con éxito", result });
       } else {
-        res.status(500).send({ error: "Error al eliminar el archivo" });
+        res.status(500).send({ error: "Error al eliminar el documento" });
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     } finally {
       next();
     }
   }
 }
-module.exports = { OffersControllers };
+module.exports = { CandidateStatus_Controller };
