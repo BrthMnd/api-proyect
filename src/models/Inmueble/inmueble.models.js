@@ -10,12 +10,8 @@ const InmuebleSchema = new Schema(
     metrosCuadrados: { type: Number },
     nHabitaciones: { type: Number },
     nBanos: { type: Number },
+    estado: { type: Boolean, default: true },
     fechConstruccion: { type: Date },
-    plano: {
-      type: String,
-      deafault:
-        "https://misplanosdecasas.com/wp-content/uploads/2020/11/30-Planos-de-Casas-para-construir.pdf",
-    },
     id_propietario: {
       type: Schema.Types.ObjectId,
       ref: PropietarioModels.modelName,
