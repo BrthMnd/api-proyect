@@ -57,12 +57,13 @@ class Candidate_Controllers {
   async getIdForOffers(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await CandidateModel.find({
+      const result = await CandidateModel.findOne({
         id_offers: new ObjectId(id),
       })
         .populate("id_offers")
         .populate("id_ServiceProvider")
         .populate("id_CandidateStatus");
+      console.log(result);
       if (result) {
         res.status(200).send(result);
       } else {
