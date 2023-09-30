@@ -8,6 +8,6 @@ const categoriaServicioSchema = new Schema({
   Estado: { type: Boolean, default: true },
 });
 
-const CategoriaModel = model("CategoriaServicio", categoriaServicioSchema);
+const CategoriaModel = model("CategoriaServicio", categoriaServicioSchema, "service_ServiceCategority");
 
 module.exports = { CategoriaModel }; // models
