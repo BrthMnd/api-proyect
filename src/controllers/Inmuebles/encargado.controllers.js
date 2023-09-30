@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { EncargadoModels } = require("../../models/Inmueble/encargado.models");
+const {InmuebleModels} = require("../../models/Inmueble/inmueble.models")
 
 class EncargadoControllers {
   getEncargado(req, res, next) {
@@ -66,18 +67,28 @@ class EncargadoControllers {
 
   async deleteEncargado(req, res, next) {
     const id = req.params.id;
-    try {
-      const result = await EncargadoModels.findOneAndDelete({
-        _id: new ObjectId(id),
-      });
 
-      if (result) {
-        res.status(200).send({ message: "Borrado con exito", result });
+    try {
+      const reference = await InmuebleModels.find({
+        id_encargado: new ObjectId(id),
+      });
+      console.log(reference);
+      if (reference.length > 0) {
+        res.status(500).send({
+          error:
+            "No se puede eliminar este documento, ya que se utiliza en otra parte.",
+        });
       } else {
-        res.status(500).send({ error: "Error al eliminar el archivo" });
+        const result = await EncargadoModels.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+        res.status(200).send({ message: "Borrado con éxito", Result: result });
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error al eliminar el documento -> " + error.message);
+      res.status(500).send({
+        error: "error.",
+      });
     } finally {
       next();
     }

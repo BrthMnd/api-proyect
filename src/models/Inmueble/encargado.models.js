@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const EncargadoSchema = new Schema(
   {
     documento: { type: Number },
-    nombres: { type: String },
-    apellidos: { type: String },
+    nombre: { type: String },
     correo: { type: String },
     telefono: { type: String },
     estado: { type: Boolean, default: true },
@@ -20,7 +19,7 @@ const EncargadoSchema = new Schema(
 const EncargadoModels = mongoose.model(
   "Encargados",
   EncargadoSchema,
-  "encargados"
+  "property_Manager"
 );
 
 module.exports = {
