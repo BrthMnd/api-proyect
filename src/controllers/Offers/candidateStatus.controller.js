@@ -2,6 +2,7 @@ const { ObjectId } = require("mongodb");
 const {
   CandidateStatusModel,
 } = require("../../models/Offers/candidateStatus.model");
+const { CandidateModel } = require("../../models/Offers/candidate.model");
 
 class CandidateStatus_Controller {
   getStatus(req, res, next) {
@@ -73,18 +74,29 @@ class CandidateStatus_Controller {
   }
   async deleteStatus(req, res, next) {
     const id = req.params.id;
-    try {
-      const result = await CandidateStatusModel.findOneAndDelete({
-        _id: new ObjectId(id),
-      });
 
-      if (result) {
-        res.status(200).send({ message: "Borrado con éxito", result });
+    try {
+      const reference = await CandidateModel.find({
+        id_CandidateStatus: new ObjectId(id),
+      });
+      console.log(reference);
+      if (reference.length > 0) {
+        res.status(500).send({
+          error:
+            "No se puede eliminar este documento, ya que se utiliza en otra parte. ",
+        });
       } else {
-        res.status(500).send({ error: "Error al eliminar el documento" });
+        const result = await CandidateStatusModel.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+
+        res.status(200).send({ message: "Borrado con éxito", Result: result });
       }
     } catch (error) {
-      console.log(error.message);
+      console.log("Error al eliminar el documento -> " + error.message);
+      res.status(500).send({
+        error: "error.",
+      });
     } finally {
       next();
     }

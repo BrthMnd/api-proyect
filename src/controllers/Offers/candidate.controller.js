@@ -1,17 +1,20 @@
 const { ObjectId } = require("mongodb");
-// const { CandidateModel } = require("../../models/Offers/candidate.model.js");
+const { CandidateModel } = require("../../models/Offers/candidate.model");
+const { ContractingModal } = require("../../models/Offers/contracting.model");
 
-class CandidateControllers {
+class Candidate_Controllers {
   getStatus(req, res, next) {
     CandidateModel.find()
       .populate("id_offers")
       .populate("id_ServiceProvider")
-      .populate("id_ContratingStatus")
+      .populate("id_CandidateStatus")
       .then((result) => {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Estados" });
+        res
+          .status(500)
+          .json({ error: "Error al obtener Estados", err: error.message });
       })
       .finally(() => {
         next();
@@ -22,7 +25,11 @@ class CandidateControllers {
     result
       .save()
       .then((result) => res.status(201).json(result))
-      .catch((error) => res.status(500).json({ Error: "ERROR CON ESTADO ***" }))
+      .catch((error) =>
+        res
+          .status(500)
+          .json({ Error: "ERROR CON ESTADO ***", err: error.message })
+      )
       .finally(() => next());
   }
   async getIdStatus(req, res, next) {
@@ -33,7 +40,7 @@ class CandidateControllers {
       })
         .populate("id_offers")
         .populate("id_ServiceProvider")
-        .populate("id_ContratingStatus");
+        .populate("id_CandidateStatus");
       if (result) {
         res.status(200).send(result);
       } else {
@@ -42,7 +49,7 @@ class CandidateControllers {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("eeeror" + error);
+      console.log("error" + error);
     } finally {
       next();
     }
@@ -65,28 +72,83 @@ class CandidateControllers {
         res.status(500).json({ error: "Error al actualizar el documento" });
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
+    } finally {
+      next();
+    }
+  }
+  async AggregateNewCandidate(req, res, next) {
+    const { id_ServiceProvider } = req.body;
+    const candidateId = req.params.id;
+    try {
+      const result = await CandidateModel.findByIdAndUpdate(
+        candidateId,
+        { $addToSet: { id_ServiceProvider: id_ServiceProvider } },
+        { new: true }
+      );
+      if (!result) {
+        return res.status(404).json({ error: "Candidato no encontrado." });
+      }
+      res.status(200).json(result);
+    } catch (error) {
+      console.log(error.message);
+      return res
+        .status(500)
+        .json({ error: "Candidato no encontrado.", err: error.message });
+    } finally {
+      next();
+    }
+  }
+  async EliminateCandidate(req, res, next) {
+    const serviceProviderIdToDelete = req.body.id_ServiceProvider;
+    const candidateId = req.params.id;
+    try {
+      const result = await CandidateModel.findByIdAndUpdate(
+        candidateId,
+        { $pull: { id_ServiceProvider: serviceProviderIdToDelete } },
+        { new: true }
+      );
+      if (!result) {
+        return res.status(404).json({ error: "Candidato no encontrado." });
+      }
+      res.status(200).json(result);
+    } catch (error) {
+      console.log(error.message);
     } finally {
       next();
     }
   }
   async deleteStatus(req, res, next) {
     const id = req.params.id;
-    try {
-      const result = await CandidateModel.findOneAndDelete({
-        _id: new ObjectId(id),
-      });
 
-      if (result) {
-        res.status(200).send({ message: "Borrado con exito", result });
+    try {
+      const reference = await ContractingModal.find({
+        id_CandidateStatus: new ObjectId(id),
+      });
+      console.log(reference);
+      if (reference.length > 0) {
+        res.status(500).send({
+          error:
+            "No se puede eliminar este documento, ya que se utiliza en otra parte.",
+        });
+        throw new Error(
+          "No se puede eliminar este documento, ya que se utiliza en otra parte."
+        );
       } else {
-        res.status(500).send({ error: "Error al eliminar el archivo" });
+        const result = await CandidateModel.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+
+        res.status(200).send({ message: "Borrado con éxito", Result: result });
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error al eliminar el documento -> " + error.message);
+      res.status(500).send({
+        error: "error.",
+      });
     } finally {
       next();
     }
   }
 }
-module.exports = { CandidateControllers };
+module.exports = { Candidate_Controllers };

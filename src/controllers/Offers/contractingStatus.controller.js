@@ -2,6 +2,7 @@ const { ObjectId } = require("mongodb");
 const {
   ContractingStatusModel,
 } = require("../../models/Offers/contractingStatus.modal");
+const { ContractingModal } = require("../../models/Offers/contracting.model");
 
 class ContractingStatus_Controller {
   getStatus(req, res, next) {
@@ -61,7 +62,7 @@ class ContractingStatus_Controller {
       if (result) {
         res
           .status(200)
-          .json({ message: "Documento actualizado exitosamente\n", result });
+          .json({ message: "Documento actualizado exitosamente", result });
       } else {
         res.status(500).json({ error: "Error al actualizar el documento" });
       }
@@ -73,18 +74,28 @@ class ContractingStatus_Controller {
   }
   async deleteStatus(req, res, next) {
     const id = req.params.id;
-    try {
-      const result = await ContractingStatusModel.findOneAndDelete({
-        _id: new ObjectId(id),
-      });
 
-      if (result) {
-        res.status(200).send({ message: "Borrado con éxito", result });
+    try {
+      const reference = await ContractingModal.find({
+        id_contractingStatus: new ObjectId(id),
+      });
+      console.log(reference);
+      if (reference.length > 0) {
+        res.status(500).send({
+          error:
+            "No se puede eliminar este documento, ya que se utiliza en otra parte.",
+        });
       } else {
-        res.status(500).send({ error: "Error al eliminar el documento" });
+        const result = await ContractingStatusModel.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+        res.status(200).send({ message: "Borrado con éxito", Result: result });
       }
     } catch (error) {
-      console.log(error.message);
+      console.log("Error al eliminar el documento -> " + error.message);
+      res.status(500).send({
+        error: "error.",
+      });
     } finally {
       next();
     }
