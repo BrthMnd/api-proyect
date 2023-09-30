@@ -54,6 +54,28 @@ class Candidate_Controllers {
       next();
     }
   }
+  async getIdForOffers(req, res, next) {
+    const id = req.params.id;
+    try {
+      const result = await CandidateModel.find({
+        id_offers: new ObjectId(id),
+      })
+        .populate("id_offers")
+        .populate("id_ServiceProvider")
+        .populate("id_CandidateStatus");
+      if (result) {
+        res.status(200).send(result);
+      } else {
+        res
+          .status(404)
+          .send("No se encontró ningún documento con el ID proporcionado.");
+      }
+    } catch (error) {
+      console.log("error" + error);
+    } finally {
+      next();
+    }
+  }
   async putStatus(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
