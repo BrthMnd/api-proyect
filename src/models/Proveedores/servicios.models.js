@@ -11,7 +11,11 @@ const servicioSchema = new Schema({
   },
 });
 
-const ServicioModels = mongoose.model("Servicio", servicioSchema, "service_servicio");
+const ServicioModels = mongoose.model(
+  "Servicio",
+  servicioSchema,
+  "service_servicio"
+);
 
 module.exports = {
   ServicioModels,
