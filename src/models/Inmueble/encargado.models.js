@@ -19,7 +19,7 @@ const EncargadoSchema = new Schema(
 const EncargadoModels = mongoose.model(
   "Encargados",
   EncargadoSchema,
-  "encargados"
+  "property_Manager"
 );
 
 module.exports = {

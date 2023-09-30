@@ -19,7 +19,7 @@ const PropietarioSchema = new Schema(
 const PropietarioModels = mongoose.model(
   "Propietarios",
   PropietarioSchema,
-  "propietarios"
+  "property_Owner"
 );
 
 module.exports = {
