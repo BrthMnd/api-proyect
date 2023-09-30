@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { ServicioModels } = require("../../models/Proveedores/servicios.models");
 
-const { OffersModel } = require("../../models/Offers/offers.models");
+const { OffersModel } = require("../../models/Offers/offers.model");
 
 class ServiciosController {
   async getServicios(req, res, next) {
@@ -99,14 +99,14 @@ class ServiciosController {
         });
 
         if (result) {
-          res.status(200).send({ message: "Categoría borrada con éxito" });
+          res.status(200).send({ message: "Servicio borrado con éxito" });
         } else {
-          res.status(500).send({ error: "Error al eliminar la categoría" });
+          res.status(500).send({ error: "Error al eliminar el servicio" });
         }
       }
     } catch (error) {
-      console.log("Error al eliminar la categoría -> " + error.message);
-      res.status(500).send({ error: "Error al eliminar la categoría" });
+      console.log("Error al eliminar el servicio -> " + error.message);
+      res.status(500).send({ error: "Error al eliminar el servicio" });
     } finally {
       next();
     }
