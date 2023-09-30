@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   OffersControllers,
-} = require("../../controllers/Offers/offers.controllers");
+} = require("../../controllers/Offers/offers.controller");
 const offers = new OffersControllers();
 
 router.get("/", offers.getStatus.bind());

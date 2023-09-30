@@ -1,11 +1,11 @@
 const { ObjectId } = require("mongodb");
-const { OffersModel } = require("../../models/Offers/offers.models");
+const { OffersModel } = require("../../models/Offers/offers.model");
+const { CandidateModel } = require("../../models/Offers/candidate.model");
 
 class OffersControllers {
   getStatus(req, res, next) {
     OffersModel.find()
       .populate("id_property")
-      .populate("id_status")
       .populate("id_service")
       .then((result) => {
         res.status(200).json(result);
@@ -22,7 +22,9 @@ class OffersControllers {
       .save()
       .then((result) => res.status(201).json(result))
       .catch((error) =>
-        res.status(500).json({ Error: "ERROR CON ESTADO ***", err: error })
+        res
+          .status(500)
+          .json({ Error: "*** Error al Ingresar datos *** >>>", err: error })
       )
       .finally(() => next());
   }
@@ -33,7 +35,6 @@ class OffersControllers {
         _id: new ObjectId(id),
       })
         .populate("id_property")
-        .populate("id_status")
         .populate("id_service");
       if (result) {
         res.status(200).send(result);
@@ -43,7 +44,7 @@ class OffersControllers {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("eeeror" + error);
+      console.log("Error al Obtener Datos por 'ID' >>>" + error.message);
     } finally {
       next();
     }
@@ -66,25 +67,39 @@ class OffersControllers {
         res.status(500).json({ error: "Error al actualizar el documento" });
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     } finally {
       next();
     }
   }
   async deleteStatus(req, res, next) {
     const id = req.params.id;
-    try {
-      const result = await OffersModel.findOneAndDelete({
-        _id: new ObjectId(id),
-      });
 
-      if (result) {
-        res.status(200).send({ message: "Borrado con exito", result });
+    try {
+      const reference = await CandidateModel.find({
+        id_offers: new ObjectId(id),
+      });
+      console.log(reference);
+      if (reference.length > 0) {
+        res.status(500).send({
+          error:
+            "No se puede eliminar este documento, ya que se utiliza en otra parte. ",
+        });
+        throw new Error(
+          "No se puede eliminar este documento, ya que se utiliza en otra parte."
+        );
       } else {
-        res.status(500).send({ error: "Error al eliminar el archivo" });
+        const result = await OffersModel.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+
+        res.status(200).send({ message: "Borrado con éxito", Result: result });
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error al eliminar el documento -> " + error.message);
+      res.status(500).send({
+        error: "error.",
+      });
     } finally {
       next();
     }
