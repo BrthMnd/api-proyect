@@ -14,7 +14,6 @@ const CandidateSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: ProveedoresModels.modelName,
-      unique: true,
     },
   ],
   id_CandidateStatus: {
