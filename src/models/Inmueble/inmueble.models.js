@@ -30,7 +30,11 @@ const InmuebleSchema = new Schema(
     versionKey: false,
   }
 );
-const InmuebleModels = mongoose.model("Inmuebles", InmuebleSchema, "inmuebles"); //
+const InmuebleModels = mongoose.model(
+  "Inmuebles",
+  InmuebleSchema,
+  "property_Property"
+);
 
 module.exports = {
   InmuebleModels,
