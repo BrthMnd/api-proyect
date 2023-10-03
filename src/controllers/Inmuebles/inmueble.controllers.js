@@ -12,7 +12,7 @@ class InmuebleControllers {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Estados" });
+        res.status(500).json({ error: "Error al obtener Estados", err: error.message });
       })
       .finally(() => next());
   }
