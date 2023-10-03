@@ -6,7 +6,6 @@ const Candidate = new Candidate_Controllers();
 
 router.get("/", Candidate.getStatus.bind());
 router.get("/:id", Candidate.getIdStatus.bind());
-router.get("/oferta/:id", Candidate.getIdForOffers.bind());
 router.post("/", Candidate.postStatus.bind());
 router.put("/:id", Candidate.putStatus.bind());
 router.put("/add/:id", Candidate.AggregateNewCandidate.bind());

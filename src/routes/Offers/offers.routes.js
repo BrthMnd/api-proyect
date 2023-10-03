@@ -8,6 +8,6 @@ router.get("/", offers.getStatus.bind());
 router.get("/:id", offers.getIdStatus.bind());
 router.post("/", offers.postStatus.bind());
 router.put("/:id", offers.putStatus.bind());
-router.delete("/:id", offers.deleteStatus.bind());
+router.delete("/:id", offers.deleteCandidateAndOffers.bind());
 
 module.exports = router;
