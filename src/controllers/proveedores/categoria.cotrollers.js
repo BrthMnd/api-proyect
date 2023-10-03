@@ -116,7 +116,7 @@ class CategoriasController {
       }
     } catch (error) {
       console.log("Error al eliminar la categoría -> " + error.message);
-      res.status(500).send({ error: "Error al eliminar la categoría" });
+      res.status(500).send({ error: "Error.", err: error.message });
     } finally {
       next();
     }
@@ -124,3 +124,5 @@ class CategoriasController {
 }
 
 module.exports = { CategoriasController };
+
+
