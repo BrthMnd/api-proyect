@@ -11,7 +11,7 @@ class propietarioController {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener propietarios" });
+        res.status(500).json({ error: "Error al obtener propietarios" , err: error.message });
       })
       .finally(() => next());
   }
@@ -39,7 +39,7 @@ class propietarioController {
       .then((result) => res.status(201).json(result))
       .catch((error) =>
         res.status(500).json({
-          error: "Error al injectar un propietario ",
+          error: "Error al injectar un propietario ", err: error.message
         })
       )
       .finally(() => next());
