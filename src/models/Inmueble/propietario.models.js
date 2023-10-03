@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const FechaActual = require("../../tools/date.tools");
+const { FechaActual } = require("../../tools/date.tools");
 
 const PropietarioSchema = new Schema(
   {
-    documento: { type: Number, unique: true, require: true},
+    documento: { type: Number, unique: true, require: true },
     nombre: { type: String, require: true },
     correo: { type: String, unique: true },
     telefono: { type: String, require: true },

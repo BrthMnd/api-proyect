@@ -2,7 +2,6 @@ const { Schema, model } = require("mongoose");
 const { FechaActual } = require("../../tools/date.tools");
 //
 const { OffersModel } = require("./offers.model");
-const { CandidateStatusModel } = require("./candidateStatus.model");
 const { ProveedoresModels } = require("../Proveedores/provedores.models");
 const CandidateSchema = new Schema({
   id_offers: {
@@ -16,12 +15,7 @@ const CandidateSchema = new Schema({
       ref: ProveedoresModels.modelName,
     },
   ],
-  id_CandidateStatus: {
-    type: Schema.Types.ObjectId,
-    ref: CandidateStatusModel.modelName,
-    required: true,
-    default: "651760a29407f722414e9d75",
-  },
+  id_CandidateStatus: { type: Boolean, default: true },
   DateApplied: { type: String, default: FechaActual },
 });
 
