@@ -9,7 +9,7 @@ class EncargadoControllers {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Erro al obtener datos" });
+        res.status(500).json({ error: "Erro al obtener datos", err: error.message });
       })
       .finally(() => next());
   }
@@ -19,7 +19,7 @@ class EncargadoControllers {
     result
       .save()
       .then((result) => res.status(200).json(result))
-      .catch((error) => res.status(500).json({ error: "Error al insertar" }))
+      .catch((error) => res.status(500).json({ error: "Error al insertar", err: error.message }))
       .finally(() => next());
   }
 

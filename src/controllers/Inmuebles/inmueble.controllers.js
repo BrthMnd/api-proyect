@@ -12,7 +12,7 @@ class InmuebleControllers {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Estados" });
+        res.status(500).json({ error: "Error al obtener Estados", err: error.message });
       })
       .finally(() => next());
   }
@@ -24,7 +24,7 @@ class InmuebleControllers {
       .then((data) =>
         res.status(201).json({ result: data, message: "Created" })
       )
-      .catch((error) => res.status(500).json({ Error: "ERROR CON ESTADO ***" }))
+      .catch((error) => res.status(500).json({ Error: "ERROR CON ESTADO ***", err: error.message }))
       .finally(() => next());
   }
   async getIdInmueble(req, res, next) {
