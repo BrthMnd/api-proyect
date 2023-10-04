@@ -12,9 +12,9 @@ const PropietarioSchema = new Schema(
     direccion: { type: String, require: true },
     fechCreacion: { type: String, default: FechaActual },
   },
-  {
-    versionKey: false, // __v: 0
-  }
+    {
+      versionKey: false, // __v: 0
+    }
 );
 
 const PropietarioModels = mongoose.model(

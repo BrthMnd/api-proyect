@@ -37,54 +37,40 @@ class CalificacionesController {
 
   //__________________________________________________________________________________________
 
-  async postCalificacion(req, res, next) {
-    try {
-      const result = new CalificacionModel(req.body);
-      await result.save();
-
-      if (result) {
-        res.status(200).json({ message: "Calificación creada exitosamente" });
-      } else {
-        res.status(500).json({ error: "Error al crear la calificación" });
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "Error al crear la calificación" });
-    } finally {
-      next();
-    }
+  postCalificacion(req, res, next) {
+    const result = new CalificacionModel(req.body);
+    result
+      .save()
+      .then((result) => res.status(201).json(result))
+      .catch((error) =>
+        res.status(500).json({
+          error: "Error al injectar una calificacion ", err: error.message
+        })
+      )
+      .finally(() => next());
   }
-
   //__________________________________________________________________________________________
   async putCalificacion(req, res, next) {
-    const { Comentarios, CalificacionesFloat } = req.body;
+    
     const id = req.params.id;
-    const collection = "calificacion";
+
     try {
-      const result = await CalificacionModel.updateOne(
+      const result = await CalificacionModel.findOneAndUpdate(
         { _id: new ObjectId(id) },
-        {
-          $set: {
-            Comentarios: Comentarios,
-            CalificacionesFloat: CalificacionesFloat,
-          },
-        }
+        req.body,
+        { new: true }
       );
-      if (result.modifiedCount === 1) {
-        res
-          .status(200)
-          .json({ message: "Calificación actualizada exitosamente" });
+      if (result) {
+        res.status(200).json({ melo: "Documnto actualizado ", result });
       } else {
-        res.status(500).json({ error: "Error al actualizar la calificación" });
+        res.status(500).json({ error: "Error al actualizar" });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Error al actualizar la calificación" });
     } finally {
       next();
     }
   }
-
   //__________________________________________________________________________________________
 
   async deleteCalificacion(req, res, next) {

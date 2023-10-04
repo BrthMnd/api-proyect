@@ -31,49 +31,34 @@ class ProveedoresController {
 
   //_____________________________________________________________________________________
 
-  async postProveedor(req, res) {
-    const { Nombre, Apellido, Telefono, Email, Direccion } = req.body;
-    try {
-      const proveedor = new ProveedoresModels({
-        Nombre: Nombre,
-        Apellido: Apellido,
-        Telefono: Telefono,
-        Email: Email,
-        Direccion: Direccion,
-      });
-
-      await proveedor.save();
-
-      res.status(200).json({ message: "Proveedor creado exitosamente" });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "Error al crear el proveedor" });
-    }
+  postProveedor(req, res, next) {
+    const result = new ProveedoresModels(req.body);
+    result
+      .save()
+      .then((result) => res.status(201).json(result))
+      .catch((error) =>
+        res.status(500).json({
+          error: "Error al injectar un proveedor ", err: error.message
+        })
+      )
+      .finally(() => next());
   }
-
   //_____________________________________________________________________________________
 
   async putProveedor(req, res, next) {
-    const { Nombre, Apellido, Telefono, Email, Direccion } = req.body;
+    
     const id = req.params.id;
-    const collection = "proveedor";
+
     try {
-      const result = await ProveedoresModels.updateOne(
+      const result = await ProveedoresModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
-        {
-          $set: {
-            Nombre: Nombre,
-            Apellido: Apellido,
-            Telefono: Telefono,
-            Email: Email,
-            Direccion: Direccion,
-          },
-        }
+        req.body,
+        { new: true }
       );
-      if (result.modifiedCount === 1) {
-        res.status(200).json({ message: "Documento actualizado exitosamente" });
+      if (result) {
+        res.status(200).json({ melo: "Documnto actualizado ", result });
       } else {
-        res.status(500).json({ error: "Error al actualizar el documento" });
+        res.status(500).json({ error: "Error al actualizar" });
       }
     } catch (error) {
       console.log(error);
