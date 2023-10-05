@@ -1,6 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { EncargadoModels } = require("../../models/Inmueble/encargado.models");
-const {InmuebleModels} = require("../../models/Inmueble/inmueble.models")
+const { InmuebleModels } = require("../../models/Inmueble/inmueble.models");
 
 class EncargadoControllers {
   getEncargado(req, res, next) {
@@ -9,7 +9,9 @@ class EncargadoControllers {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Erro al obtener datos", err: error.message });
+        res
+          .status(500)
+          .json({ error: "Erro al obtener datos", err: error.message });
       })
       .finally(() => next());
   }
@@ -19,7 +21,9 @@ class EncargadoControllers {
     result
       .save()
       .then((result) => res.status(200).json(result))
-      .catch((error) => res.status(500).json({ error: "Error al insertar", err: error.message }))
+      .catch((error) =>
+        res.status(500).json({ error: "Error al insertar", err: error })
+      )
       .finally(() => next());
   }
 

@@ -4,23 +4,29 @@ const { ContractingModal } = require("../../models/Offers/contracting.model");
 class Contracting_Controller {
   getStatus(req, res, next) {
     ContractingModal.find()
-      .populate("id_candidates")
       .populate("id_contractingStatus")
+      .populate("id_candidates")
+      .populate("id_proveedor")
+      .populate("id_offers")
       .then((result) => {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Estados" });
+        res.status(500).json({ error: "Error al obtener Contrato", error });
       })
       .finally(() => next());
   }
 
-  postStatus(req, res, next) {
-    const result = new ContractingModal(req.body);
+  async postStatus(req, res, next) {
+    try {
+      const result = new ContractingModal(req.body);
+    } catch (error) {}
     result
       .save()
       .then((result) => res.status(201).json(result))
-      .catch((error) => res.status(500).json({ Error: "ERROR CON ESTADO ***" }))
+      .catch((error) =>
+        res.status(500).json({ Error: "ERROR CON ESTADO ***", err: error })
+      )
       .finally(() => next());
   }
   async getIdStatus(req, res, next) {
@@ -29,8 +35,10 @@ class Contracting_Controller {
       const result = await ContractingModal.find({
         _id: new ObjectId(id),
       })
+        .populate("id_contractingStatus")
         .populate("id_candidates")
-        .populate("id_contractingStatus");
+        .populate("id_proveedor")
+        .populate("id_offers");
       if (result) {
         res.status(200).send(result);
       } else {
@@ -63,6 +71,7 @@ class Contracting_Controller {
       }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: error });
     } finally {
       next();
     }
