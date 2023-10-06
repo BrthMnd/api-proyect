@@ -14,7 +14,6 @@
 /build
 
 # misc
-.env
 .DS_Store
 .env.local
 .env.development.local
@@ -171,3 +170,5 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+
+.env

@@ -1,21 +1,24 @@
 {
-  "name": "rcservice",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "node index.js",
-    "mon": "nodemon src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Brandon Quintero",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.20.2",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "mongodb": "^5.7.0",
-    "mongoose": "^7.4.3",
-    "nodemon": "^3.0.1"
-  }
+	"name": "rc-service",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"db:seed": "node db/seed.js",
+		"start-dev": "nodemon index.js"
+	},
+	"author": "Santiago",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^1.4.0",
+		"cors": "^2.8.5",
+		"dotenv": "^16.3.1",
+		"express": "^4.18.2",
+		"joi": "^17.9.2",
+		"mongoose": "^7.4.2",
+		"nodemailer": "^6.9.4",
+		"qrcode-terminal": "^0.12.0",
+		"whatsapp-web.js": "https://github.com/Julzk/whatsapp-web.js/tarball/jkr_hotfix_7"
+	}
 }
