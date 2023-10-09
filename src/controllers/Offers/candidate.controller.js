@@ -54,6 +54,7 @@ class Candidate_Controllers {
       next();
     }
   }
+
   async putStatus(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
