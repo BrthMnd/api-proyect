@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 class DatabaseConnector {
-  
   connect(req, res, next) {
     mongoose
       .connect(
@@ -15,7 +14,7 @@ class DatabaseConnector {
       })
       .catch((error) => {
         console.error("Error al conectar a la base de datos:", error);
-        res.status(500).send({ error: "Error en el servidor" });
+        res.status(500).send({ error: "Error en el servidor", Type: error });
       })
       .finally(() => next()); // continuar con la solicitud
   }
@@ -26,7 +25,9 @@ class DatabaseConnector {
       .then(() => console.log("*** Cerrando ***"))
       .catch((e) => {
         console.error("Error al cerrar la conexión a la base de datos:", error);
-        res.status(500).send({ error: "Error en el servidor" });
+        res
+          .status(500)
+          .send({ error: "Error en el servidor ->", type: e.message });
       });
   }
 }
