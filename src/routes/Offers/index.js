@@ -1,17 +1,13 @@
 const router = require("express").Router();
 
-const candidate = require("./candidate.routes");
-const estados = require("./status.routes");
-const oferta = require("./offers.routes");
-const EstadosDeContrato = require("./contratingStatus.routes");
-const ofertas_estados = require("./offers_status.routes");
-const ofertas_servicios = require("./offers_service.routes");
+const OfferRoute = require("./offers.routes");
+const ContractingStatusRoute = require("./contractingStatus.routes");
+const CandidateRoute = require("./candidate.routes");
+const ContractingRoute = require("./contracting.routes");
 
-router.use("/candidato", candidate);
-router.use("/estado", estados);
-router.use("/oferta", oferta);
-router.use("/estadoDeContrato", EstadosDeContrato);
-router.use("/oferta_estado", ofertas_estados);
-router.use("/oferta_servicio", ofertas_servicios);
+router.use("/oferta", OfferRoute);
+router.use("/estado_contrato", ContractingStatusRoute);
+router.use("/candidato", CandidateRoute);
+router.use("/contrato", ContractingRoute);
 
 module.exports = router;

@@ -1,14 +1,15 @@
 const router = require("express").Router();
 const {
-  CandidateControllers,
-} = require("../../controllers/Offers/candidate.controllers");
-const candidate = new CandidateControllers();
+  Candidate_Controllers,
+} = require("../../controllers/Offers/candidate.controller");
+const Candidate = new Candidate_Controllers();
 
-router.get("/", candidate.getStatus.bind());
-router.get("/:id", candidate.getIdStatus.bind());
-router.post("/", candidate.postStatus.bind());
-router.put("/:id", candidate.putStatus.bind());
-
-router.delete("/:id", candidate.deleteStatus.bind());
+router.get("/", Candidate.getStatus.bind());
+router.get("/:id", Candidate.getIdStatus.bind());
+router.post("/", Candidate.postStatus.bind());
+router.put("/:id", Candidate.putStatus.bind());
+router.put("/add/:id", Candidate.AggregateNewCandidate.bind());
+router.put("/delete/:id", Candidate.EliminateCandidate.bind());
+router.delete("/:id", Candidate.deleteStatus.bind());
 
 module.exports = router;

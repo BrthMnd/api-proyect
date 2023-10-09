@@ -1,30 +1,39 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const { PropietarioModels } = require("./propietario.models");
+const { FechaActual } = require("../../tools/date.tools");
 const { EncargadoModels } = require("./encargado.models");
 
 const InmuebleSchema = new Schema(
   {
-    tipoPropiedad: { type: String, required: true },
-    direccion: { type: String, required: true },
-    metrosCuadrados: { type: Number, required: true },
-    nHabitaciones: { type: Number, required: true },
-    nBanos: { type: Number, required: true },
-    fechConstruccion: { type: Date, required: false },
-    plano: {
-      type: String,
-      deafault:
-        "https://misplanosdecasas.com/wp-content/uploads/2020/11/30-Planos-de-Casas-para-construir.pdf",
+    fechCreacion: { type: String, default: FechaActual, required: true },
+    tipoPropiedad: { type: String, require: true },
+    direccion: { type: String, require: true },
+    metrosCuadrados: { type: Number, require: true },
+    nHabitaciones: { type: Number, require: true },
+    nBanos: { type: Number, require: true },
+    estado: { type: Boolean, default: true },
+    fechConstruccion: { type: String, default: "2005-11-22", require: true },
+    id_propietario: {
+      type: Schema.Types.ObjectId,
+      ref: PropietarioModels.modelName,
+      require: true,
     },
-    id_propietario: { type: Schema.Types.ObjectId, ref: PropietarioModels },
-    id_encargado: { type: Schema.Types.ObjectId, ref: EncargadoModels },
-    fechCreacion: { type: Date, default: Date.now() },
+    id_encargado: {
+      type: Schema.Types.ObjectId,
+      ref: EncargadoModels.modelName,
+      require: true,
+    },
   },
   {
     versionKey: false,
   }
 );
-const InmuebleModels = mongoose.model("Inmuebles", InmuebleSchema, "inmuebles"); // 
+const InmuebleModels = mongoose.model(
+  "Inmuebles",
+  InmuebleSchema,
+  "property_Property"
+);
 
 module.exports = {
   InmuebleModels,

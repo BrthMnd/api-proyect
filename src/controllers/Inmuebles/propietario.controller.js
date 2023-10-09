@@ -3,7 +3,7 @@ const { ObjectId } = require("mongodb");
 const {
   PropietarioModels,
 } = require("../../models/Inmueble/propietario.models");
-
+const {InmuebleModels} = require("../../models/Inmueble/inmueble.models")
 class propietarioController {
   getPropietario(req, res, next) {
     PropietarioModels.find({})
@@ -11,7 +11,7 @@ class propietarioController {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener propietarios" });
+        res.status(500).json({ error: "Error al obtener propietarios" , err: error.message });
       })
       .finally(() => next());
   }
@@ -39,13 +39,16 @@ class propietarioController {
       .then((result) => res.status(201).json(result))
       .catch((error) =>
         res.status(500).json({
-          error: "Error al injectar un propietario ",
+          error: "Error al injectar un propietario ", err: error.message
         })
       )
       .finally(() => next());
   }
 
   async putPropietario(req, res, next) {
+    
+    const id = req.params.id;
+
     try {
       const result = await PropietarioModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
@@ -66,19 +69,28 @@ class propietarioController {
 
   async deletePropietario(req, res, next) {
     const id = req.params.id;
+
     try {
-      const result = await PropietarioModels.findByIdAndDelete({
-        _id: new ObjectId(id),
+      const reference = await InmuebleModels.find({
+        id_propietario: new ObjectId(id),
       });
-      if (result) {
-        res
-          .status(200)
-          .send({ message: "Archivo eliminado exitosamente ", result });
+      console.log(reference);
+      if (reference.length > 0) {
+        res.status(500).send({
+          error:
+            "No se puede eliminar este documento, ya que se utiliza en otra parte.",
+        });
       } else {
-        res.status(500).send({ error: "Erro al eliminar el archivo" });
+        const result = await PropietarioModels.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+        res.status(200).send({ message: "Borrado con éxito", Result: result });
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error al eliminar el documento -> " + error.message);
+      res.status(500).send({
+        error: "error.",
+      });
     } finally {
       next();
     }
