@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const PropietarioSchema = new Schema(
   {
     documento: { type: Number },
-    nombres: { type: String },
-    apellidos: { type: String },
+    nombre: { type: String },
     correo: { type: String },
     telefono: { type: String },
     estado: { type: Boolean, default: true },
