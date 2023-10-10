@@ -56,7 +56,7 @@ class ServiciosController {
     const Update = req.body;
     const id = req.params.id;
     try {
-      const result = await ServicioModels.findOneAndUpdate(
+      const result = await ServicioModels.updateOne(
         { _id: new ObjectId(id) },
         Update,
         { new: true } // Para obtener el documento actualizado en luxgar del antiguo
