@@ -16,6 +16,7 @@ const CandidateSchema = new Schema({
     },
   ],
   id_CandidateStatus: { type: Boolean, default: true },
+  selectedCandidate: { type: String, default: "" },
   DateApplied: { type: String, default: FechaActual },
 });
 
