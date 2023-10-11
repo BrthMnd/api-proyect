@@ -1,9 +1,3 @@
-<!-- @format -->
-
-# RC-SERVICE
-
-Este es un proyecto que usa Node.js, Express, MongoDB y otras dependencias para crear una aplicación web.
-
 # Notas de Brandon
 
 PD: no tocar la carpeta ImgForMd que con ella se muestran las imágenes de ejemplo
@@ -20,6 +14,9 @@ PD: no tocar la carpeta ImgForMd que con ella se muestran las imágenes de ejemp
 
 ![estructura del proyecto](/ImgForMd/ejemplo2.png)
 ![estructura del proyecto](/ImgForMd/ejemplo3.png)
+
+---
+
 Es importante que la estructura sea la misma, teniendo en cuenta que tienes alguna que otra carpeta de mas, no debería ser un problema, solo tienes que colocar todo dentro de la carpeta src.
 
 > teniendo en cuenta que en el .gitignore tienes archivos que buscan la raíz del proyecto también deberías cambiarlo.
@@ -29,13 +26,35 @@ Es importante que la estructura sea la misma, teniendo en cuenta que tienes algu
 ## los Path / direcciones
 
 ![dirección en conflicto](/ImgForMd/ejemplo4.png)
+
+---
+
 las direcciones entran en conflicto con la estructura del proyecto ya preestablecida por el grupo, si no sigue las normas o la metodología que nosotros utilizamos cuando juntemos en la main y en the cloud no servirá.
+
+---
+
+## Utilizo la api pero no me busca ni me autentica ningún usuario.
+
+## ![falta usuarios](/ImgForMd/ejemplo5.png)
+
+Busco usuarios en POSTMAN pero no me funciona, al revisar sale al hacer las búsquedas en la base de datos crea la colección user, pero no la busca ni crea nuevos usuarios (documentos) debido que no tiene manera de manipular, el control de esto se debe hacer en la carpeta routes/usuarios.
+
+## Buenas Practicas - BD
+
+![falta usuarios](/ImgForMd/ejemplo6.png)
+![falta usuarios](/ImgForMd/ejemplo7.png)
+
+---
+
+Mongodb es una base de datos no relacional, y mucho de su estructura no tiene orden, por lo tanto hacemos lo de las anteriores imágenes para que tengan un sentido, para que sepas hacerlo revisa nuestros models.
+
+---
 
 # Notas de Dufainer
 
 # Notas Cristian
 
-## Errores
+# Errores
 
 -
 
