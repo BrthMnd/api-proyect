@@ -6,7 +6,30 @@ Este es un proyecto que usa Node.js, Express, MongoDB y otras dependencias para 
 
 # Notas de Brandon
 
+PD: no tocar la carpeta ImgForMd que con ella se muestran las imágenes de ejemplo
+
+---
+
+## La Estructura
+
+### Actual
+
 ![estructura distinta](/ImgForMd/ejemplo1.png)
+
+### La que maneja el proyecto
+
+![estructura del proyecto](/ImgForMd/ejemplo2.png)
+![estructura del proyecto](/ImgForMd/ejemplo3.png)
+Es importante que la estructura sea la misma, teniendo en cuenta que tienes alguna que otra carpeta de mas, no debería ser un problema, solo tienes que colocar todo dentro de la carpeta src.
+
+> teniendo en cuenta que en el .gitignore tienes archivos que buscan la raíz del proyecto también deberías cambiarlo.
+
+---
+
+## los Path / direcciones
+
+![direccion en conflicto](/ImgForMd/ejemplo4.png)
+las direcciones
 
 # Notas de Dufainer
 
