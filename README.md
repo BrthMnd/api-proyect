@@ -28,8 +28,8 @@ Es importante que la estructura sea la misma, teniendo en cuenta que tienes algu
 
 ## los Path / direcciones
 
-![direccion en conflicto](/ImgForMd/ejemplo4.png)
-las direcciones
+![dirección en conflicto](/ImgForMd/ejemplo4.png)
+las direcciones entran en conflicto con la estructura del proyecto ya preestablecida por el grupo, si no sigue las normas o la metodología que nosotros utilizamos cuando juntemos en la main y en the cloud no servirá.
 
 # Notas de Dufainer
 
