@@ -2,6 +2,9 @@ const { ObjectId } = require("mongodb");
 const {
   CategoriaModel,
 } = require("../../models/Proveedores/categoria.models.js");
+const {
+  ServicioModels,
+} = require("../../models/Proveedores/servicios.models.js");
 
 class CategoriasController {
   getCategorias(req, res, next) {
@@ -87,20 +90,37 @@ class CategoriasController {
 
   async deleteCategoria(req, res, next) {
     const id = req.params.id;
-    const collection = "categoria";
+
     try {
-      const result = await CategoriaModel.deleteOne({
-        _id: new ObjectId(id),
+      const reference = await ServicioModels.find({
+        Categoria_Servicio: new ObjectId(id),
       });
 
-      if (result) {
-        res.status(200).send({ message: "Categoría borrada con éxito" });
+      if (reference.length > 0) {
+        // Si hay servicios relacionados, se envía un código de estado 409 (Conflict)
+        res.status(409).send({
+          error:
+            "No se puede eliminar esta categoría, ya que se utiliza en otra parte.",
+        });
       } else {
-        res.status(500).send({ error: "Error al eliminar la categoría" });
+        const result = await CategoriaModel.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+
+        if (result) {
+          // Si la eliminación tiene éxito, se envía un código de estado 200 (OK)
+          res.status(200).send({ message: "Categoría borrada con éxito" });
+        } else {
+          // Si no se encuentra la categoría para eliminar, se envía un código de estado 404 (Not Found)
+          res.status(404).send({ error: "Categoría no encontrada" });
+        }
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).send({ error: "Error al eliminar la categoría" });
+      console.error("Error al eliminar la categoría -> " + error.message);
+      // Para errores internos del servidor, se utiliza el código de estado 500 (Internal Server Error)
+      res
+        .status(500)
+        .send({ error: "Error interno del servidor", err: error.message });
     } finally {
       next();
     }
