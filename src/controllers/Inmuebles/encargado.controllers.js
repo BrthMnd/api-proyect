@@ -1,6 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { EncargadoModels } = require("../../models/Inmueble/encargado.models");
-const {InmuebleModels} = require("../../models/Inmueble/inmueble.models")
+const { InmuebleModels } = require("../../models/Inmueble/inmueble.models");
 
 class EncargadoControllers {
   getEncargado(req, res, next) {
@@ -9,7 +9,9 @@ class EncargadoControllers {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Erro al obtener datos", err: error.message });
+        res
+          .status(500)
+          .json({ error: "Erro al obtener datos", err: error.message });
       })
       .finally(() => next());
   }
@@ -19,7 +21,9 @@ class EncargadoControllers {
     result
       .save()
       .then((result) => res.status(200).json(result))
-      .catch((error) => res.status(500).json({ error: "Error al insertar", err: error.message }))
+      .catch((error) =>
+        res.status(500).json({ error: "Error al insertar", err: error })
+      )
       .finally(() => next());
   }
 
@@ -73,22 +77,26 @@ class EncargadoControllers {
         id_encargado: new ObjectId(id),
       });
       console.log(reference);
-      if (reference.length > 0) {
-        res.status(500).send({
+       if (reference.length > 0) {
+        res.status(409).send({
           error:
-            "No se puede eliminar este documento, ya que se utiliza en otra parte.",
+            "No se puede eliminar este Propietario, ya que se utiliza en otra parte.",
         });
       } else {
         const result = await EncargadoModels.findOneAndDelete({
           _id: new ObjectId(id),
         });
-        res.status(200).send({ message: "Borrado con éxito", Result: result });
+      }
+      if (result) {
+        res.status(200).send({ message: "Encargado borrada con éxito" });
+      } else {
+        res.status(404).send({ error: "Encargado no encontrada" });
       }
     } catch (error) {
-      console.log("Error al eliminar el documento -> " + error.message);
-      res.status(500).send({
-        error: "error.",
-      });
+      console.error("Error al eliminar la encargado -> " + error.message);
+      res
+        .status(500)
+        .send({ error: "Error interno del servidor", err: error.message });
     } finally {
       next();
     }

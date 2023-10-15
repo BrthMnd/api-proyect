@@ -54,6 +54,7 @@ class Candidate_Controllers {
       next();
     }
   }
+
   async putStatus(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
@@ -131,9 +132,6 @@ class Candidate_Controllers {
           error:
             "No se puede eliminar este documento, ya que se utiliza en otra parte.",
         });
-        throw new Error(
-          "No se puede eliminar este documento, ya que se utiliza en otra parte."
-        );
       } else {
         const result = await CandidateModel.findOneAndDelete({
           _id: new ObjectId(id),

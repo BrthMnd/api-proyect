@@ -1,6 +1,8 @@
 const { ObjectId } = require("mongodb");
 const { ServicioModels } = require("../../models/Proveedores/servicios.models");
 
+const { OffersModel } = require("../../models/Offers/offers.model");
+
 class ServiciosController {
   async getServicios(req, res, next) {
     try {
@@ -51,20 +53,13 @@ class ServiciosController {
   //______________________________________________________________________________________
 
   async putServicio(req, res, next) {
-    const { Nombre_Servicio, Descripcion, estado, Categoria_Servicios } =
-      req.body;
+    const Update = req.body;
     const id = req.params.id;
     try {
-      const result = await ServicioModels.findOneAndUpdate(
+      const result = await ServicioModels.updateOne(
         { _id: new ObjectId(id) },
-        {
-          $set: {
-            Nombre_Servicio: Nombre_Servicio,
-            Descripcion: Descripcion,
-            estado: estado,
-            Categoria_Servicios: Categoria_Servicios,
-          },
-        }
+        Update,
+        { new: true } // Para obtener el documento actualizado en luxgar del antiguo
       );
 
       if (result) {
@@ -85,20 +80,54 @@ class ServiciosController {
 
   async deleteServicio(req, res, next) {
     const id = req.params.id;
-    try {
-      const result = await ServicioModels.deleteOne({ _id: new ObjectId(id) });
 
-      if (result) {
-        res.status(200).send({ message: "Borrado con éxito" });
+    try {
+      const reference = await OffersModel.find({
+        id_service: new ObjectId(id),
+      });
+
+      console.log(reference);
+
+      if (reference.length > 0) {
+        res.status(500).send({
+          error:
+            "No se puede eliminar esta categoría, ya que se utiliza en otra parte.",
+        });
       } else {
-        res.status(500).send({ error: "Error al eliminar el archivo" });
+        const result = await ServicioModels.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+
+        if (result) {
+          res.status(200).send({ message: "Servicio borrado con éxito" });
+        } else {
+          res.status(500).send({ error: "Error al eliminar el servicio" });
+        }
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error al eliminar el servicio -> " + error.message);
+      res.status(500).send({ error: "Error al eliminar el servicio" });
     } finally {
       next();
     }
   }
+
+  // async deleteServicio(req, res, next) {
+  //   const id = req.params.id;
+  //   try {
+  //     const result = await ServicioModels.deleteOne({ _id: new ObjectId(id) });
+
+  //     if (result) {
+  //       res.status(200).send({ message: "Borrado con éxito" });
+  //     } else {
+  //       res.status(500).send({ error: "Error al eliminar el archivo" });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     next();
+  //   }
+  // }
 }
 
 module.exports = { ServiciosController };

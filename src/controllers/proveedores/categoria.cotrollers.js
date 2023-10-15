@@ -2,6 +2,9 @@ const { ObjectId } = require("mongodb");
 const {
   CategoriaModel,
 } = require("../../models/Proveedores/categoria.models.js");
+const {
+  ServicioModels,
+} = require("../../models/Proveedores/servicios.models.js");
 
 class CategoriasController {
   getCategorias(req, res, next) {
@@ -87,19 +90,32 @@ class CategoriasController {
 
   async deleteCategoria(req, res, next) {
     const id = req.params.id;
-    const collection = "categoria";
+
     try {
-      const result = await CategoriaModel.deleteOne({
-        _id: new ObjectId(id),
+      const reference = await ServicioModels.find({
+        Categoria_Servicio: new ObjectId(id),
       });
 
-      if (result) {
-        res.status(200).send({ message: "Categoría borrada con éxito" });
+      console.log(reference);
+
+      if (reference.length > 0) {
+        res.status(500).send({
+          error:
+            "No se puede eliminar esta categoría, ya que se utiliza en otra parte.",
+        });
       } else {
-        res.status(500).send({ error: "Error al eliminar la categoría" });
+        const result = await CategoriaModel.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+
+        if (result) {
+          res.status(200).send({ message: "Categoría borrada con éxito" });
+        } else {
+          res.status(500).send({ error: "Error al eliminar la categoría" });
+        }
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error al eliminar la categoría -> " + error.message);
       res.status(500).send({ error: "Error al eliminar la categoría" });
     } finally {
       next();
