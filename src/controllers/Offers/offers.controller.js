@@ -11,7 +11,7 @@ class OffersControllers {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Ofertas" });
+        res.status(500).json({ error: "Error al obtener Ofertas", err: error });
       })
       .finally(() => next());
   }

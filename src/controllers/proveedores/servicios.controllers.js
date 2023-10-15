@@ -106,28 +106,11 @@ class ServiciosController {
       }
     } catch (error) {
       console.log("Error al eliminar el servicio -> " + error.message);
-      res.status(500).send({ error: "Error al eliminar el servicio" });
+      res.status(500).send({ error: "Error.", err: error.message });
     } finally {
       next();
     }
   }
-
-  // async deleteServicio(req, res, next) {
-  //   const id = req.params.id;
-  //   try {
-  //     const result = await ServicioModels.deleteOne({ _id: new ObjectId(id) });
-
-  //     if (result) {
-  //       res.status(200).send({ message: "Borrado con éxito" });
-  //     } else {
-  //       res.status(500).send({ error: "Error al eliminar el archivo" });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     next();
-  //   }
-  // }
 }
 
 module.exports = { ServiciosController };

@@ -96,10 +96,9 @@ class CategoriasController {
         Categoria_Servicio: new ObjectId(id),
       });
 
-      console.log(reference);
-
       if (reference.length > 0) {
-        res.status(500).send({
+        // Si hay servicios relacionados, se envía un código de estado 409 (Conflict)
+        res.status(409).send({
           error:
             "No se puede eliminar esta categoría, ya que se utiliza en otra parte.",
         });
@@ -109,14 +108,19 @@ class CategoriasController {
         });
 
         if (result) {
+          // Si la eliminación tiene éxito, se envía un código de estado 200 (OK)
           res.status(200).send({ message: "Categoría borrada con éxito" });
         } else {
-          res.status(500).send({ error: "Error al eliminar la categoría" });
+          // Si no se encuentra la categoría para eliminar, se envía un código de estado 404 (Not Found)
+          res.status(404).send({ error: "Categoría no encontrada" });
         }
       }
     } catch (error) {
-      console.log("Error al eliminar la categoría -> " + error.message);
-      res.status(500).send({ error: "Error al eliminar la categoría" });
+      console.error("Error al eliminar la categoría -> " + error.message);
+      // Para errores internos del servidor, se utiliza el código de estado 500 (Internal Server Error)
+      res
+        .status(500)
+        .send({ error: "Error interno del servidor", err: error.message });
     } finally {
       next();
     }
