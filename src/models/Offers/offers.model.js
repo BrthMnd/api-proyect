@@ -6,7 +6,7 @@ const { ServicioModels } = require("../Proveedores/servicios.models");
 let OffersSchema = new Schema({
   publicationDate: { type: String, default: FechaActual, required: true },
   description: { type: String, maxLength: 500, required: true },
-  status: { type: Boolean, default: true },
+  estado: { type: Boolean, default: true },
   id_property: {
     type: Schema.Types.ObjectId,
     ref: InmuebleModels.modelName,
