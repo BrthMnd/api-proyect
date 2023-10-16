@@ -18,7 +18,7 @@ let OffersSchema = new Schema({
     required: true,
   },
 });
-
+//
 let OffersModel = model("Offers", OffersSchema, "offers_Offers");
 
 module.exports = { OffersModel };
