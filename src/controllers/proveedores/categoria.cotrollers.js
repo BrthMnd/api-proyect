@@ -40,12 +40,12 @@ class CategoriasController {
   //__________________________________________________________________________________________
 
   async postCategoria(req, res, next) {
-    const { Nombre_Categoria, Descripcion, Estado } = req.body;
+    const { Nombre_Categoria, Descripcion, estado } = req.body;
     try {
       const categoria = new CategoriaModel({
         Nombre_Categoria: Nombre_Categoria,
         Descripcion: Descripcion,
-        Estado: Estado,
+        Estado: estado,
       });
 
       const result = await categoria.save();

@@ -5,7 +5,7 @@ const categoriaServicioSchema = new Schema({
   Nombre_Categoria: { type: String, unique: true, require: true },
   Descripcion: { type: String },
   Fecha_Creacion: { type: String, default: FechaActual },
-  Estado: { type: Boolean, default: true },
+  estado: { type: Boolean, default: true },
 });
 
 const CategoriaModel = model("CategoriaServicio", categoriaServicioSchema, "service_ServiceCategority");
