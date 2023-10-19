@@ -3,7 +3,7 @@ const { ObjectId } = require("mongodb");
 const {
   PropietarioModels,
 } = require("../../models/Inmueble/propietario.models");
-const {InmuebleModels} = require("../../models/Inmueble/inmueble.models")
+const { InmuebleModels } = require("../../models/Inmueble/inmueble.models");
 class propietarioController {
   getPropietario(req, res, next) {
     PropietarioModels.find({})
@@ -11,7 +11,9 @@ class propietarioController {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener propietarios" , err: error.message });
+        res
+          .status(500)
+          .json({ error: "Error al obtener propietarios", err: error.message });
       })
       .finally(() => next());
   }
@@ -39,14 +41,14 @@ class propietarioController {
       .then((result) => res.status(201).json(result))
       .catch((error) =>
         res.status(500).json({
-          error: "Error al injectar un propietario ", err: error.message
+          error: "Error al injectar un propietario ",
+          err: error.message,
         })
       )
       .finally(() => next());
   }
 
   async putPropietario(req, res, next) {
-    
     const id = req.params.id;
 
     try {
@@ -75,7 +77,7 @@ class propietarioController {
         id_propietario: new ObjectId(id),
       });
       console.log(reference);
-       if (reference.length > 0) {
+      if (reference.length > 0) {
         res.status(409).send({
           error:
             "No se puede eliminar este Propietario, ya que se utiliza en otra parte.",
@@ -84,11 +86,12 @@ class propietarioController {
         const result = await PropietarioModels.findOneAndDelete({
           _id: new ObjectId(id),
         });
-      }
-      if (result) {
-        res.status(200).send({ message: "Propietario borrada con éxito" });
-      } else {
-        res.status(404).send({ error: "Propietario no encontrada" });
+
+        if (result) {
+          res.status(200).send({ message: "Propietario borrada con éxito" });
+        } else {
+          res.status(404).send({ error: "Propietario no encontrada" });
+        }
       }
     } catch (error) {
       console.error("Error al eliminar el propietario -> " + error.message);

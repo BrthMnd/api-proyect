@@ -77,7 +77,7 @@ class EncargadoControllers {
         id_encargado: new ObjectId(id),
       });
       console.log(reference);
-       if (reference.length > 0) {
+      if (reference.length > 0) {
         res.status(409).send({
           error:
             "No se puede eliminar este Propietario, ya que se utiliza en otra parte.",
@@ -86,11 +86,12 @@ class EncargadoControllers {
         const result = await EncargadoModels.findOneAndDelete({
           _id: new ObjectId(id),
         });
-      }
-      if (result) {
-        res.status(200).send({ message: "Encargado borrada con éxito" });
-      } else {
-        res.status(404).send({ error: "Encargado no encontrada" });
+
+        if (result) {
+          res.status(200).send({ message: "Encargado borrada con éxito" });
+        } else {
+          res.status(404).send({ error: "Encargado no encontrada" });
+        }
       }
     } catch (error) {
       console.error("Error al eliminar la encargado -> " + error.message);
