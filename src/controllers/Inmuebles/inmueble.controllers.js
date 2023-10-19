@@ -85,15 +85,16 @@ class InmuebleControllers {
             "No se puede eliminar este Inmueble, ya que se utiliza en otra parte.",
         });
       } else {
-        const result = await InmuebleModels.findOneAndDelete({
+        const result= await InmuebleModels.findOneAndDelete({
           _id: new ObjectId(id),
         });
-      }
+      
       if (result) {
         res.status(200).send({ message: "Inmueble borrada con éxito" });
       } else {
         res.status(404).send({ error: "Inmueble no encontrada" });
       }
+    }
     } catch (error) {
       console.error("Error al eliminar el inmueble -> " + error.message);
       res
