@@ -1,9 +1,8 @@
 const { ObjectId } = require("mongodb");
 const { InmuebleModels } = require("../../models/Inmueble/inmueble.models");
-const {OffersModel} = require("../../models/Offers/offers.model");
+const { OffersModel } = require("../../models/Offers/offers.model");
 
 class InmuebleControllers {
-  
   getInmueble(req, res, next) {
     InmuebleModels.find({})
       .populate("id_propietario")
@@ -12,7 +11,9 @@ class InmuebleControllers {
         res.status(200).json(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Estados", err: error.message });
+        res
+          .status(500)
+          .json({ error: "Error al obtener Estados", err: error.message });
       })
       .finally(() => next());
   }
@@ -24,7 +25,11 @@ class InmuebleControllers {
       .then((data) =>
         res.status(201).json({ result: data, message: "Created" })
       )
-      .catch((error) => res.status(500).json({ Error: "ERROR CON ESTADO ***", err: error.message }))
+      .catch((error) =>
+        res
+          .status(500)
+          .json({ Error: "ERROR CON ESTADO ***", err: error.message })
+      )
       .finally(() => next());
   }
   async getIdInmueble(req, res, next) {
@@ -79,7 +84,7 @@ class InmuebleControllers {
         id_property: new ObjectId(id),
       });
       console.log(reference);
-       if (reference.length > 0) {
+      if (reference.length > 0) {
         res.status(409).send({
           error:
             "No se puede eliminar este Inmueble, ya que se utiliza en otra parte.",
@@ -88,11 +93,12 @@ class InmuebleControllers {
         const result = await InmuebleModels.findOneAndDelete({
           _id: new ObjectId(id),
         });
-      }
-      if (result) {
-        res.status(200).send({ message: "Inmueble borrada con éxito" });
-      } else {
-        res.status(404).send({ error: "Inmueble no encontrada" });
+
+        if (result) {
+          res.status(200).send({ message: "Inmueble borrada con éxito" });
+        } else {
+          res.status(404).send({ error: "Inmueble no encontrada" });
+        }
       }
     } catch (error) {
       console.error("Error al eliminar el inmueble -> " + error.message);
@@ -105,4 +111,3 @@ class InmuebleControllers {
   }
 }
 module.exports = { InmuebleControllers };
-
