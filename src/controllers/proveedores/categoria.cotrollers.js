@@ -40,12 +40,12 @@ class CategoriasController {
   //__________________________________________________________________________________________
 
   async postCategoria(req, res, next) {
-    const { Nombre_Categoria, Descripcion, Estado } = req.body;
+    const { Nombre_Categoria, Descripcion, estado } = req.body;
     try {
       const categoria = new CategoriaModel({
         Nombre_Categoria: Nombre_Categoria,
         Descripcion: Descripcion,
-        Estado: Estado,
+        Estado: estado,
       });
 
       const result = await categoria.save();
@@ -65,22 +65,37 @@ class CategoriasController {
 
   async putCategoria(req, res, next) {
     const id = req.params.id;
-    const collection = "categoria";
+    const updatedData = req.body;
     try {
+      const categoria = await CategoriaModel.findOne({ _id: new ObjectId(id) });
+      if (updatedData.estado !== categoria.estado) {
+        const servicios = await ServicioModels.find({
+          Categoria_Servicio: new ObjectId(id),
+        });
+
+        for (const servicio of servicios) {
+          await ServicioModels.updateOne(
+            { _id: servicio._id },
+            { $set: { estado: updatedData.estado } }
+          );
+        }
+      }
+
       const result = await CategoriaModel.updateOne(
         { _id: new ObjectId(id) },
-        {
-          $set: req.body,
-        }
+        { $set: updatedData }
       );
+
       if (result.modifiedCount === 1) {
         res.status(200).json({ message: "Categoría actualizada exitosamente" });
       } else {
-        res.status(500).json({ error: "Error al actualizar la categoría" });
+        res.status(500).json({ message: "Error al actualizar la categoría" });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Error al actualizar la categoría" });
+      res
+        .status(500)
+        .json({ message: "Error al actualizar la categoría", err: error });
     } finally {
       next();
     }
@@ -96,10 +111,9 @@ class CategoriasController {
         Categoria_Servicio: new ObjectId(id),
       });
 
-      console.log(reference);
-
       if (reference.length > 0) {
-        res.status(500).send({
+        // Si hay servicios relacionados, se envía un código de estado 409 (Conflict)
+        res.status(409).send({
           error:
             "No se puede eliminar esta categoría, ya que se utiliza en otra parte.",
         });
@@ -109,14 +123,19 @@ class CategoriasController {
         });
 
         if (result) {
+          // Si la eliminación tiene éxito, se envía un código de estado 200 (OK)
           res.status(200).send({ message: "Categoría borrada con éxito" });
         } else {
-          res.status(500).send({ error: "Error al eliminar la categoría" });
+          // Si no se encuentra la categoría para eliminar, se envía un código de estado 404 (Not Found)
+          res.status(404).send({ error: "Categoría no encontrada" });
         }
       }
     } catch (error) {
-      console.log("Error al eliminar la categoría -> " + error.message);
-      res.status(500).send({ error: "Error al eliminar la categoría" });
+      console.error("Error al eliminar la categoría -> " + error.message);
+      // Para errores internos del servidor, se utiliza el código de estado 500 (Internal Server Error)
+      res
+        .status(500)
+        .send({ error: "Error interno del servidor", err: error.message });
     } finally {
       next();
     }

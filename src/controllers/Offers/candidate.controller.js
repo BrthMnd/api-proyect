@@ -100,6 +100,28 @@ class Candidate_Controllers {
       next();
     }
   }
+  async SelectCandidate(req, res, next) {
+    const { selectedCandidate } = req.body;
+    const candidateId = req.params.id;
+    try {
+      const result = await CandidateModel.findByIdAndUpdate(
+        candidateId,
+        { selectedCandidate: selectedCandidate },
+        { new: true }
+      );
+      if (!result) {
+        return res.status(404).json({ error: "Candidato no seleccionado." });
+      }
+      res.status(200).json(result);
+    } catch (error) {
+      console.log(error.message);
+      return res
+        .status(500)
+        .json({ error: "Candidato no seleccionado.", err: error.message });
+    } finally {
+      next();
+    }
+  }
   async EliminateCandidate(req, res, next) {
     const serviceProviderIdToDelete = req.body.id_ServiceProvider;
     const candidateId = req.params.id;

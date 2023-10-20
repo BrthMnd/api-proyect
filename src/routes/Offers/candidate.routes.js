@@ -10,6 +10,7 @@ router.post("/", Candidate.postStatus.bind());
 router.put("/:id", Candidate.putStatus.bind());
 router.put("/add/:id", Candidate.AggregateNewCandidate.bind());
 router.put("/delete/:id", Candidate.EliminateCandidate.bind());
+router.put("/select/:id", Candidate.SelectCandidate.bind());
 router.delete("/:id", Candidate.deleteStatus.bind());
 
 module.exports = router;

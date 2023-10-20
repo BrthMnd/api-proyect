@@ -5,6 +5,7 @@ class Contracting_Controller {
   getStatus(req, res, next) {
     ContractingModal.find()
       .populate("id_contractingStatus")
+
       .populate("id_candidates")
       .populate("id_proveedor")
       .populate("id_offers")
@@ -20,14 +21,13 @@ class Contracting_Controller {
   async postStatus(req, res, next) {
     try {
       const result = new ContractingModal(req.body);
-    } catch (error) {}
-    result
-      .save()
-      .then((result) => res.status(201).json(result))
-      .catch((error) =>
-        res.status(500).json({ Error: "ERROR CON ESTADO ***", err: error })
-      )
-      .finally(() => next());
+      const response = await result.save();
+      res.status(201).json({ type: "Success", response: response });
+    } catch (error) {
+      res.status(500).json({ Error: "ERROR CON ESTADO ***", err: error });
+    } finally {
+      next();
+    }
   }
   async getIdStatus(req, res, next) {
     const id = req.params.id;
