@@ -57,23 +57,20 @@ class ServiciosController {
   async putServicio(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
-    const servicio = await ServicioModels.findOne({ _id: new ObjectId(id) });
-
     try {
-      // Verifica si el estado de la categoría de este servicio es activo
+      const servicio = await ServicioModels.findOne({ _id: new ObjectId(id) });
       const categoria = await CategoriaModel.findOne({
         _id: servicio.Categoria_Servicio,
       });
 
-      if (categoria.estado && Update.estado) {
-        // Si la categoría está activa o se está actualizando el servicio a activo
-        // Realiza la actualización del servicio
+      if (categoria.estado && servicio.estado) {
+        console.log("entro");
         const result = await ServicioModels.updateOne(
           { _id: new ObjectId(id) },
           Update,
           { new: true }
         );
-
+        console.log("entro completo");
         if (result) {
           res
             .status(200)
@@ -82,7 +79,7 @@ class ServiciosController {
           res.status(500).json({ error: "Error al actualizar el documento" });
         }
       } else {
-        // Si la categoría está inactiva y se intenta activar el servicio
+        console.log("fallo 1");
         res.status(400).json({
           error:
             "No puedes activar este servicio ya que la categoría asociada está inactiva.",
@@ -90,6 +87,7 @@ class ServiciosController {
       }
     } catch (error) {
       console.log(error);
+      console.log("fallo 2");
     } finally {
       next();
     }
