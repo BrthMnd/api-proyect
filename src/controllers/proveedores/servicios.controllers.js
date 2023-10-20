@@ -63,7 +63,7 @@ class ServiciosController {
         _id: servicio.Categoria_Servicio,
       });
 
-      if (categoria.estado && servicio.estado) {
+      if (categoria.estado) {
         console.log("entro");
         const result = await ServicioModels.updateOne(
           { _id: new ObjectId(id) },
