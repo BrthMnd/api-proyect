@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { OffersModel } = require("../../models/Offers/offers.model");
 const { CandidateModel } = require("../../models/Offers/candidate.model");
+const { ContractingModal } = require("../../models/Offers/contracting.model");
 
 class OffersControllers {
   getStatus(req, res, next) {
@@ -91,18 +92,27 @@ class OffersControllers {
     const id = req.params.id;
 
     try {
-      const response_Candidate = await CandidateModel.findOneAndDelete({
+      const response_contract = await ContractingModal.findOne({
         id_offers: new ObjectId(id),
       });
-      const response_offers = await OffersModel.findOneAndDelete({
-        _id: new ObjectId(id),
-      });
-
-      res.status(200).send({
-        message: "Borrados con éxito",
-        Candidate: response_Candidate,
-        Offers: response_offers,
-      });
+      if (response_contract) {
+        res.status(200).send({
+          message:
+            "No se pudo eliminar porque esta siendo utilizado en un contrato",
+        });
+      } else {
+        const response_Candidate = await CandidateModel.findOneAndDelete({
+          id_offers: new ObjectId(id),
+        });
+        const response_offers = await OffersModel.findOneAndDelete({
+          _id: new ObjectId(id),
+        });
+        res.status(200).send({
+          message: "Borrados con éxito",
+          Candidate: response_Candidate,
+          Offers: response_offers,
+        });
+      }
     } catch (error) {
       console.log("Error al eliminar el documento -> " + error.message);
       res.status(500).send({
