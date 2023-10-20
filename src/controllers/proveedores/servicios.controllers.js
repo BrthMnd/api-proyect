@@ -3,6 +3,8 @@ const { ServicioModels } = require("../../models/Proveedores/servicios.models");
 
 const { OffersModel } = require("../../models/Offers/offers.model");
 
+const { CategoriaModel } = require("../../models/Proveedores/categoria.models");
+
 class ServiciosController {
   async getServicios(req, res, next) {
     try {
@@ -55,19 +57,36 @@ class ServiciosController {
   async putServicio(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
-    try {
-      const result = await ServicioModels.updateOne(
-        { _id: new ObjectId(id) },
-        Update,
-        { new: true } // Para obtener el documento actualizado en luxgar del antiguo
-      );
+    const servicio = await ServicioModels.findOne({ _id: new ObjectId(id) });
 
-      if (result) {
-        res
-          .status(200)
-          .json({ message: "Documento actualizado exitosamente\n", result });
+    try {
+      // Verifica si el estado de la categoría de este servicio es activo
+      const categoria = await CategoriaModel.findOne({
+        _id: servicio.Categoria_Servicio,
+      });
+
+      if (categoria.estado && Update.estado) {
+        // Si la categoría está activa o se está actualizando el servicio a activo
+        // Realiza la actualización del servicio
+        const result = await ServicioModels.updateOne(
+          { _id: new ObjectId(id) },
+          Update,
+          { new: true }
+        );
+
+        if (result) {
+          res
+            .status(200)
+            .json({ message: "Documento actualizado exitosamente", result });
+        } else {
+          res.status(500).json({ error: "Error al actualizar el documento" });
+        }
       } else {
-        res.status(500).json({ error: "Error al actualizar el documento" });
+        // Si la categoría está inactiva y se intenta activar el servicio
+        res.status(400).json({
+          error:
+            "No puedes activar este servicio ya que la categoría asociada está inactiva.",
+        });
       }
     } catch (error) {
       console.log(error);

@@ -40,12 +40,12 @@ class CategoriasController {
   //__________________________________________________________________________________________
 
   async postCategoria(req, res, next) {
-    const { Nombre_Categoria, Descripcion, Estado } = req.body;
+    const { Nombre_Categoria, Descripcion, estado } = req.body;
     try {
       const categoria = new CategoriaModel({
         Nombre_Categoria: Nombre_Categoria,
         Descripcion: Descripcion,
-        Estado: Estado,
+        Estado: estado,
       });
 
       const result = await categoria.save();
@@ -65,22 +65,37 @@ class CategoriasController {
 
   async putCategoria(req, res, next) {
     const id = req.params.id;
-    const collection = "categoria";
+    const updatedData = req.body;
     try {
+      const categoria = await CategoriaModel.findOne({ _id: new ObjectId(id) });
+      if (updatedData.estado !== categoria.estado) {
+        const servicios = await ServicioModels.find({
+          Categoria_Servicio: new ObjectId(id),
+        });
+
+        for (const servicio of servicios) {
+          await ServicioModels.updateOne(
+            { _id: servicio._id },
+            { $set: { estado: updatedData.estado } }
+          );
+        }
+      }
+
       const result = await CategoriaModel.updateOne(
         { _id: new ObjectId(id) },
-        {
-          $set: req.body,
-        }
+        { $set: updatedData }
       );
+
       if (result.modifiedCount === 1) {
         res.status(200).json({ message: "Categoría actualizada exitosamente" });
       } else {
-        res.status(500).json({ error: "Error al actualizar la categoría" });
+        res.status(500).json({ message: "Error al actualizar la categoría" });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Error al actualizar la categoría" });
+      res
+        .status(500)
+        .json({ message: "Error al actualizar la categoría", err: error });
     } finally {
       next();
     }
