@@ -65,7 +65,7 @@ class ServiciosController {
         _id: servicio.Categoria_Servicio,
       });
 
-      if (categoria.estado || Update.estado) {
+      if (categoria.estado && Update.estado) {
         // Si la categoría está activa o se está actualizando el servicio a activo
         // Realiza la actualización del servicio
         const result = await ServicioModels.updateOne(
