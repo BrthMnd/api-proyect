@@ -117,7 +117,70 @@ class ProveedoresController {
       next();
     }
   }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7////
+
+  async AggregateNewCalificacion(req, res, next) {
+    const { id_calificacion } = req.body;
+    const proveedor_id = req.params.id;
+    try {
+      const result = await ProveedoresModels.findByIdAndUpdate(
+        proveedor_id,
+        { $addToSet: { id_calificacion: id_calificacion } },
+        { new: true }
+      );
+      if (!result) {
+        return res.status(404).json({ error: "Proveedor no encontrado." });
+      }
+      res.status(200).json(result);
+    } catch (error) {
+      console.log(error.message);
+      return res
+        .status(500)
+        .json({ error: "Proveedor no encontrado.", err: error.message });
+    } finally {
+      next();
+    }
+
+
+  }
+
+/////////////////////////////////////////////////////////////
+
+
+async EliminateCalificacion(req, res, next) {
+  const delete_calificacion = req.body.id_calificacion;
+  const proveedor_id = req.params.id;
+  try {
+    const result = await ProveedoresModels.findByIdAndUpdate(
+      proveedor_id,
+      { $pull: { id_calificacion: delete_calificacion } },
+      { new: true }
+    );
+    if (!result) {
+      return res.status(404).json({ error: "Proveedor no encontrado." });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    console.log(error.message);
+  } finally {
+    next();
+  }
 }
+
+
+  
+}
+
+
+
+
+
+
+
+
+
 
 module.exports = {
   ProveedoresController,

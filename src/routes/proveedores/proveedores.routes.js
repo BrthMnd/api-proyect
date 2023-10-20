@@ -10,6 +10,10 @@ router.post('/', Proveedores.postProveedor.bind())
 router.delete('/:id', Proveedores.deleteProveedor.bind())
 router.put('/:id', Proveedores.putProveedor.bind())
 
+//
+router.put('/agregar/:id', Proveedores.AggregateNewCalificacion.bind());
+router.put('/delete/:id', Proveedores.EliminateCalificacion.bind());
+
 // models -> controllers -> routes -> Final
 
 module.exports  = router

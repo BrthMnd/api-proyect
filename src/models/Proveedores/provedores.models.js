@@ -3,12 +3,11 @@ const Schema = mongoose.Schema;
 const { CalificacionModel } = require("./calificacion.models");
 const proveedoresSchema = new Schema(
   {
-    Nombre: { type: String, require: true },
-    Apellido: { type: String, require: true },
-    Documento: { type: String, unique: true, require: true },
-    Telefono: { type: String, require: true },
-    Email: { type: String, unique: true },
-    Direccion: { type: String, require: true },
+    nombre: { type: String, require: true },
+    documento: { type: String, unique: true },
+    telefono: { type: String, require: true, unique: true },
+    email: { type: String, unique: true },
+    direccion: { type: String, require: true },
     id_calificacion: [
       {
         type: Schema.Types.ObjectId,
