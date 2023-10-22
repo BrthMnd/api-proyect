@@ -41,6 +41,7 @@ class CategoriasController {
 
   async postCategoria(req, res, next) {
     const { Nombre_Categoria, Descripcion, estado } = req.body;
+
     try {
       const categoria = new CategoriaModel({
         Nombre_Categoria: Nombre_Categoria,
@@ -54,8 +55,23 @@ class CategoriasController {
         .status(200)
         .json({ message: "Categoría creada exitosamente", Resultado: result });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "Error al crear la categoría" });
+      if (
+        error.code === 11000 &&
+        error.keyPattern &&
+        error.keyPattern.Nombre_Categoria
+      ) {
+        // Código 11000 indica una violación de restricción unique
+        // keyPattern.Nombre_Categoria verifica que la restricción unique se aplique al campo Nombre_Categoria
+        res
+          .status(400)
+          .json({
+            error: "El nombre de categoría ya existe en la base de datos",
+          });
+      } else {
+        // Otro error
+        console.log(error);
+        res.status(500).json({ error: "Error al crear la categoría" });
+      }
     } finally {
       next();
     }
