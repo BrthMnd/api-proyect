@@ -1,15 +1,15 @@
 const { Schema, model } = require("mongoose");
 
-const ContractingStatusSchema = new Schema({
+const OffersStatusSchema = new Schema({
   name: { type: String, unique: true, required: true },
   description: { type: String, required: true },
   estado: { type: Boolean, default: true },
 });
 
-const ContractingStatusModel = model(
+const OffersStatusModel = model(
   "ContractingStatus",
-  ContractingStatusSchema,
-  "offers_ContractingStatus"
+  OffersStatusSchema,
+  "offers_OffersStatus"
 );
 
-module.exports = { ContractingStatusModel };
+module.exports = { OffersStatusModel };

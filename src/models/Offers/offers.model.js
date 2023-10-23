@@ -2,11 +2,16 @@ const { Schema, model } = require("mongoose");
 const { FechaActual } = require("../../tools/date.tools");
 const { InmuebleModels } = require("../Inmueble/inmueble.models");
 const { ServicioModels } = require("../Proveedores/servicios.models");
+const { OffersStatusModel } = require("./contractingStatus.modal");
 
 let OffersSchema = new Schema({
   publicationDate: { type: String, default: FechaActual, required: true },
   description: { type: String, maxLength: 500, required: true },
-  estado: { type: Boolean, default: true },
+  id_OffersStatus: {
+    type: Schema.Types.ObjectId,
+    ref: OffersStatusModel.modelName,
+    required: true,
+  },
   id_property: {
     type: Schema.Types.ObjectId,
     ref: InmuebleModels.modelName,
