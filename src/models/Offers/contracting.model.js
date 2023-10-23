@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 const { CandidateModel } = require("./candidate.model");
-const { ContractingStatusModel } = require("./contractingStatus.modal");
 const { FechaActual } = require("../../tools/date.tools");
 const { OffersModel } = require("./offers.model");
 const { ProveedoresModels } = require("../Proveedores/provedores.models");
