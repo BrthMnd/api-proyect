@@ -4,10 +4,11 @@ const { CandidateModel } = require("../../models/Offers/candidate.model");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
 
 class OffersControllers {
-  getStatus(req, res, next) {
+  Get(req, res, next) {
     OffersModel.find()
       .populate("id_property")
       .populate("id_service")
+      .populate("id_OfferStatus")
       .then((result) => {
         res.status(200).json(result);
       })
@@ -17,7 +18,7 @@ class OffersControllers {
       .finally(() => next());
   }
 
-  async postStatus(req, res, next) {
+  async Post(req, res, next) {
     try {
       const response_offers = new OffersModel(req.body);
       const data_offers = await response_offers.save();
@@ -40,7 +41,7 @@ class OffersControllers {
       next();
     }
   }
-  async getIdStatus(req, res, next) {
+  async GetId(req, res, next) {
     const id = req.params.id;
     try {
       const result = await OffersModel.find({
@@ -61,7 +62,7 @@ class OffersControllers {
       next();
     }
   }
-  async putStatus(req, res, next) {
+  async Put(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
     try {
@@ -88,7 +89,7 @@ class OffersControllers {
       next();
     }
   }
-  async deleteCandidateAndOffers(req, res, next) {
+  async Delete_CandidateAndOffers(req, res, next) {
     const id = req.params.id;
 
     try {
@@ -123,7 +124,7 @@ class OffersControllers {
       next();
     }
   }
-  async getIdCandidateForOffers(req, res, next) {
+  async GetId_CandidateForOffers(req, res, next) {
     const id = req.params.id;
     try {
       const result = await CandidateModel.findOne({

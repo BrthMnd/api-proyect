@@ -1,12 +1,10 @@
 const { ObjectId } = require("mongodb");
-const {
-  ContractingStatusModel,
-} = require("../../models/Offers/contractingStatus.modal");
+const { OffersStatus_Model } = require("../../models/Offers/OfferStatus");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
 
-class ContractingStatus_Controller {
-  getStatus(req, res, next) {
-    ContractingStatusModel.find()
+class OffersStatus_Controller {
+  Get(req, res, next) {
+    OffersStatus_Model.find()
       .then((result) => {
         res.status(200).json(result);
       })
@@ -19,13 +17,8 @@ class ContractingStatus_Controller {
       .finally(() => next());
   }
 
-  postStatus(req, res, next) {
-    const { name, description } = req.body;
-
-    const result = new ContractingStatusModel({
-      name,
-      description,
-    });
+  Post(req, res, next) {
+    const result = new OffersStatus_Model(req.body);
     result
       .save()
       .then((result) => res.status(201).json(result))
@@ -36,10 +29,10 @@ class ContractingStatus_Controller {
       )
       .finally(() => next());
   }
-  async getIdStatus(req, res, next) {
+  async GetId(req, res, next) {
     const id = req.params.id;
     try {
-      const result = await ContractingStatusModel.find({
+      const result = await OffersStatus_Model.find({
         _id: new ObjectId(id),
       });
       res.status(200).send(result);
@@ -49,11 +42,11 @@ class ContractingStatus_Controller {
       next();
     }
   }
-  async putStatus(req, res, next) {
+  async Put(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
     try {
-      const result = await ContractingStatusModel.findOneAndUpdate(
+      const result = await OffersStatus_Model.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
         { new: true } // Para obtener el documento actualizado en lugar del antiguo
@@ -72,12 +65,12 @@ class ContractingStatus_Controller {
       next();
     }
   }
-  async deleteStatus(req, res, next) {
+  async Delete(req, res, next) {
     const id = req.params.id;
 
     try {
       const reference = await ContractingModal.find({
-        id_contractingStatus: new ObjectId(id),
+        id_contracting: new ObjectId(id),
       });
       console.log(reference);
       if (reference.length > 0) {
@@ -86,7 +79,7 @@ class ContractingStatus_Controller {
             "No se puede eliminar este documento, ya que se utiliza en otra parte.",
         });
       } else {
-        const result = await ContractingStatusModel.findOneAndDelete({
+        const result = await OffersStatus_Model.findOneAndDelete({
           _id: new ObjectId(id),
         });
         res.status(200).send({ message: "Borrado con éxito", Result: result });
@@ -101,4 +94,4 @@ class ContractingStatus_Controller {
     }
   }
 }
-module.exports = { ContractingStatus_Controller };
+module.exports = { OffersStatus_Controller };

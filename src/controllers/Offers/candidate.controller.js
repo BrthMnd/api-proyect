@@ -3,7 +3,7 @@ const { CandidateModel } = require("../../models/Offers/candidate.model");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
 
 class Candidate_Controllers {
-  getStatus(req, res, next) {
+  Get(req, res, next) {
     CandidateModel.find()
       .populate("id_offers")
       .populate("id_ServiceProvider")
@@ -20,7 +20,7 @@ class Candidate_Controllers {
         next();
       });
   }
-  postStatus(req, res, next) {
+  Post(req, res, next) {
     const result = new CandidateModel(req.body);
     result
       .save()
@@ -32,7 +32,7 @@ class Candidate_Controllers {
       )
       .finally(() => next());
   }
-  async getIdStatus(req, res, next) {
+  async GetId(req, res, next) {
     const id = req.params.id;
     try {
       const result = await CandidateModel.find({
@@ -55,7 +55,7 @@ class Candidate_Controllers {
     }
   }
 
-  async putStatus(req, res, next) {
+  async Put(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
     try {
@@ -141,7 +141,7 @@ class Candidate_Controllers {
       next();
     }
   }
-  async deleteStatus(req, res, next) {
+  async Delete(req, res, next) {
     const id = req.params.id;
 
     try {
