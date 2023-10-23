@@ -4,11 +4,11 @@ const {
 } = require("../../controllers/Offers/offers.controller");
 const offers = new OffersControllers();
 
-router.get("/", offers.getStatus.bind());
-router.get("/:id", offers.getIdStatus.bind());
-router.get("/candidato/:id", offers.getIdCandidateForOffers.bind());
-router.post("/", offers.postStatus.bind());
-router.put("/:id", offers.putStatus.bind());
-router.delete("/:id", offers.deleteCandidateAndOffers.bind());
+router.get("/", offers.Get.bind());
+router.get("/:id", offers.GetId.bind());
+router.get("/candidato/:id", offers.GetId_CandidateForOffers.bind());
+router.post("/", offers.Post.bind());
+router.put("/:id", offers.Put.bind());
+router.delete("/:id", offers.Delete_CandidateAndOffers.bind());
 
 module.exports = router;

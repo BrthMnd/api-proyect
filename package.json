@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index.js",
-    "mon": "nodemon src/app.js",
+    "mon": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brandon Quintero",
@@ -16,6 +16,7 @@
     "express": "^4.18.2",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.3",
+    "morgan": "^1.10.0",
     "nodemon": "^3.0.1"
   }
 }
