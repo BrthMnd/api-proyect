@@ -60,15 +60,10 @@ class CategoriasController {
         error.keyPattern &&
         error.keyPattern.Nombre_Categoria
       ) {
-        // Código 11000 indica una violación de restricción unique
-        // keyPattern.Nombre_Categoria verifica que la restricción unique se aplique al campo Nombre_Categoria
-        res
-          .status(400)
-          .json({
-            error: "El nombre de categoría ya existe en la base de datos",
-          });
+        res.status(409).json({
+          error: "El nombre de categoría ya existe en la base de datos",
+        });
       } else {
-        // Otro error
         console.log(error);
         res.status(500).json({ error: "Error al crear la categoría" });
       }
@@ -128,7 +123,6 @@ class CategoriasController {
       });
 
       if (reference.length > 0) {
-        // Si hay servicios relacionados, se envía un código de estado 409 (Conflict)
         res.status(409).send({
           error:
             "No se puede eliminar esta categoría, ya que se utiliza en otra parte.",
@@ -139,16 +133,13 @@ class CategoriasController {
         });
 
         if (result) {
-          // Si la eliminación tiene éxito, se envía un código de estado 200 (OK)
           res.status(200).send({ message: "Categoría borrada con éxito" });
         } else {
-          // Si no se encuentra la categoría para eliminar, se envía un código de estado 404 (Not Found)
           res.status(404).send({ error: "Categoría no encontrada" });
         }
       }
     } catch (error) {
       console.error("Error al eliminar la categoría -> " + error.message);
-      // Para errores internos del servidor, se utiliza el código de estado 500 (Internal Server Error)
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
