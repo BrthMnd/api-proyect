@@ -2,6 +2,7 @@ const { ObjectId } = require("mongodb");
 const { UserModel } = require("../../models/Users/users.models.js");
 const jwt = require("jsonwebtoken");
 const bycrypt = require("bcrypt");
+const { CreateAccess } = require("../../libs/jwt.js");
 class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
@@ -97,16 +98,56 @@ class User_Controller {
       next();
     }
   }
+  async Login(req, res, next) {
+    const { password, userName } = req.body;
+
+    try {
+      const Usuario = await UserModel.findOne({ userName: userName });
+      if (!Usuario) return res.status(404).send("Hermano, no lo encontre");
+
+      const Coindide = await bycrypt.compare(password, Usuario.password);
+      if (!Coindide)
+        return res.status(400).send("Hermano, la contraseña es incorrecta");
+
+      const Token = await CreateAccess({ id: Usuario._id });
+      console.log(Token);
+      res.cookie("token", Token);
+      res.status(200).json({ message: "Good", Result: Usuario, token: Token });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Bad", error: error });
+    } finally {
+      next();
+    }
+  }
+  Logout(req, res, next) {
+      res.cookie("token", "", { expires: new Date(0) });
+      res.status(200).send("Sesion Cerrada");
+      next();
+  }
   async register(req, res, next) {
     const { password, userName, Rols } = req.body;
-    // console.log(req.body);
+
     try {
       const passwordHash = await bycrypt.hash(password, 10);
-      const Result = `El usuario ${userName} tiene una contraseña: ${password}, que fue codificada: ${passwordHash}`;
-      res.status(200).json({ result: "Good", message: Result });
+      const newUser = await UserModel({
+        userName,
+        Rols,
+        password: passwordHash,
+      });
+      const UsuarioGuardado = await newUser.save();
+      const Token = await CreateAccess({ id: UsuarioGuardado._id });
+      console.log(Token);
+      res.cookie("token", Token);
+
+      res
+        .status(200)
+        .json({ message: "Good", Result: UsuarioGuardado, token: Token });
     } catch (error) {
-      res.status(500).json({ result: error });
       console.log(error);
+      res.status(500).json({ message: "Bad", error: error });
+    } finally {
+      next();
     }
   }
 }
