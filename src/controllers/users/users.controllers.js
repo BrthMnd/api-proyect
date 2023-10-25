@@ -102,7 +102,7 @@ class User_Controller {
     // console.log(req.body);
     try {
       const passwordHash = await bycrypt.hash(password, 10);
-      const Result = `El usuario ${userName} tiene una contraseña: ${password}, que fue codificada: ${passwordHash}`
+      const Result = `El usuario ${userName} tiene una contraseña: ${password}, que fue codificada: ${passwordHash}`;
       res.status(200).json({ result: "Good", message: Result });
     } catch (error) {
       res.status(500).json({ result: error });
