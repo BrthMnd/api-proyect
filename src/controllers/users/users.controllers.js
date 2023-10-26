@@ -111,11 +111,7 @@ class User_Controller {
 
       const Token = await CreateAccess({ id: Usuario._id });
       console.log(Token);
-      res.cookie("token", Token, {
-        sameSite: "none",
-        secure: true,
-        httpOnly: true,
-      });
+      res.cookie("token", Token);
       res.status(200).json({ message: "Good", Result: Usuario, token: Token });
     } catch (error) {
       console.log(error);
