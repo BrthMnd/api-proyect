@@ -13,6 +13,6 @@ routes.delete("/:id", User.Delete.bind());
 routes.post("/registro", User.register.bind());
 routes.post("/login", User.Login.bind());
 routes.post("/logout", User.Logout.bind());
-routes.get("/VerifyToken", User.VerifyToken.bind());
+routes.post("/VerifyToken", User.VerifyToken.bind());
 
 module.exports = routes;
