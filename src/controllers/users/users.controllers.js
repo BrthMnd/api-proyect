@@ -113,7 +113,7 @@ class User_Controller {
       console.log(Token);
       res.cookie("token", Token, {
         sameSite: "none",
-        secure: "false",
+        secure: true,
       });
       res.status(200).json({ message: "Good", Result: Usuario, token: Token });
     } catch (error) {
