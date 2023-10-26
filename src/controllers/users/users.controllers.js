@@ -121,18 +121,17 @@ class User_Controller {
     }
   }
   Logout(req, res, next) {
-      res.cookie("token", "", { expires: new Date(0) });
-      res.status(200).send("Sesion Cerrada");
-      next();
+    res.cookie("token", "", { expires: new Date(0) });
+    res.status(200).send("Sesion Cerrada");
+    next();
   }
   async register(req, res, next) {
-    const { password, userName, Rols } = req.body;
+    const { password, userName } = req.body;
 
     try {
       const passwordHash = await bycrypt.hash(password, 10);
       const newUser = await UserModel({
         userName,
-        Rols,
         password: passwordHash,
       });
       const UsuarioGuardado = await newUser.save();
@@ -143,6 +142,29 @@ class User_Controller {
       res
         .status(200)
         .json({ message: "Good", Result: UsuarioGuardado, token: Token });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Bad", error: error });
+    } finally {
+      next();
+    }
+  }
+  async VerifyToken(req, res, next) {
+    const { token } = req.cookies;
+
+    try {
+      if (!token) return res.status(400).json({ message: "Unauthorized" });
+
+      const verify = jwt.verify(token, process.env.SECRET_KEY);
+      if (!verify) return res.status(400).json({ message: "Unauthorized" });
+
+      const user = await UserModel.findById({ _id: new ObjectId(verify.id) });
+      if (!user) return res.status(400).json({ message: "Unauthorized" });
+
+      return res.status(200).json({
+        id: user._id,
+        email: user.userName,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error: error });
