@@ -158,6 +158,7 @@ class User_Controller {
   }
   async VerifyToken(req, res, next) {
     const { token } = req.cookies;
+    console.log("Estamos verificando el token: " + token);
 
     try {
       if (!token) return res.status(400).json({ message: "Unauthorized" });
