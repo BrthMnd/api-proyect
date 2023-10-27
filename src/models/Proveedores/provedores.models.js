@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const { CalificacionModel } = require("./calificacion.models");
+const { CategoriaModel } = require("./categoria.models");
+
 const proveedoresSchema = new Schema(
   {
     nombre: { type: String, require: true },
@@ -12,6 +14,12 @@ const proveedoresSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: CalificacionModel.modelName,
+      },
+    ],
+    categoriaServicio: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: CategoriaModel.modelName,
       },
     ],
   },
