@@ -63,7 +63,7 @@ class User_Controller {
         { new: true }
       );
       if (result) {
-        res.status(200).json({ melo: "Permiso actualizado ", result });
+        res.status(200).json({ message: "Permiso actualizado ", result });
       } else {
         res.status(500).json({ error: "Error al actualizar" });
       }
@@ -103,11 +103,10 @@ class User_Controller {
 
     try {
       const Usuario = await UserModel.findOne({ userName: userName });
-      if (!Usuario) return res.status(404).send("Hermano, no lo encontre");
+      if (!Usuario) return res.status(404).send("El usuario no existe");
 
-      const Coindide = await bycrypt.compare(password, Usuario.password);
-      if (!Coindide)
-        return res.status(400).send("Hermano, la contraseña es incorrecta");
+      const Coincide = await bycrypt.compare(password, Usuario.password);
+      if (!Coincide) return res.status(400).send("La contraseña es incorrecta");
 
       const Token = await CreateAccess({ id: Usuario._id });
       console.log(Token);
@@ -115,7 +114,9 @@ class User_Controller {
         sameSite: "none",
         secure: true,
       });
-      res.status(200).json({ message: "Good", Result: Usuario, token: Token });
+      res
+        .status(200)
+        .json({ message: "Bienvenido", result: Usuario, token: Token });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error: error });
@@ -125,7 +126,7 @@ class User_Controller {
   }
   Logout(req, res, next) {
     res.cookie("token", "", { expires: new Date(0) });
-    res.status(200).send("Sesion Cerrada");
+    res.status(200).send("Sesión Cerrada");
     next();
   }
   async register(req, res, next) {
@@ -145,10 +146,13 @@ class User_Controller {
         secure: true,
         httpOnly: true,
       });
-
       res
         .status(200)
-        .json({ message: "Good", Result: UsuarioGuardado, token: Token });
+        .json({
+          message: "Usuario Registrado",
+          result: UsuarioGuardado,
+          token: Token,
+        });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error: error });
