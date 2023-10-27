@@ -146,13 +146,11 @@ class User_Controller {
         secure: true,
         httpOnly: true,
       });
-      res
-        .status(200)
-        .json({
-          message: "Usuario Registrado",
-          result: UsuarioGuardado,
-          token: Token,
-        });
+      res.status(200).json({
+        message: "Usuario Registrado",
+        result: UsuarioGuardado,
+        token: Token,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error: error });
@@ -161,13 +159,12 @@ class User_Controller {
     }
   }
   async VerifyToken(req, res, next) {
-    const { token } = req.cookies;
-    console.log("Estamos verificando el token: " + token);
-
     try {
+      const { token } = req.cookies;
+      console.log("Estamos verificando el token: " + token);
       if (!token) return res.status(400).json({ message: "Unauthorized" });
 
-      const verify = jwt.verify(token, process.env.SECRET_KEY);
+      const verify = await jwt.verify(token, process.env.SECRET_KEY);
       if (!verify) return res.status(400).json({ message: "Unauthorized" });
 
       const user = await UserModel.findById({ _id: new ObjectId(verify.id) });

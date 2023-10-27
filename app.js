@@ -10,9 +10,10 @@ const { CORS } = require("./src/config/cors.config");
 const logger = require("morgan");
 // * Configuration
 app.use(bodyParser.json());
+const allowedOrigins = ["http://localhost:5173", "https://hoppscotch.io"];
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
   })
 );
