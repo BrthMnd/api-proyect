@@ -2,20 +2,30 @@ const { ObjectId } = require("mongodb");
 const { OffersModel } = require("../../models/Offers/offers.model");
 const { CandidateModel } = require("../../models/Offers/candidate.model");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
+const { UserModel } = require("../../models/Users/users.models");
 
 class OffersControllers {
-  Get(req, res, next) {
-    OffersModel.find()
-      .populate("id_property")
-      .populate("id_service")
-      .populate("id_OfferStatus")
-      .then((result) => {
-        res.status(200).json(result);
+  async Get(req, res, next) {
+    try {
+      
+      const response_offers = await OffersModel.find()
+        .populate("id_property")
+        .populate("id_service")
+        .populate("id_OfferStatus")
+
+      res.status(200).json({
+        response_offers
       })
-      .catch((error) => {
-        res.status(500).json({ error: "Error al obtener Ofertas", err: error });
+    } catch (error) {
+      res.status(400).json({
+        type: "Bad",
+        Error: error
       })
-      .finally(() => next());
+      
+    } finally{
+      next()
+    }
+
   }
 
   async Post(req, res, next) {
