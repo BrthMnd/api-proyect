@@ -27,9 +27,9 @@ class EncargadoControllers {
 
         if (error.code === 11000) {
         if (error.keyPattern.documento) {
-          res.status(400).json({ error: "El documento ya esta", err: error });
+          res.status(401).json({ error: "El documento ya esta", err: error });
         } else if (error.keyPattern.correo) {
-          res.status(400).json({ error: "El correo ya esta", err: error });
+          res.status(402).json({ error: "El correo ya esta", err: error });
         }
         else {
           res.status(500).json({ error: "Error con los campos unicos", err: error });
