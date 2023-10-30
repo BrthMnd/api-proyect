@@ -10,6 +10,7 @@ const PropietarioSchema = new Schema(
     telefono: { type: String, require: true },
     estado: { type: Boolean, default: true },
     direccion: { type: String, require: true },
+    tipoDocumento: { type: String, require: true },
     fechCreacion: { type: String, default: FechaActual },
   },
     {
