@@ -3,6 +3,12 @@ const { OffersModel } = require("../../models/Offers/offers.model");
 const { CandidateModel } = require("../../models/Offers/candidate.model");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
 const { UserModel } = require("../../models/Users/users.models");
+const { ServicioModels } = require("../../models/Proveedores/servicios.models");
+const {
+  PropietarioModels,
+} = require("../../models/Inmueble/propietario.models");
+const { InmuebleModels } = require("../../models/Inmueble/inmueble.models");
+const { OffersStatus_Model } = require("../../models/Offers/OfferStatus");
 
 class OffersControllers {
   async Get(req, res, next) {
@@ -90,6 +96,30 @@ class OffersControllers {
         err: error.message,
       });
       console.log(error.message);
+    } finally {
+      next();
+    }
+  }
+  async GetModalData(req, res, next) {
+    try {
+      const response_service = await ServicioModels.find();
+      const response_property = await InmuebleModels.find();
+      const response_offerStatus = await OffersStatus_Model.find();
+      console.log({
+        service: response_service,
+        property: response_property,
+        offerStatus: response_offerStatus,
+      });
+      res.status(200).send({
+        service: response_service,
+        property: response_property,
+        offerStatus: response_offerStatus,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(400).send({
+        error: error,
+      });
     } finally {
       next();
     }
