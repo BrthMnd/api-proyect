@@ -110,14 +110,14 @@ class OffersControllers {
         property: response_property,
         offerStatus: response_offerStatus,
       });
-      res.status(200).send({
+      res.status(200).json({
         service: response_service,
         property: response_property,
         offerStatus: response_offerStatus,
       });
     } catch (error) {
       console.log(error);
-      res.status(400).send({
+      res.status(400).json({
         error: error,
       });
     } finally {
