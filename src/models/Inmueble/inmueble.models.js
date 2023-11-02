@@ -24,6 +24,18 @@ const InmuebleSchema = new Schema(
       ref: EncargadoModels.modelName,
       require: true,
     },
+
+    ////////////////////////////////////////////////////
+
+    documento: { type: Number, unique: true },
+    nombre: { type: String },
+    correo: { type: String, unique: true },
+    telefono: { type: String},
+    tipoDocumento: { type: String, require: true },
+
+
+
+
   },
   {
     versionKey: false,
