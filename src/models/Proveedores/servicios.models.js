@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema, model } = require("mongoose");
 const { CategoriaModel } = require("./categoria.models");
 const servicioSchema = new Schema({
-  Nombre_Servicio: { type: String, unique: true, require: true },
+  Nombre_Servicio: { type: String, unique: true, require: true, trim: true },
   Descripcion: { type: String, require: true },
   estado: { type: Boolean, default: true },
   Categoria_Servicio: {

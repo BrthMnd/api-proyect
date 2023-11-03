@@ -45,8 +45,18 @@ class ServiciosController {
 
       res.status(200).json({ message: "Documento creado exitosamente" });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "Error al crear el documento" });
+      if (
+        error.code === 11000 &&
+        error.keyPattern &&
+        error.keyPattern.Nombre_Servicio
+      ) {
+        res.status(409).json({
+          error: "El nombre del servicio ya esta en uso",
+        });
+      } else {
+        console.log(error);
+        res.status(500).json({ error: "Error al crear el documento" });
+      }
     } finally {
       next();
     }

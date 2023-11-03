@@ -45,19 +45,33 @@ class ProveedoresController {
 
   //_____________________________________________________________________________________
 
-  postProveedor(req, res, next) {
-    const result = new ProveedoresModels(req.body);
-    result
-      .save()
-      .then((data) =>
-        res.status(201).json({ result: data, message: "Proveedor creado" })
-      )
-      .catch((error) =>
-        res
-          .status(500)
-          .json({ Error: "ERROR CON ESTADO ***", err: error.message })
-      )
-      .finally(() => next());
+  async postProveedor(req, res, next) {
+    const { nombre, telefono, email, direccion, categoriaServicio } = req.body;
+
+    try {
+      // Crear un nuevo proveedor
+      const nuevoProveedor = new ProveedoresModels({
+        nombre,
+        telefono,
+        email,
+        direccion,
+        categoriaServicio: categoriaServicio, // Un array de IDs de categorías
+      });
+
+      // Guardar el proveedor en la base de datos
+      const proveedorCreado = await nuevoProveedor.save();
+
+      res.status(201).json({
+        result: proveedorCreado,
+        message: "Proveedor creado con éxito",
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Error al crear el proveedor", err: error.message });
+    } finally {
+      next();
+    }
   }
 
   //_____________________________________________________________________________________
