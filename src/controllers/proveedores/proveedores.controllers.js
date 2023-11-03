@@ -46,29 +46,40 @@ class ProveedoresController {
   //_____________________________________________________________________________________
 
   async postProveedor(req, res, next) {
-    const { nombre, telefono, email, direccion, categoriaServicio } = req.body;
+    const { nombre, documento, telefono, email, direccion, categoriaServicio } =
+      req.body;
 
     try {
       // Crear un nuevo proveedor
       const nuevoProveedor = new ProveedoresModels({
         nombre,
+        documento,
         telefono,
         email,
         direccion,
-        categoriaServicio: categoriaServicio, // Un array de IDs de categorías
+        categoriaServicio: categoriaServicio,
       });
 
-      // Guardar el proveedor en la base de datos
       const proveedorCreado = await nuevoProveedor.save();
-
-      res.status(201).json({
+      res.status(200).json({
         result: proveedorCreado,
         message: "Proveedor creado con éxito",
       });
     } catch (error) {
-      res
-        .status(500)
-        .json({ error: "Error al crear el proveedor", err: error.message });
+      if (
+        error.code === 11000 &&
+        error.keyPattern &&
+        error.keyPattern.documento
+      ) {
+        res.status(409).json({
+          error: "Documento duplicado, el proveedor ya existe.",
+          err: error.message,
+        });
+      } else {
+        res
+          .status(500)
+          .json({ error: "Error al crear el proveedor", err: error.message });
+      }
     } finally {
       next();
     }
