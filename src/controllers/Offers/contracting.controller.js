@@ -2,9 +2,8 @@ const { ObjectId } = require("mongodb");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
 
 class Contracting_Controller {
-  getStatus(req, res, next) {
+  Get(req, res, next) {
     ContractingModal.find()
-      .populate("id_contractingStatus")
 
       .populate("id_candidates")
       .populate("id_proveedor")
@@ -18,7 +17,7 @@ class Contracting_Controller {
       .finally(() => next());
   }
 
-  async postStatus(req, res, next) {
+  async Post(req, res, next) {
     try {
       const result = new ContractingModal(req.body);
       const response = await result.save();
@@ -29,13 +28,12 @@ class Contracting_Controller {
       next();
     }
   }
-  async getIdStatus(req, res, next) {
+  async GetId(req, res, next) {
     const id = req.params.id;
     try {
       const result = await ContractingModal.find({
         _id: new ObjectId(id),
       })
-        .populate("id_contractingStatus")
         .populate("id_candidates")
         .populate("id_proveedor")
         .populate("id_offers");
@@ -52,7 +50,7 @@ class Contracting_Controller {
       next();
     }
   }
-  async putStatus(req, res, next) {
+  async Put(req, res, next) {
     const Update = req.body;
     const id = req.params.id;
     try {
@@ -76,7 +74,7 @@ class Contracting_Controller {
       next();
     }
   }
-  async deleteStatus(req, res, next) {
+  async Delete(req, res, next) {
     const id = req.params.id;
     try {
       const result = await ContractingModal.findOneAndDelete({

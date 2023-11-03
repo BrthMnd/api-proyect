@@ -1,12 +1,12 @@
 const router = require("express").Router();
 
 const OfferRoute = require("./offers.routes");
-const ContractingStatusRoute = require("./contractingStatus.routes");
+const OfferStatus = require("./offerStatus.routes");
 const CandidateRoute = require("./candidate.routes");
 const ContractingRoute = require("./contracting.routes");
 
 router.use("/oferta", OfferRoute);
-router.use("/estado_contrato", ContractingStatusRoute);
+router.use("/estado_oferta", OfferStatus);
 router.use("/candidato", CandidateRoute);
 router.use("/contrato", ContractingRoute);
 
