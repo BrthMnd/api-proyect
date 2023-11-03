@@ -6,7 +6,7 @@ const { CreateAccess } = require("../../libs/jwt.js");
 class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
-      .populate("Rols")
+      .populate("roleRef")
       .then((result) => {
         res.status(200).send(result);
       })
@@ -24,7 +24,7 @@ class User_Controller {
     try {
       const result = await UserModel.find({
         _id: new ObjectId(id),
-      });
+      }).populate("roleRef");
 
       res.status(200).send(result);
     } catch (error) {
@@ -37,18 +37,29 @@ class User_Controller {
 
   //__________________________________________________________________________________________
 
-  Post(req, res, next) {
-    const result = new UserModel(req.body);
-    result
-      .save()
-      .then((result) => res.status(201).json(result))
-      .catch((error) =>
-        res.status(500).json({
-          error: "Error al agregar un permiso ",
-          err: error.message,
-        })
-      )
-      .finally(() => next());
+  async Post(req, res, next) {
+    const { email, password, role, roleRef } = req.body;
+    try {
+      const passwordHash = await bycrypt.hash(password, 10);
+      const result = new UserModel({
+        email,
+        password: passwordHash,
+        role,
+        roleRef,
+      });
+      const user = await result.save();
+
+      if (!user) return res.status(400).send("hubo algún error");
+      res.status(201).json({
+        message: "GOOD",
+        User: user,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    } finally {
+      next();
+    }
   }
 
   //__________________________________________________________________________________________
@@ -85,12 +96,12 @@ class User_Controller {
       });
 
       if (result) {
-        res.status(200).send({ message: "Rol borrado con éxito" });
+        res.status(200).send({ message: "Usuario borrado con éxito" });
       } else {
-        res.status(404).send({ error: "Rol no encontrado" });
+        res.status(404).send({ error: "Usuario no encontrado" });
       }
     } catch (error) {
-      console.error("Error al eliminar el Rol -> " + error.message);
+      console.error("Error al eliminar el Usuario -> " + error.message);
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
@@ -98,15 +109,23 @@ class User_Controller {
       next();
     }
   }
+  // LOGIN
   async Login(req, res, next) {
-    const { password, userName } = req.body;
+    const { password, email } = req.body;
 
     try {
-      const Usuario = await UserModel.findOne({ userName: userName });
+      const Usuario = await UserModel.findOne({ email: email }).populate(
+        "roleRef"
+      );
       if (!Usuario) return res.status(404).send("El usuario no existe");
 
       const Coincide = await bycrypt.compare(password, Usuario.password);
-      if (!Coincide) return res.status(400).send("La contraseña es incorrecta");
+
+      if (!Coincide) {
+        return res
+          .status(400)
+          .json({ response: "La contraseña es incorrecta ", status: Coincide });
+      }
 
       const Token = await CreateAccess({ id: Usuario._id });
       console.log(Token);
@@ -119,7 +138,7 @@ class User_Controller {
         .json({ message: "Bienvenido", result: Usuario, token: Token });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Bad", error: error });
+      res.status(500).json({ message: "Bad", error });
     } finally {
       next();
     }
@@ -130,12 +149,12 @@ class User_Controller {
     next();
   }
   async register(req, res, next) {
-    const { password, userName } = req.body;
+    const { password, email } = req.body;
 
     try {
       const passwordHash = await bycrypt.hash(password, 10);
       const newUser = await UserModel({
-        userName,
+        email,
         password: passwordHash,
       });
       const UsuarioGuardado = await newUser.save();
@@ -153,7 +172,7 @@ class User_Controller {
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Bad", error: error });
+      res.status(500).json({ message: "Bad", error });
     } finally {
       next();
     }
@@ -172,11 +191,11 @@ class User_Controller {
 
       return res.status(200).json({
         id: user._id,
-        email: user.userName,
+        email: user.email,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Bad", error: error });
+      res.status(500).json({ message: "Bad", error });
     } finally {
       next();
     }

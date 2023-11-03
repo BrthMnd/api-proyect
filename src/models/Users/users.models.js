@@ -1,16 +1,21 @@
-const mongoose = require("mongoose");
 const { Schema, model } = require("mongoose");
-const { RolModel } = require("./rols.models");
+const { Employed_Model } = require("./employed.models");
+const { ProveedoresModels } = require("../Proveedores/provedores.models");
 const UserSchema = new Schema({
-  userName: { type: String, unique: true, require: true },
+  email: { type: String, unique: true, require: true },
   password: { type: String, require: true },
-  Rols: {
+  role: {
+    type: String,
+    enum: [Employed_Model.modelName, ProveedoresModels.modelName],
+    required: true,
+  },
+  roleRef: {
     type: Schema.Types.ObjectId,
-    ref: RolModel.modelName,
+    refPath: "role",
   },
 });
 
-const UserModel = mongoose.model("user", UserSchema, "user_user");
+const UserModel = model("user", UserSchema, "user_User");
 
 module.exports = {
   UserModel,
