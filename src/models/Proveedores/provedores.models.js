@@ -6,9 +6,9 @@ const { CategoriaModel } = require("./categoria.models");
 const proveedoresSchema = new Schema(
   {
     nombre: { type: String, require: true },
-    documento: { type: String, unique: true },
-    telefono: { type: String, require: true, unique: true },
-    email: { type: String, unique: true },
+    documento: { type: String, unique: true, trim: true },
+    telefono: { type: String, require: true, unique: true, trim: true },
+    email: { type: String, unique: true, trim: true },
     direccion: { type: String, require: true },
     id_calificacion: [
       {
