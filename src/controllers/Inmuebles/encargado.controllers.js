@@ -22,21 +22,17 @@ class EncargadoControllers {
       .save()
       .then((result) => res.status(200).json(result))
       .catch((error) => {
-
-        console.log(error)
+        console.log(error);
 
         if (error.code === 11000) {
-        if (error.keyPattern.documento) {
-          res.status(409).json({ error: "El documento ya esta", err: error });
-        } else if (error.keyPattern.correo) {
-          res.status(404).json({ error: "El correo ya esta", err: error });
+          if (error.keyPattern.documento) {
+            res.status(400).json({ error: "El documento ya esta", err: error });
+          } else {
+            res.status(500).json({ error: "Algo esta mal con el campo único", err: error });
+          }
+        } else {
+          res.status(500).json({ error: "Error al insertar Encargado ", err: error });
         }
-        else {
-          res.status(500).json({ error: "Error con los campos unicos", err: error });
-        }
-      } else {
-        res.status(500).json({ error: "Error al insertar", err: error });
-      }
       })
       .finally(() => next());
   }
