@@ -51,6 +51,7 @@ class ProveedoresController {
 
     try {
       // Crear un nuevo proveedor
+      console.log(req.body);
       const nuevoProveedor = new ProveedoresModels({
         nombre,
         documento,
