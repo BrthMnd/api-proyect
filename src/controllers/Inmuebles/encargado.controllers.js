@@ -26,7 +26,7 @@ class EncargadoControllers {
 
         if (error.code === 11000) {
           if (error.keyPattern.documento) {
-            res.status(400).json({ error: "El documento ya esta", err: error });
+            res.status(409).json({ error: "Este documento ya se encuentra registrado", err: error });
           } else {
             res.status(500).json({ error: "Algo esta mal con el campo único", err: error });
           }
