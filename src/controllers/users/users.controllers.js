@@ -125,6 +125,11 @@ class User_Controller {
       res.status(200).send("Sesion Cerrada");
       next();
   }
+
+
+
+
+  
   async register(req, res, next) {
     const { password, userName, Rols } = req.body;
 
