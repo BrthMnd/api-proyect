@@ -5,6 +5,7 @@ const {
 const offers = new OffersControllers();
 
 router.get("/", offers.Get.bind());
+router.get("/GetModalData", offers.GetModalData.bind());
 router.get("/:id", offers.GetId.bind());
 router.get("/candidato/:id", offers.GetId_CandidateForOffers.bind());
 router.post("/", offers.Post.bind());

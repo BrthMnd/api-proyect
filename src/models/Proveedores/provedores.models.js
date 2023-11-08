@@ -1,18 +1,25 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const { CalificacionModel } = require("./calificacion.models");
+const { CategoriaModel } = require("./categoria.models");
+
 const proveedoresSchema = new Schema(
   {
-    Nombre: { type: String, require: true },
-    Apellido: { type: String, require: true },
-    Documento: { type: String, unique: true, require: true },
-    Telefono: { type: String, require: true },
-    Email: { type: String, unique: true },
-    Direccion: { type: String, require: true },
+    nombre: { type: String, require: true },
+    documento: { type: String, unique: true, trim: true },
+    telefono: { type: String, require: true, unique: true, trim: true },
+    email: { type: String, unique: true, trim: true },
+    direccion: { type: String, require: true },
     id_calificacion: [
       {
         type: Schema.Types.ObjectId,
         ref: CalificacionModel.modelName,
+      },
+    ],
+    categoriaServicio: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: CategoriaModel.modelName,
       },
     ],
   },

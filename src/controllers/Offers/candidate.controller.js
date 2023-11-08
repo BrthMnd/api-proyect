@@ -87,9 +87,9 @@ class Candidate_Controllers {
         { $addToSet: { id_ServiceProvider: id_ServiceProvider } },
         { new: true }
       );
-      if (!result) {
+      if (!result)
         return res.status(404).json({ error: "Candidato no encontrado." });
-      }
+
       res.status(200).json(result);
     } catch (error) {
       console.log(error.message);
