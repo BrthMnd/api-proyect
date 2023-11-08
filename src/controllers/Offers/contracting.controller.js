@@ -23,7 +23,18 @@ class Contracting_Controller {
       const response = await result.save();
       res.status(201).json({ type: "Success", response: response });
     } catch (error) {
-      res.status(500).json({ Error: "ERROR CON ESTADO ***", err: error });
+      if (
+        error.code === 11000 &&
+        error.keyPattern &&
+        error.keyPattern.Nombre_Servicio
+      ) {
+        res.status(409).json({
+          error: "El nombre del estado ya esta en uso",
+        });
+      } else {
+        console.log(error);
+        res.status(500).json({ error: "Error al crear el documento" });
+      }
     } finally {
       next();
     }
@@ -57,7 +68,7 @@ class Contracting_Controller {
       const result = await ContractingModal.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
-        { new: true } // Para obtener el documento actualizado en lugar del antiguo
+        { new: true }
       );
 
       if (result) {

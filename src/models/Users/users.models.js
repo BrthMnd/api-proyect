@@ -4,6 +4,7 @@ const { ProveedoresModels } = require("../Proveedores/provedores.models");
 const UserSchema = new Schema({
   email: { type: String, unique: true, require: true },
   password: { type: String, require: true },
+  status: { type: Boolean, default: true },
   role: {
     type: String,
     enum: [Employed_Model.modelName, ProveedoresModels.modelName],

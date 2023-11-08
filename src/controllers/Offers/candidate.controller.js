@@ -62,7 +62,7 @@ class Candidate_Controllers {
       const result = await CandidateModel.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
-        { new: true } // Para obtener el documento actualizado en lugar del antiguo
+        { new: true }
       );
 
       if (result) {

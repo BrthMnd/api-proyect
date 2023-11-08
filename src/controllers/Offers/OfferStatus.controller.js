@@ -1,6 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { OffersStatus_Model } = require("../../models/Offers/OfferStatus");
-const { ContractingModal } = require("../../models/Offers/contracting.model");
+const { OffersModel } = require("../../models/Offers/offers.model");
 
 class OffersStatus_Controller {
   Get(req, res, next) {
@@ -22,11 +22,20 @@ class OffersStatus_Controller {
     result
       .save()
       .then((result) => res.status(201).json(result))
-      .catch((error) =>
-        res
-          .status(500)
-          .json({ Error: "error-> estado de Contrato ***", err: error.message })
-      )
+      .catch((error) => {
+        if (
+          error.code === 11000 &&
+          error.keyPattern &&
+          error.keyPattern.Nombre_Servicio
+        ) {
+          res.status(409).json({
+            error: "El nombre del estado ya esta en uso",
+          });
+        } else {
+          console.log(error);
+          res.status(500).json({ error: "Error al crear el documento" });
+        }
+      })
       .finally(() => next());
   }
   async GetId(req, res, next) {
@@ -49,7 +58,7 @@ class OffersStatus_Controller {
       const result = await OffersStatus_Model.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
-        { new: true } // Para obtener el documento actualizado en lugar del antiguo
+        { new: true }
       );
 
       if (result) {
@@ -69,10 +78,9 @@ class OffersStatus_Controller {
     const id = req.params.id;
 
     try {
-      const reference = await ContractingModal.find({
-        id_contracting: new ObjectId(id),
+      const reference = await OffersModel.find({
+        id_OfferStatus: new ObjectId(id),
       });
-      console.log(reference);
       if (reference.length > 0) {
         res.status(500).send({
           error:

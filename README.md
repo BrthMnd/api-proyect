@@ -1,4 +1,6 @@
-# tareas
+# Rc Service
 
-- Crear el primer usuario con rol bien
-- Crear implementar cambios de vista del rol proveedor
+- ver relevancia de proveedor en usuario y decidir si se busca por usuario o por proveedor
+- otras cosas
+
+> Version 1.5

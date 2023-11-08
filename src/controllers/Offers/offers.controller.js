@@ -44,10 +44,18 @@ class OffersControllers {
         Candidate: data_candidate,
       });
     } catch (error) {
-      res.status(500).json({
-        Error: "*** Error al Ingresar datos ***",
-        err: error.message,
-      });
+      if (
+        error.code === 11000 &&
+        error.keyPattern &&
+        error.keyPattern.Nombre_Servicio
+      ) {
+        res.status(409).json({
+          error: "El nombre del estado ya esta en uso",
+        });
+      } else {
+        console.log(error);
+        res.status(500).json({ error: "Error al crear el documento" });
+      }
     } finally {
       next();
     }
@@ -80,7 +88,7 @@ class OffersControllers {
       const result = await OffersModel.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
-        { new: true } // Para obtener el documento actualizado en lugar del antiguo
+        { new: true }
       );
 
       if (result) {
