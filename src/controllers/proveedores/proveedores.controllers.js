@@ -50,7 +50,6 @@ class ProveedoresController {
       req.body;
 
     try {
-      // Crear un nuevo proveedor
       const nuevoProveedor = new ProveedoresModels({
         nombre,
         documento,
@@ -92,10 +91,18 @@ class ProveedoresController {
     const id = req.params.id;
     Update.categorias = req.body.categorias;
     try {
+      const existingProvider = await ProveedoresModels.findOne({
+        documento: Update.documento,
+      });
+      if (existingProvider && existingProvider._id.toString() !== id) {
+        return res.status(409).json({
+          error: "Documento duplicado, el proveedor ya existe.",
+        });
+      }
       const result = await ProveedoresModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
-        { new: true } // Para obtener el documento actualizado en lugar del antiguo
+        { new: true }
       );
 
       if (result) {
