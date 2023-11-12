@@ -181,13 +181,13 @@ class User_Controller {
     try {
       const { token } = req.cookies;
       console.log("Estamos verificando el token: " + token);
-      if (!token) return res.status(400).json({ message: "Unauthorized" });
+      if (!token) return res.status(400).json({ message: "Unauthorized 1" });
 
       const verify = await jwt.verify(token, process.env.SECRET_KEY);
-      if (!verify) return res.status(400).json({ message: "Unauthorized" });
+      if (!verify) return res.status(400).json({ message: "Unauthorized 2" });
 
       const user = await UserModel.findById({ _id: new ObjectId(verify.id) });
-      if (!user) return res.status(400).json({ message: "Unauthorized" });
+      if (!user) return res.status(400).json({ message: "Unauthorized 3" });
 
       return res.status(200).json({
         id: user._id,
