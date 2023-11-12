@@ -201,5 +201,28 @@ class User_Controller {
       next();
     }
   }
+  async VerifyTokenMobile(req, res, next) {
+    const {token} = req.body
+    try {
+      console.log("Estamos verificando el token: " + token);
+      if (!token) return res.status(400).json({ message: "Unauthorized 1" });
+
+      const verify = await jwt.verify(token, process.env.SECRET_KEY);
+      if (!verify) return res.status(400).json({ message: "Unauthorized 2" });
+
+      const user = await UserModel.findById({ _id: new ObjectId(verify.id) });
+      if (!user) return res.status(400).json({ message: "Unauthorized 3" });
+
+      return res.status(200).json({
+        id: user._id,
+        email: user.email,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Bad", error });
+    } finally {
+      next();
+    }
+  }
 }
 module.exports = { User_Controller };

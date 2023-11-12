@@ -14,5 +14,6 @@ routes.post("/registro", User.register.bind());
 routes.post("/login", User.Login.bind());
 routes.post("/logout", User.Logout.bind());
 routes.post("/VerifyToken", User.VerifyToken.bind());
+routes.post("/VerifyTokenMobile", User.VerifyTokenMobile.bind());
 
 module.exports = routes;
