@@ -1,4 +1,4 @@
-const allowedOrigins = ["http://localhost:5173", "https://hoppscotch.io"];
+const allowedOrigins = ["http://localhost:5173", "https://hoppscotch.io","http://localhost:19006"];
 const CORSConfiguration = {
   origin: allowedOrigins,
   credentials: true,
