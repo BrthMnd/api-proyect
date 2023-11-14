@@ -18,7 +18,7 @@ class InmuebleControllers {
       .finally(() => next());
   }
 
-  postInmueble(req, res, next) {
+   postInmueble(req, res, next) {
     const result = new InmuebleModels(req.body);
     result
       .save()
@@ -74,6 +74,14 @@ class InmuebleControllers {
     const Update = req.body;
     const id = req.params.id;
     try {
+      const existingUpdate = await InmuebleModels.findOne({
+        documento: Update.documento,
+      });
+      if (existingUpdate && existingUpdate._id !== id) {
+        return res.status(409).json({
+          error: "Este documento ya se encuentra registrado",
+        });
+      }
       const result = await InmuebleModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
