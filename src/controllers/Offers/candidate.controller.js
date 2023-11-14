@@ -82,9 +82,12 @@ class Candidate_Controllers {
   async AggregateNewCandidate(req, res, next) {
     const { id_ServiceProvider } = req.body;
     const offersId = req.params.id;
+    console.log("proveedor: " + id_ServiceProvider);
+    console.log("oferta: " + offersId);
+
     try {
       const result = await CandidateModel.findOneAndUpdate(
-        { id_offers: offersId },
+        { id_offers: new ObjectId(offersId) },
         { $addToSet: { id_ServiceProvider: id_ServiceProvider } },
         { new: true }
       );
