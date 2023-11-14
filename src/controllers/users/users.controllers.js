@@ -180,7 +180,7 @@ class User_Controller {
   async VerifyToken(req, res, next) {
     try {
       const { token } = req.cookies;
-      console.log(req.cookie)
+      console.log(req.cookie);
       console.log("Estamos verificando el token: " + token);
       if (!token) return res.status(400).json({ message: "Unauthorized 1" });
 
@@ -193,6 +193,11 @@ class User_Controller {
       return res.status(200).json({
         id: user._id,
         email: user.email,
+        name: user.roleRef.nombre,
+        cc: user.roleRef.documento,
+        phone: user.roleRef.telefono,
+        direction: user.roleRef.direccion,
+        score: user.roleRef.id_calificacion,
       });
     } catch (error) {
       console.log(error);
@@ -202,7 +207,7 @@ class User_Controller {
     }
   }
   async VerifyTokenMobile(req, res, next) {
-    const {token} = req.body
+    const { token } = req.body;
     try {
       console.log("Estamos verificando el token: " + token);
       if (!token) return res.status(400).json({ message: "Unauthorized 1" });
@@ -210,12 +215,19 @@ class User_Controller {
       const verify = await jwt.verify(token, process.env.SECRET_KEY);
       if (!verify) return res.status(400).json({ message: "Unauthorized 2" });
 
-      const user = await UserModel.findById({ _id: new ObjectId(verify.id) });
+      const user = await UserModel.findById({
+        _id: new ObjectId(verify.id),
+      }).populate("roleRef");
       if (!user) return res.status(400).json({ message: "Unauthorized 3" });
 
       return res.status(200).json({
         id: user._id,
         email: user.email,
+        name: user.roleRef.nombre,
+        cc: user.roleRef.documento,
+        phone: user.roleRef.telefono,
+        direction: user.roleRef.direccion,
+        score: user.roleRef.id_calificacion,
       });
     } catch (error) {
       console.log(error);
