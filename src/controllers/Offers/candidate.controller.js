@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { CandidateModel } = require("../../models/Offers/candidate.model");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
+const { OffersModel } = require("../../models/Offers/offers.model");
 
 class Candidate_Controllers {
   Get(req, res, next) {
@@ -80,10 +81,10 @@ class Candidate_Controllers {
   }
   async AggregateNewCandidate(req, res, next) {
     const { id_ServiceProvider } = req.body;
-    const candidateId = req.params.id;
+    const offersId = req.params.id;
     try {
-      const result = await CandidateModel.findByIdAndUpdate(
-        candidateId,
+      const result = await CandidateModel.findOneAndUpdate(
+        { id_offers: offersId },
         { $addToSet: { id_ServiceProvider: id_ServiceProvider } },
         { new: true }
       );

@@ -199,6 +199,7 @@ class User_Controller {
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
         direction: user.roleRef.direccion,
+        role:user.role,
         score: user.roleRef.id_calificacion,
       });
     } catch (error) {
@@ -228,6 +229,7 @@ class User_Controller {
         name: user.roleRef.nombre,
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
+        role:user.role,
         direction: user.roleRef.direccion,
         score: user.roleRef.id_calificacion,
       });
