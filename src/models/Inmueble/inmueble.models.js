@@ -27,7 +27,7 @@ const InmuebleSchema = new Schema(
 
     ////////////////////////////////////////////////////
 
-    documento: { type: Number, unique: true, trim: true },
+    documento: { type: Number, unique: true, trim: true, sparse: true },
     nombre: { type: String },
     correo: { type: String, require: true, trim: true },
     telefono: { type: String, require: true, trim: true},

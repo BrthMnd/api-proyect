@@ -57,8 +57,16 @@ class propietarioController {
 
   async putPropietario(req, res, next) {
     const id = req.params.id;
-
+    const update = req.body;
     try {
+      const existingUpdate = await PropietarioModels.findOne({
+        documento: update.documento,
+      });
+      if (existingUpdate && existingUpdate._id !== id) {
+        return res.status(409).json({
+          error: "Este documento ya se encuentra registrado",
+        });
+      }
       const result = await PropietarioModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
         req.body,

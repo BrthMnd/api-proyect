@@ -60,6 +60,14 @@ class EncargadoControllers {
     const id = req.params.id;
 
     try {
+      const existingUpdate = await EncargadoModels.findOne({
+        documento: update.documento,
+      });
+      if (existingUpdate && existingUpdate._id !== id) {
+        return res.status(409).json({
+          error: "Este documento ya se encuentra registrado",
+        });
+      }
       const result = await EncargadoModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
         req.body,
