@@ -187,7 +187,9 @@ class User_Controller {
       const verify = await jwt.verify(token, process.env.SECRET_KEY);
       if (!verify) return res.status(400).json({ message: "Unauthorized 2" });
 
-      const user = await UserModel.findById({ _id: new ObjectId(verify.id) });
+      const user = await UserModel.findById({
+        _id: new ObjectId(verify.id),
+      }).populate("roleRef");
       if (!user) return res.status(400).json({ message: "Unauthorized 3" });
 
       return res.status(200).json({
