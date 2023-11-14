@@ -36,23 +36,16 @@ class Employed_Controller {
   //__________________________________________________________________________________________
 
   async Post(req, res, next) {
-    const {
-      email,
-      password,
-      Nombre,
-      Apellido,
-      Documento,
-      Telefono,
-      Direccion,
-    } = req.body;
+    const { nombre, documento, telefono, direccion, password, email } =
+      req.body;
+
     try {
       const passwordHash = await bycrypt.hash(password, 10);
       const employed = new Employed_Model({
-        Nombre,
-        Apellido,
-        Documento,
-        Telefono,
-        Direccion,
+        nombre,
+        documento,
+        telefono,
+        direccion,
       });
       const employed_created = await employed.save();
 

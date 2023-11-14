@@ -1,10 +1,9 @@
 const { Schema, model } = require("mongoose");
 const EmployedSchema = new Schema({
-  Nombre: { type: String, require: true },
-  Apellido: { type: String, require: true },
-  Documento: { type: String, unique: true, require: true },
-  Telefono: { type: String, require: true },
-  Direccion: { type: String, require: true },
+  nombre: { type: String, require: true },
+  documento: { type: String, unique: true, require: true },
+  telefono: { type: String, require: true },
+  direccion: { type: String, require: true },
 });
 
 const Employed_Model = model("Employed", EmployedSchema, "user_Employed");
