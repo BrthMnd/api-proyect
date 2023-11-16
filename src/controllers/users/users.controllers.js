@@ -181,6 +181,11 @@ class User_Controller {
           error: comprobando,
         });
       }
+      const verifyUser = await UserModel.findOne({ email: email });
+      if (verifyUser)
+        return res.status(409).json({
+          message: `Invalido, la cuenta ${email} ya esta asociada a otro documento`,
+        });
 
       const provider = await ProveedoresModels({
         nombre,
