@@ -3,6 +3,9 @@ const { UserModel } = require("../../models/Users/users.models.js");
 const jwt = require("jsonwebtoken");
 const bycrypt = require("bcrypt");
 const { CreateAccess } = require("../../libs/jwt.js");
+const {
+  ProveedoresModels,
+} = require("../../models/Proveedores/provedores.models.js");
 class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
@@ -148,31 +151,81 @@ class User_Controller {
     res.status(200).send("Sesión Cerrada");
     next();
   }
-  async register(req, res, next) {
-    const { password, email } = req.body;
+  async registerVerify(req, res, next) {
+    const { email } = req.body;
+    try {
+      const verifyUser = await UserModel.findOne({ email: email });
+      if (verifyUser)
+        return res
+          .status(409)
+          .json({ message: "El usuario ya esta registrado" });
 
+      res.status(200).json({ message: "Continuando con el registro" });
+    } catch (error) {
+      res.status(500).json({ message: "A ocurrido un error", error });
+    }
+  }
+  async register(req, res, next) {
+    const { nombre, documento, email, password, direccion, telefono } =
+      req.body;
     try {
       const passwordHash = await bycrypt.hash(password, 10);
+
+      const comprobando = await ProveedoresModels.findOne({
+        documento: documento,
+      });
+      if (comprobando) {
+        console.log(comprobando);
+        return res.status(409).json({
+          message: "Documento ya se encuentra en la base de datos",
+          error: comprobando,
+        });
+      }
+
+      const provider = await ProveedoresModels({
+        nombre,
+        email,
+        documento,
+        direccion,
+        telefono,
+      });
+
+      const saveProvider = await provider.save();
+      if (!saveProvider) {
+        return res.status(400).json({
+          message: "A ocurrido un error",
+          error: saveProvider,
+        });
+      }
       const newUser = await UserModel({
         email,
         password: passwordHash,
+        role: ProveedoresModels.modelName,
+        rolRef: saveProvider._id,
       });
-      const UsuarioGuardado = await newUser.save();
-      const Token = await CreateAccess({ id: UsuarioGuardado._id });
-      console.log(Token);
+      const saveUser = await newUser.save();
+      const Token = await CreateAccess({ id: saveUser._id });
       res.cookie("token", Token, {
         sameSite: "none",
         secure: true,
         httpOnly: true,
       });
+
       res.status(200).json({
         message: "Usuario Registrado",
-        result: UsuarioGuardado,
+        user: {
+          email: saveUser.email,
+          role: saveUser.role,
+        },
+        provider: saveProvider,
         token: Token,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Bad", error });
+      return res.status(500).json({
+        message: "A ocurrido un error",
+        error: error,
+      });
     } finally {
       next();
     }
@@ -199,7 +252,7 @@ class User_Controller {
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
         direction: user.roleRef.direccion,
-        role:user.role,
+        role: user.role,
         score: user.roleRef.id_calificacion,
       });
     } catch (error) {
@@ -229,7 +282,7 @@ class User_Controller {
         name: user.roleRef.nombre,
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
-        role:user.role,
+        role: user.role,
         direction: user.roleRef.direccion,
         score: user.roleRef.id_calificacion,
       });

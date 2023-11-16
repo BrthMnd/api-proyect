@@ -11,6 +11,7 @@ routes.put("/:id", User.Put.bind());
 routes.delete("/:id", User.Delete.bind());
 // LOGIN
 routes.post("/registro", User.register.bind());
+routes.post("/verificar_registro", User.registerVerify.bind());
 routes.post("/login", User.Login.bind());
 routes.post("/logout", User.Logout.bind());
 routes.post("/VerifyToken", User.VerifyToken.bind());
