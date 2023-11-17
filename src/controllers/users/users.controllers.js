@@ -94,7 +94,7 @@ class User_Controller {
     const id = req.params.id;
 
     try {
-      const result = await UserModel.findOneAndDelete({
+      const userDeleted = await UserModel.findOneAndDelete({
         _id: new ObjectId(id),
       });
 
@@ -206,9 +206,10 @@ class User_Controller {
         email,
         password: passwordHash,
         role: ProveedoresModels.modelName,
-        rolRef: saveProvider._id,
+        roleRef: saveProvider._id,
       });
       const saveUser = await newUser.save();
+      console.log(saveUser);
       const Token = await CreateAccess({ id: saveUser._id });
       res.cookie("token", Token, {
         sameSite: "none",
@@ -249,7 +250,7 @@ class User_Controller {
         _id: new ObjectId(verify.id),
       }).populate("roleRef");
       if (!user) return res.status(400).json({ message: "Unauthorized 3" });
-
+      console.log(user);
       return res.status(200).json({
         id: user._id,
         email: user.email,
