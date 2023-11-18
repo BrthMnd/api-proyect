@@ -159,7 +159,6 @@ class User_Controller {
         return res
           .status(409)
           .json({ message: "El usuario ya esta registrado" });
-
       res.status(200).json({ message: "Continuando con el registro" });
     } catch (error) {
       res.status(500).json({ message: "A ocurrido un error", error });
@@ -189,7 +188,6 @@ class User_Controller {
 
       const provider = await ProveedoresModels({
         nombre,
-        email,
         documento,
         direccion,
         telefono,
@@ -241,24 +239,34 @@ class User_Controller {
       const { token } = req.cookies;
       console.log(req.cookie);
       console.log("Estamos verificando el token: " + token);
-      if (!token) return res.status(400).json({ message: "Unauthorized 1" });
+      if (!token)
+        return res.status(400).json({ message: "Acceso no autorizado" });
 
       const verify = await jwt.verify(token, process.env.SECRET_KEY);
-      if (!verify) return res.status(400).json({ message: "Unauthorized 2" });
+      if (!verify)
+        return res
+          .status(400)
+          .json({ message: "Acceso no autorizado, Verificación invalida " });
 
       const user = await UserModel.findById({
         _id: new ObjectId(verify.id),
       }).populate("roleRef");
-      if (!user) return res.status(400).json({ message: "Unauthorized 3" });
+      if (!user)
+        return res
+          .status(400)
+          .json({
+            message:
+              "Acceso no autorizado, Verificación no hace referencia a ningún usuario ",
+          });
       console.log(user);
       return res.status(200).json({
         id: user._id,
         email: user.email,
+        role: user.role,
         name: user.roleRef.nombre,
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
         direction: user.roleRef.direccion,
-        role: user.role,
         score: user.roleRef.id_calificacion,
       });
     } catch (error) {
