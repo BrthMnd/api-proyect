@@ -8,7 +8,6 @@ const proveedoresSchema = new Schema(
     nombre: { type: String, require: true },
     documento: { type: String, unique: true, trim: true },
     telefono: { type: String, require: true },
-    email: { type: String, require: true },
     direccion: { type: String, require: true },
     id_calificacion: [
       {
