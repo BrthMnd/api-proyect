@@ -46,7 +46,7 @@ class ProveedoresController {
   //_____________________________________________________________________________________
 
   async postProveedor(req, res, next) {
-    const { nombre, documento, telefono, email, direccion, categoriaServicio } =
+    const { nombre, documento, telefono, direccion, categoriaServicio } =
       req.body;
 
     try {
@@ -54,7 +54,6 @@ class ProveedoresController {
         nombre,
         documento,
         telefono,
-        email,
         direccion,
         categoriaServicio: categoriaServicio,
       });
