@@ -76,6 +76,34 @@ class CalificacionesController {
   }
   //__________________________________________________________________________________________
 
+  async promedioCalificacion(req, res, next) {
+    try {
+      const calificaciones = await CalificacionModel.find({});
+      
+      if (calificaciones.length === 0) {
+        res.status(404).json({ error: "No hay calificaciones disponibles" });
+        return;
+      }
+  
+      const sumaCalificaciones = calificaciones.reduce(
+        (total, calificacion) => total + calificacion.CalificacionesFloat,
+        0
+      );
+  
+      const promedio = sumaCalificaciones / calificaciones.length;
+  
+      res.status(200).json({ promedio });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Error al calcular el promedio de calificaciones" });
+    } finally {
+      next();
+    }
+  }
+  
+
+   //__________________________________________________________________________________________
+
   async deleteCalificacion(req, res, next) {
     const id = req.params.id;
 
