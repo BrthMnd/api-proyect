@@ -88,15 +88,15 @@ class Candidate_Controllers {
     try {
       const result = await CandidateModel.findOneAndUpdate(
         { id_offers: new ObjectId(offersId) },
-        { $addToSet: { id_ServiceProvider: id_ServiceProvider } },
+        { $addToSet: { id_ServiceProvider: new ObjectId(id_ServiceProvider) } },
         { new: true }
       );
       if (!result)
         return res.status(404).json({ error: "Candidato no encontrado." });
-
+      console.log(result);
       res.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       return res
         .status(500)
         .json({ error: "Candidato no encontrado.", err: error.message });
