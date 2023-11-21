@@ -252,15 +252,15 @@ class User_Controller {
         _id: new ObjectId(verify.id),
       }).populate("roleRef");
       if (!user)
-        return res
-          .status(400)
-          .json({
-            message:
-              "Acceso no autorizado, Verificación no hace referencia a ningún usuario ",
-          });
+        return res.status(400).json({
+          message:
+            "Acceso no autorizado, Verificación no hace referencia a ningún usuario ",
+        });
+      console.log("🐱‍👤 por aqui");
       console.log(user);
       return res.status(200).json({
         id: user._id,
+        id_provider: user.roleRef._id,
         email: user.email,
         role: user.role,
         name: user.roleRef.nombre,

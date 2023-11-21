@@ -128,10 +128,10 @@ class Candidate_Controllers {
   }
   async EliminateCandidate(req, res, next) {
     const serviceProviderIdToDelete = req.body.id_ServiceProvider;
-    const candidateId = req.params.id;
+    const offersId = req.params.id;
     try {
-      const result = await CandidateModel.findByIdAndUpdate(
-        candidateId,
+      const result = await CandidateModel.findOneAndUpdate(
+        { id_offers: new ObjectId(offersId) },
         { $pull: { id_ServiceProvider: serviceProviderIdToDelete } },
         { new: true }
       );
