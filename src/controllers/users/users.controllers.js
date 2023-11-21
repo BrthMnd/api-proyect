@@ -3,6 +3,9 @@ const { UserModel } = require("../../models/Users/users.models.js");
 const jwt = require("jsonwebtoken");
 const bycrypt = require("bcrypt");
 const { CreateAccess } = require("../../libs/jwt.js");
+const {
+  ProveedoresModels,
+} = require("../../models/Proveedores/provedores.models.js");
 class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
@@ -91,7 +94,7 @@ class User_Controller {
     const id = req.params.id;
 
     try {
-      const result = await UserModel.findOneAndDelete({
+      const userDeleted = await UserModel.findOneAndDelete({
         _id: new ObjectId(id),
       });
 
@@ -148,31 +151,85 @@ class User_Controller {
     res.status(200).send("Sesión Cerrada");
     next();
   }
+  async registerVerify(req, res, next) {
+    const { email } = req.body;
+    try {
+      const verifyUser = await UserModel.findOne({ email: email });
+      if (verifyUser)
+        return res
+          .status(409)
+          .json({ message: "El usuario ya esta registrado" });
+      res.status(200).json({ message: "Continuando con el registro" });
+    } catch (error) {
+      res.status(500).json({ message: "A ocurrido un error", error });
+    }
+  }
   async register(req, res, next) {
-    const { password, email } = req.body;
-
+    const { nombre, documento, email, password, direccion, telefono } =
+      req.body;
     try {
       const passwordHash = await bycrypt.hash(password, 10);
+
+      const comprobando = await ProveedoresModels.findOne({
+        documento: documento,
+      });
+      if (comprobando) {
+        console.log(comprobando);
+        return res.status(409).json({
+          message: "Documento ya se encuentra en la base de datos",
+          error: comprobando,
+        });
+      }
+      const verifyUser = await UserModel.findOne({ email: email });
+      if (verifyUser)
+        return res.status(409).json({
+          message: `Invalido, la cuenta ${email} ya esta asociada a otro documento`,
+        });
+
+      const provider = await ProveedoresModels({
+        nombre,
+        documento,
+        direccion,
+        telefono,
+      });
+
+      const saveProvider = await provider.save();
+      if (!saveProvider) {
+        return res.status(400).json({
+          message: "A ocurrido un error",
+          error: saveProvider,
+        });
+      }
       const newUser = await UserModel({
         email,
         password: passwordHash,
+        role: ProveedoresModels.modelName,
+        roleRef: saveProvider._id,
       });
-      const UsuarioGuardado = await newUser.save();
-      const Token = await CreateAccess({ id: UsuarioGuardado._id });
-      console.log(Token);
+      const saveUser = await newUser.save();
+      console.log(saveUser);
+      const Token = await CreateAccess({ id: saveUser._id });
       res.cookie("token", Token, {
         sameSite: "none",
         secure: true,
         httpOnly: true,
       });
+
       res.status(200).json({
         message: "Usuario Registrado",
-        result: UsuarioGuardado,
+        user: {
+          email: saveUser.email,
+          role: saveUser.role,
+        },
+        provider: saveProvider,
         token: Token,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Bad", error });
+      return res.status(500).json({
+        message: "A ocurrido un error",
+        error: error,
+      });
     } finally {
       next();
     }
@@ -182,17 +239,30 @@ class User_Controller {
       const { token } = req.cookies;
       console.log(req.cookie);
       console.log("Estamos verificando el token: " + token);
-      if (!token) return res.status(400).json({ message: "Unauthorized 1" });
+      if (!token)
+        return res.status(400).json({ message: "Acceso no autorizado" });
 
       const verify = await jwt.verify(token, process.env.SECRET_KEY);
-      if (!verify) return res.status(400).json({ message: "Unauthorized 2" });
+      if (!verify)
+        return res
+          .status(400)
+          .json({ message: "Acceso no autorizado, Verificación invalida " });
 
-      const user = await UserModel.findById({ _id: new ObjectId(verify.id) });
-      if (!user) return res.status(400).json({ message: "Unauthorized 3" });
-
+      const user = await UserModel.findById({
+        _id: new ObjectId(verify.id),
+      }).populate("roleRef");
+      if (!user)
+        return res.status(400).json({
+          message:
+            "Acceso no autorizado, Verificación no hace referencia a ningún usuario ",
+        });
+      console.log("🐱‍👤 por aqui");
+      console.log(user);
       return res.status(200).json({
         id: user._id,
+        id_provider: user.roleRef._id,
         email: user.email,
+        role: user.role,
         name: user.roleRef.nombre,
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
@@ -226,6 +296,7 @@ class User_Controller {
         name: user.roleRef.nombre,
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
+        role: user.role,
         direction: user.roleRef.direccion,
         score: user.roleRef.id_calificacion,
       });

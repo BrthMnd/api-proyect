@@ -26,12 +26,21 @@ class EncargadoControllers {
 
         if (error.code === 11000) {
           if (error.keyPattern.documento) {
-            res.status(409).json({ error: "Este documento ya se encuentra registrado", err: error });
+            res
+              .status(409)
+              .json({
+                error: "Este documento ya se encuentra registrado",
+                err: error,
+              });
           } else {
-            res.status(500).json({ error: "Algo esta mal con el campo único", err: error });
+            res
+              .status(500)
+              .json({ error: "Algo esta mal con el campo único", err: error });
           }
         } else {
-          res.status(500).json({ error: "Error al insertar Encargado ", err: error });
+          res
+            .status(500)
+            .json({ error: "Error al insertar Encargado ", err: error });
         }
       })
       .finally(() => next());

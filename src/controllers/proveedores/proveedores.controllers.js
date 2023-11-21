@@ -47,7 +47,7 @@
   //_____________________________________________________________________________________
 
   async postProveedor(req, res, next) {
-    const { nombre, documento, telefono, email, direccion, categoriaServicio } =
+    const { nombre, documento, telefono, direccion, categoriaServicio } =
       req.body;
 
     try {
@@ -55,7 +55,6 @@
         nombre,
         documento,
         telefono,
-        email,
         direccion,
         categoriaServicio: categoriaServicio,
       });

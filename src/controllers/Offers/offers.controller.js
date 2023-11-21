@@ -18,7 +18,11 @@ class OffersControllers {
         .populate("id_service")
         .populate("id_OfferStatus");
 
-      res.status(200).send(response_offers);
+      const response_candidate = await CandidateModel.find()
+        .populate("id_offers")
+        .populate("id_ServiceProvider");
+
+      res.status(200).json({ response_offers, response_candidate });
     } catch (error) {
       res.status(400).json({
         type: "Bad",
@@ -173,6 +177,31 @@ class OffersControllers {
       const result = await CandidateModel.findOne({
         id_offers: new ObjectId(id),
       })
+        .populate("id_offers")
+        .populate("id_ServiceProvider")
+        .populate("id_CandidateStatus");
+      console.log(result);
+      if (result) {
+        res.status(200).send(result);
+      } else {
+        res
+          .status(404)
+          .send("No se encontró ningún documento con el ID proporcionado.");
+      }
+    } catch (error) {
+      console.log("error" + error.message);
+    } finally {
+      next();
+    }
+  }
+  async Add_provider_for_offer(req, res, next) {
+    const id = req.params.id;
+    try {
+      const result = await CandidateModel.findOneAndUpdate(
+        { id_offers: new ObjectId(id) },
+        { $addToSet: { id_ServiceProvider: id_ServiceProvider } },
+        { new: true }
+      )
         .populate("id_offers")
         .populate("id_ServiceProvider")
         .populate("id_CandidateStatus");

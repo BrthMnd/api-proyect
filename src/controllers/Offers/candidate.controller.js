@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { CandidateModel } = require("../../models/Offers/candidate.model");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
+const { OffersModel } = require("../../models/Offers/offers.model");
 
 class Candidate_Controllers {
   Get(req, res, next) {
@@ -80,19 +81,22 @@ class Candidate_Controllers {
   }
   async AggregateNewCandidate(req, res, next) {
     const { id_ServiceProvider } = req.body;
-    const candidateId = req.params.id;
+    const offersId = req.params.id;
+    console.log("proveedor: " + id_ServiceProvider);
+    console.log("oferta: " + offersId);
+
     try {
-      const result = await CandidateModel.findByIdAndUpdate(
-        candidateId,
-        { $addToSet: { id_ServiceProvider: id_ServiceProvider } },
+      const result = await CandidateModel.findOneAndUpdate(
+        { id_offers: new ObjectId(offersId) },
+        { $addToSet: { id_ServiceProvider: new ObjectId(id_ServiceProvider) } },
         { new: true }
       );
       if (!result)
         return res.status(404).json({ error: "Candidato no encontrado." });
-
+      console.log(result);
       res.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       return res
         .status(500)
         .json({ error: "Candidato no encontrado.", err: error.message });
@@ -124,10 +128,10 @@ class Candidate_Controllers {
   }
   async EliminateCandidate(req, res, next) {
     const serviceProviderIdToDelete = req.body.id_ServiceProvider;
-    const candidateId = req.params.id;
+    const offersId = req.params.id;
     try {
-      const result = await CandidateModel.findByIdAndUpdate(
-        candidateId,
+      const result = await CandidateModel.findOneAndUpdate(
+        { id_offers: new ObjectId(offersId) },
         { $pull: { id_ServiceProvider: serviceProviderIdToDelete } },
         { new: true }
       );
