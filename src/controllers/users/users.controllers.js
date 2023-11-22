@@ -165,10 +165,19 @@ class User_Controller {
     }
   }
   async register(req, res, next) {
-    const { nombre, documento, email, password, direccion, telefono } =
-      req.body;
+    const {
+      nombre,
+      documento,
+      email,
+      password,
+      direccion,
+      telefono,
+      categoriaServicio,
+    } = req.body;
+    console.log(req.body);
     try {
       const passwordHash = await bycrypt.hash(password, 10);
+      console.log(passwordHash);
 
       const comprobando = await ProveedoresModels.findOne({
         documento: documento,
@@ -191,6 +200,7 @@ class User_Controller {
         documento,
         direccion,
         telefono,
+        categoriaServicio,
       });
 
       const saveProvider = await provider.save();
