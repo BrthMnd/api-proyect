@@ -266,9 +266,11 @@ class User_Controller {
           message:
             "Acceso no autorizado, Verificación no hace referencia a ningún usuario ",
         });
+      console.log("🐱‍👤 por aqui");
       console.log(user);
       return res.status(200).json({
         id: user._id,
+        id_provider: user.roleRef._id,
         email: user.email,
         role: user.role,
         name: user.roleRef.nombre,
