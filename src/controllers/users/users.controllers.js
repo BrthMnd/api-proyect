@@ -6,6 +6,7 @@ const { CreateAccess } = require("../../libs/jwt.js");
 const {
   ProveedoresModels,
 } = require("../../models/Proveedores/provedores.models.js");
+const { Employed_Model } = require("../../models/Users/employed.models.js");
 class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
@@ -69,20 +70,35 @@ class User_Controller {
 
   async Put(req, res, next) {
     const id = req.params.id;
-
+    const { nombre, documento, direccion, telefono, categoriaServicio } =
+      req.body;
     try {
-      const result = await UserModel.findOneAndUpdate(
-        { _id: new ObjectId(id) },
-        req.body,
-        { new: true }
-      );
-      if (result) {
-        res.status(200).json({ message: "Permiso actualizado ", result });
+      const result = await UserModel.findOne({ _id: new ObjectId(id) });
+
+      if (result.role == "Proveedores") {
+        const providerUpdated = await ProveedoresModels.findOneAndUpdate(
+          { _id: new ObjectId(result.roleRef) },
+          { nombre, documento, direccion, telefono, categoriaServicio },
+          { new: true }
+        );
+        res
+          .status(200)
+          .json({ message: "actualizado con éxito", User: providerUpdated });
+      } else if (result.role == "Employed") {
+        const employedUpdated = await Employed_Model.findOneAndUpdate(
+          { _id: new ObjectId(result.roleRef) },
+          { nombre, documento, direccion, telefono },
+          { new: true }
+        );
+        res
+          .status(200)
+          .json({ message: "actualizado con éxito", User: employedUpdated });
       } else {
-        res.status(500).json({ error: "Error al actualizar" });
+        res.status(404).json({ message: "Rol indefinido" });
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Ha ocurrido un error.", error: err });
     } finally {
       next();
     }
@@ -260,12 +276,20 @@ class User_Controller {
 
       const user = await UserModel.findById({
         _id: new ObjectId(verify.id),
-      }).populate("roleRef");
+      }).populate({
+        path: "roleRef",
+      });
+      let provider = null;
       if (!user)
         return res.status(400).json({
           message:
             "Acceso no autorizado, Verificación no hace referencia a ningún usuario ",
         });
+      if (user.role == "Proveedores") {
+        provider = await ProveedoresModels.findById({
+          _id: new ObjectId(user.roleRef._id),
+        }).populate("categoriaServicio");
+      }
       console.log("🐱‍👤 por aqui");
       console.log(user);
       return res.status(200).json({
@@ -278,6 +302,7 @@ class User_Controller {
         phone: user.roleRef.telefono,
         direction: user.roleRef.direccion,
         score: user.roleRef.id_calificacion,
+        category: provider ? provider.categoriaServicio : "",
       });
     } catch (error) {
       console.log(error);
