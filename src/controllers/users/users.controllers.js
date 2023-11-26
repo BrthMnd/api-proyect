@@ -1,3 +1,4 @@
+const { transporter } = require("../../libs/emailConfig.js");
 const { ObjectId } = require("mongodb");
 const { UserModel } = require("../../models/Users/users.models.js");
 const jwt = require("jsonwebtoken");
@@ -7,6 +8,28 @@ const {
   ProveedoresModels,
 } = require("../../models/Proveedores/provedores.models.js");
 const { Employed_Model } = require("../../models/Users/employed.models.js");
+
+const CorreoConfirmacion = async (userEmail) => {
+  try {
+    const mailOptions = {
+      from: transporter.senderEmail,
+      to: userEmail,
+      subject: "Bienvenido a la aplicación",
+      html: `
+        <h1>Bienvenido a nuestra aplicación</h1>
+        <p>Gracias por registrarte. Estamos emocionados de tenerte a bordo.</p>
+        <img src="../../assets/img/LogoRc.png" alt="Logo de la aplicación" width="200" height="200">
+        <p>¡Esperamos que disfrutes de tu experiencia!</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("Correo enviado correctamente");
+  } catch (error) {
+    console.error("Error al enviar el correo: ", error);
+  }
+};
+
 class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
@@ -234,6 +257,7 @@ class User_Controller {
       });
       const saveUser = await newUser.save();
       console.log(saveUser);
+
       const Token = await CreateAccess({ id: saveUser._id });
       res.cookie("token", Token, {
         sameSite: "none",
@@ -241,7 +265,7 @@ class User_Controller {
         httpOnly: true,
       });
 
-      SendEmail(saveUser.email);
+      CorreoConfirmacion(saveUser.email);
       res.status(200).json({
         message: "Usuario Registrado",
         user: {
