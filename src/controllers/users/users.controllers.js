@@ -1,4 +1,5 @@
 const { ObjectId } = require("mongodb");
+const { SendEmail } = require("../email.controller.js");
 const { UserModel } = require("../../models/Users/users.models.js");
 const jwt = require("jsonwebtoken");
 const bycrypt = require("bcrypt");
@@ -241,6 +242,7 @@ class User_Controller {
         httpOnly: true,
       });
 
+      SendEmail(saveUser.email);
       res.status(200).json({
         message: "Usuario Registrado",
         user: {
@@ -290,6 +292,7 @@ class User_Controller {
           _id: new ObjectId(user.roleRef._id),
         }).populate("categoriaServicio");
       }
+      SendEmail(user.email);
       console.log("🐱‍👤 por aqui");
       console.log(user);
       return res.status(200).json({
