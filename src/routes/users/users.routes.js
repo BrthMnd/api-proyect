@@ -6,7 +6,7 @@ const routes = require("express").Router();
 
 routes.get("/", User.Get.bind());
 routes.get("/:id", User.GetById.bind());
-routes.post("/", User.Post.bind());
+routes.post("/", User.PostEmployed.bind());
 routes.put("/:id", User.Put.bind());
 routes.delete("/:id", User.Delete.bind());
 // LOGIN

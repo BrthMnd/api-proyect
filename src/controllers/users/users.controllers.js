@@ -30,6 +30,29 @@ const CorreoConfirmacion = async (userEmail) => {
   }
 };
 
+const CorreoConfirmacionEmpleado = async (userEmail, password) => {
+  try {
+    const mailOptions = {
+      from: transporter.senderEmail,
+      to: userEmail,
+      subject: "Bienvenido a la aplicación",
+      html: `
+      <h1>Bienvenido a nuestra aplicación como rol Empleado</h1>
+      <p>Estamos emocionados de tenerte a bordo, tu usuario y contraseña, asignados son los siguietes: </p>
+      <p>Usuario: ${userEmail}</p>
+      <p>Contraseña: ${password}</p>
+      <img src="../../assets/img/LogoRc.png" alt="Logo de la aplicación" width="200" height="200">
+      <p>¡Esperamos que tengas una excelente experiencia como Empleado!</p>
+    `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("Correo enviado correctamente");
+  } catch (error) {
+    console.error("Error al enviar el correo: ", error);
+  }
+};
+
 class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
@@ -64,23 +87,41 @@ class User_Controller {
 
   //__________________________________________________________________________________________
 
-  async Post(req, res, next) {
-    const { email, password, role, roleRef } = req.body;
+  async PostEmployed(req, res, next) {
+    const { nombre, documento, telefono, direccion, password, email } =
+      req.body;
+
     try {
+      //Guarda la contraseña sin encriptar
+      const passwordPlain = password;
       const passwordHash = await bycrypt.hash(password, 10);
-      const result = new UserModel({
+      const employed = new Employed_Model({
+        nombre,
+        documento,
+        telefono,
+        direccion,
+      });
+      const employed_created = await employed.save();
+
+      if (!employed_created)
+        return res.status(400).send("error al crear empleado");
+
+      const user = UserModel({
         email,
         password: passwordHash,
-        role,
-        roleRef,
+        role: "Employed",
+        roleRef: new ObjectId(employed_created._id),
       });
-      const user = await result.save();
+      const user_created = await user.save();
 
-      if (!user) return res.status(400).send("hubo algún error");
+      if (!user_created) return res.status(400).send("hubo algún error");
+
       res.status(201).json({
         message: "GOOD",
-        User: user,
+        Employed: employed_created,
+        User: user_created,
       });
+      CorreoConfirmacionEmpleado(user_created.email, passwordPlain)
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
