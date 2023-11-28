@@ -409,6 +409,7 @@ class User_Controller {
 
       return res.status(200).json({
         id: user._id,
+        id_provider: user.roleRef._id,
         email: user.email,
         name: user.roleRef.nombre,
         cc: user.roleRef.documento,
