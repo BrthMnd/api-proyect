@@ -66,6 +66,22 @@ class User_Controller {
       .finally(() => next());
   }
 
+  // Get_proveedores(req, res, next) {
+  //   UserModel.find({ role: "Proveedores" })
+  //     .populate({
+  //       path: "roleRef",
+  //       populate: { path: "categoriaServicio" },
+  //     })
+  //     .then((result) => {
+  //       res.status(200).send(result);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       res.status(500).json({ error: error });
+  //     })
+  //     .finally(() => next());
+  // }
+
   // //__________________________________________________________________________________________
 
   async GetById(req, res, next) {
@@ -121,7 +137,7 @@ class User_Controller {
         Employed: employed_created,
         User: user_created,
       });
-      CorreoConfirmacionEmpleado(user_created.email, passwordPlain)
+      CorreoConfirmacionEmpleado(user_created.email, passwordPlain);
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
