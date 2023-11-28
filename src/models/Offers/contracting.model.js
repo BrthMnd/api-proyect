@@ -7,7 +7,7 @@ const { ProveedoresModels } = require("../Proveedores/provedores.models");
 let ContractingSchema = new Schema({
   estado: { type: Boolean, default: true },
   id_candidates: { type: Schema.Types.ObjectId, ref: CandidateModel.modelName },
-  id_proveedor: {
+  id_provider: {
     type: Schema.Types.ObjectId,
     ref: ProveedoresModels.modelName,
   },
@@ -16,7 +16,7 @@ let ContractingSchema = new Schema({
 });
 
 let ContractingModal = model(
-  "ContractingModal",
+  "ContractingModel",
   ContractingSchema,
   "offers_Contracting"
 );

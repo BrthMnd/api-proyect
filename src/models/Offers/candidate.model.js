@@ -16,7 +16,11 @@ const CandidateSchema = new Schema({
     },
   ],
   id_CandidateStatus: { type: Boolean, default: true },
-  selectedCandidate: { type: String, default: "" },
+  selectedCandidate: {
+    type: Schema.Types.ObjectId,
+    ref: ProveedoresModels.modelName,
+    default: null,
+  },
   DateApplied: { type: String, default: FechaActual },
 });
 
