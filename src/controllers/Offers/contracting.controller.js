@@ -14,7 +14,7 @@ class Contracting_Controller {
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Contrato", error });
       })
-      .finally(() => next());
+      
   }
 
   async Post(req, res, next) {
@@ -35,9 +35,7 @@ class Contracting_Controller {
         console.log(error);
         res.status(500).json({ error: "Error al crear el documento" });
       }
-    } finally {
-      next();
-    }
+    } 
   }
   async GetId(req, res, next) {
     const id = req.params.id;
@@ -57,9 +55,7 @@ class Contracting_Controller {
       }
     } catch (error) {
       console.log("error" + error);
-    } finally {
-      next();
-    }
+    } 
   }
   async Put(req, res, next) {
     const Update = req.body;
@@ -81,9 +77,7 @@ class Contracting_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: error });
-    } finally {
-      next();
-    }
+    } 
   }
   async Delete(req, res, next) {
     const id = req.params.id;
@@ -99,9 +93,7 @@ class Contracting_Controller {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
 }
 module.exports = { Contracting_Controller };

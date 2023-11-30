@@ -17,9 +17,7 @@ class Candidate_Controllers {
           .status(500)
           .json({ error: "Error al obtener Estados", err: error.message });
       })
-      .finally(() => {
-        next();
-      });
+      
   }
   Post(req, res, next) {
     const result = new CandidateModel(req.body);
@@ -31,7 +29,7 @@ class Candidate_Controllers {
           .status(500)
           .json({ Error: "ERROR CON ESTADO ***", err: error.message })
       )
-      .finally(() => next());
+      
   }
   async GetId(req, res, next) {
     const id = req.params.id;
@@ -51,9 +49,7 @@ class Candidate_Controllers {
       }
     } catch (error) {
       console.log("error" + error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   async Put(req, res, next) {
@@ -75,9 +71,7 @@ class Candidate_Controllers {
       }
     } catch (error) {
       console.log(error.message);
-    } finally {
-      next();
-    }
+    } 
   }
   async AggregateNewCandidate(req, res, next) {
     const { id_ServiceProvider } = req.body;
@@ -100,9 +94,7 @@ class Candidate_Controllers {
       return res
         .status(500)
         .json({ error: "Candidato no encontrado.", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
   async SelectCandidate(req, res, next) {
     const { selectedCandidate } = req.body;
@@ -122,9 +114,7 @@ class Candidate_Controllers {
       return res
         .status(500)
         .json({ error: "Candidato no seleccionado.", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
   async EliminateCandidate(req, res, next) {
     const serviceProviderIdToDelete = req.body.id_ServiceProvider;
@@ -141,9 +131,7 @@ class Candidate_Controllers {
       res.status(200).json(result);
     } catch (error) {
       console.log(error.message);
-    } finally {
-      next();
-    }
+    } 
   }
   async Delete(req, res, next) {
     const id = req.params.id;
@@ -170,9 +158,7 @@ class Candidate_Controllers {
       res.status(500).send({
         error: "error.",
       });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 module.exports = { Candidate_Controllers };

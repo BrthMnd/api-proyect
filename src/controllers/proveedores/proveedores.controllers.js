@@ -19,7 +19,7 @@
             .status(500)
             .json({ error: "Error al obtener Estados", err: error.message });
         })
-        .finally(() => next());
+        
     }
 
   async getProveedorPorId(req, res, next) {
@@ -39,9 +39,7 @@
       }
     } catch (error) {
       console.log("error" + error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //_____________________________________________________________________________________
@@ -79,9 +77,7 @@
           .status(500)
           .json({ error: "Error al crear el proveedor", err: error.message });
       }
-    } finally {
-      next();
-    }
+    } 
   }
 
   //_____________________________________________________________________________________
@@ -114,9 +110,7 @@
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //_____________________________________________________________________________________
@@ -150,9 +144,7 @@
     } catch (error) {
       console.log("Error al eliminar proveedor -> " + error.message);
       res.status(500).send({ error: "Error.", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7////
@@ -175,9 +167,7 @@
       return res
         .status(500)
         .json({ error: "Proveedor no encontrado.", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 
   /////////////////////////////////////////////////////////////
@@ -197,9 +187,7 @@
       res.status(200).json(result);
     } catch (error) {
       console.log(error.message);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //___________________________________________Metodos_Categoria________________________
@@ -223,9 +211,7 @@
         error: "Error al agregar categorías de servicio",
         err: error.message,
       });
-    } finally {
-      next();
-    }
+    } 
   }
 
   async eliminateCategoriasServicio(req, res, next) {
@@ -247,9 +233,7 @@
         error: "Error al eliminar categorías de servicio",
         err: error.message,
       });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 

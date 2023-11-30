@@ -11,7 +11,7 @@ class Employed_Controller {
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener el Empleado", error });
       })
-      .finally(() => next());
+      
   }
 
   // //__________________________________________________________________________________________
@@ -28,9 +28,7 @@ class Employed_Controller {
     } catch (error) {
       console.log("Error: " + error);
       res.status(500).json({ error: "Error al obtener el Empleado" });
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -70,9 +68,7 @@ class Employed_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -94,9 +90,7 @@ class Employed_Controller {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -119,9 +113,7 @@ class Employed_Controller {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 module.exports = { Employed_Controller };

@@ -11,12 +11,12 @@ class User_Controller {
     UserModel.find({})
       .populate("roleRef")
       .then((result) => {
-        res.status(200).send(result);
+        return res.status(200).send(result);
       })
       .catch((error) => {
-        res.status(500).json({ error: "Error al obtener el permiso" });
+        return res.status(500).json({ error: "Error al obtener el permiso" });
       })
-      .finally(() => next());
+      
   }
 
   // //__________________________________________________________________________________________
@@ -33,9 +33,7 @@ class User_Controller {
     } catch (error) {
       console.log("Error: " + error);
       res.status(500).json({ error: "Error al obtener el usuario" });
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -60,9 +58,7 @@ class User_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -83,9 +79,7 @@ class User_Controller {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -108,9 +102,7 @@ class User_Controller {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
   // LOGIN
   async Login(req, res, next) {
@@ -142,14 +134,11 @@ class User_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error });
-    } finally {
-      next();
-    }
+    } 
   }
   Logout(req, res, next) {
     res.cookie("token", "", { expires: new Date(0) });
     res.status(200).send("Sesión Cerrada");
-    next();
   }
   async registerVerify(req, res, next) {
     const { email } = req.body;
@@ -240,9 +229,7 @@ class User_Controller {
         message: "A ocurrido un error",
         error: error,
       });
-    } finally {
-      next();
-    }
+    } 
   }
   async VerifyToken(req, res, next) {
     try {
@@ -282,9 +269,7 @@ class User_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error });
-    } finally {
-      next();
-    }
+    } 
   }
   async VerifyTokenMobile(req, res, next) {
     const { token } = req.body;
@@ -313,9 +298,7 @@ class User_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 module.exports = { User_Controller };

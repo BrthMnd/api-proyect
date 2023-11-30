@@ -15,7 +15,7 @@ class CategoriasController {
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Cartegorias" });
       })
-      .finally(() => next());
+      
   }
 
   // //__________________________________________________________________________________________
@@ -32,9 +32,7 @@ class CategoriasController {
     } catch (error) {
       console.log("Error: " + error);
       res.status(500).json({ error: "Error al obtener la categoría" });
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -67,9 +65,7 @@ class CategoriasController {
         console.log(error);
         res.status(500).json({ error: "Error al crear la categoría" });
       }
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -107,9 +103,7 @@ class CategoriasController {
       res
         .status(500)
         .json({ message: "Error al actualizar la categoría", err: error });
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -143,9 +137,7 @@ class CategoriasController {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 

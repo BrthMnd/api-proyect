@@ -9,6 +9,5 @@ const AuthValidate = (req,res,next)=>{
     const verifyUser = jwt.verify(token, secret)
     if (!verifyUser) return res.status(400).send("Token invalido")
     req.user = verifyUser
-    next()
 }
 module.exports= {AuthValidate}

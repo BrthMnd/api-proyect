@@ -15,9 +15,7 @@ class CalificacionesController {
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Error al obtener las calificaciones" });
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -33,9 +31,7 @@ class CalificacionesController {
     } catch (error) {
       console.log("Error: " + error);
       res.status(500).json({ error: "Error al obtener la calificación" });
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -51,7 +47,7 @@ class CalificacionesController {
           err: error.message,
         })
       )
-      .finally(() => next());
+      
   }
   //__________________________________________________________________________________________
   async putCalificacion(req, res, next) {
@@ -70,9 +66,7 @@ class CalificacionesController {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
   //__________________________________________________________________________________________
 
@@ -96,9 +90,7 @@ class CalificacionesController {
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Error al calcular el promedio de calificaciones" });
-    } finally {
-      next();
-    }
+    } 
   }
   
 
@@ -133,9 +125,7 @@ class CalificacionesController {
     } catch (error) {
       console.log("Error al eliminar la categoría -> " + error.message);
       res.status(500).send({ error: "Error.", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 

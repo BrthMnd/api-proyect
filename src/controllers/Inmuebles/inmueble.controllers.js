@@ -15,7 +15,7 @@ class InmuebleControllers {
           .status(500)
           .json({ error: "Error al obtener Estados", err: error.message });
       })
-      .finally(() => next());
+      
   }
 
    postInmueble(req, res, next) {
@@ -47,7 +47,7 @@ class InmuebleControllers {
             .json({ error: "Error al insertar Inmueble", err: error.message });
         }
       })
-      .finally(() => next());
+      
   }
   async getIdInmueble(req, res, next) {
     const id = req.params.id;
@@ -66,9 +66,7 @@ class InmuebleControllers {
       }
     } catch (error) {
       console.log("error" + error);
-    } finally {
-      next();
-    }
+    } 
   }
   async putInmueble(req, res, next) {
     const Update = req.body;
@@ -97,9 +95,7 @@ class InmuebleControllers {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
   async deleteInmueble(req, res, next) {
     const id = req.params.id;
@@ -130,9 +126,7 @@ class InmuebleControllers {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 module.exports = { InmuebleControllers };

@@ -15,9 +15,7 @@ class ServiciosController {
       res.status(200).send(result);
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   async getServicioPorId(req, res, next) {
@@ -31,9 +29,7 @@ class ServiciosController {
       res.status(200).send(result);
     } catch (error) {
       console.log("Error: " + error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //   ______________________________________________________________________________________
@@ -57,9 +53,7 @@ class ServiciosController {
         console.log(error);
         res.status(500).json({ error: "Error al crear el documento" });
       }
-    } finally {
-      next();
-    }
+    } 
   }
 
   //______________________________________________________________________________________
@@ -98,9 +92,7 @@ class ServiciosController {
     } catch (error) {
       console.log(error);
       console.log("fallo 2");
-    } finally {
-      next();
-    }
+    } 
   }
 
   //______________________________________________________________________________________
@@ -134,9 +126,7 @@ class ServiciosController {
     } catch (error) {
       console.log("Error al eliminar el servicio -> " + error.message);
       res.status(500).send({ error: "Error.", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 
