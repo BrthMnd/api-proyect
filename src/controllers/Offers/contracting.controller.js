@@ -1,12 +1,16 @@
 const { ObjectId } = require("mongodb");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
+const { CandidateModel } = require("../../models/Offers/candidate.model");
 
 class Contracting_Controller {
   Get(req, res, next) {
     ContractingModal.find()
 
-      .populate("id_candidates")
-      .populate("id_proveedor")
+      .populate({
+        path: "id_candidates",
+        populate: { path: "selectedCandidate" },
+      })
+      .populate("id_provider")
       .populate("id_offers")
       .then((result) => {
         res.status(200).json(result);
@@ -14,28 +18,51 @@ class Contracting_Controller {
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Contrato", error });
       })
-      
   }
+  // estado: { type: Boolean, default: true },
+  // id_candidates: { type: Schema.Types.ObjectId, ref: CandidateModel.modelName },
+  // id_provider: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: ProveedoresModels.modelName,
+  // },
+  // id_offers: { type: Schema.Types.ObjectId, ref: OffersModel.modelName },
+  // DateApplied: { type: String, default: FechaActual },
 
   async Post(req, res, next) {
+    const { id_candidates, id_provider, id_offers } = req.body;
     try {
-      const result = new ContractingModal(req.body);
+      const result = new ContractingModal({
+        id_candidates,
+        id_provider,
+        id_offers,
+      });
       const response = await result.save();
-      res.status(201).json({ type: "Success", response: response });
-    } catch (error) {
-      if (
-        error.code === 11000 &&
-        error.keyPattern &&
-        error.keyPattern.Nombre_Servicio
-      ) {
-        res.status(409).json({
-          error: "El nombre del estado ya esta en uso",
-        });
-      } else {
-        console.log(error);
-        res.status(500).json({ error: "Error al crear el documento" });
+      if (!response) {
+        return res
+          .status(400)
+          .json({ message: "A ocurrido un error 1", response });
       }
-    } 
+      const update_candidate = await CandidateModel.findByIdAndUpdate(
+        { _id: new ObjectId(id_candidates) },
+        {
+          selectedCandidate: id_provider,
+        },
+        { new: true }
+      );
+
+      if (!update_candidate) {
+        return res
+          .status(400)
+          .json({ message: "A ocurrido un error 2", update_candidate });
+      }
+
+      res.status(201).json({ message: "Success", response: response });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error al crear el documento", error });
+    } finally {
+      next();
+    }
   }
   async GetId(req, res, next) {
     const id = req.params.id;

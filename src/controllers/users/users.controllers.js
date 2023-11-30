@@ -1,3 +1,4 @@
+const { transporter } = require("../../libs/emailConfig.js");
 const { ObjectId } = require("mongodb");
 const { UserModel } = require("../../models/Users/users.models.js");
 const jwt = require("jsonwebtoken");
@@ -6,6 +7,52 @@ const { CreateAccess } = require("../../libs/jwt.js");
 const {
   ProveedoresModels,
 } = require("../../models/Proveedores/provedores.models.js");
+const { Employed_Model } = require("../../models/Users/employed.models.js");
+
+const CorreoConfirmacion = async (userEmail) => {
+  try {
+    const mailOptions = {
+      from: transporter.senderEmail,
+      to: userEmail,
+      subject: "Bienvenido a la aplicación",
+      html: `
+        <h1>Bienvenido a nuestra aplicación</h1>
+        <p>Gracias por registrarte. Estamos emocionados de tenerte a bordo.</p>
+        <img src="../../assets/img/LogoRc.png" alt="Logo de la aplicación" width="200" height="200">
+        <p>¡Esperamos que disfrutes de tu experiencia!</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("Correo enviado correctamente");
+  } catch (error) {
+    console.error("Error al enviar el correo: ", error);
+  }
+};
+
+const CorreoConfirmacionEmpleado = async (userEmail, password) => {
+  try {
+    const mailOptions = {
+      from: transporter.senderEmail,
+      to: userEmail,
+      subject: "Bienvenido a la aplicación",
+      html: `
+      <h1>Bienvenido a nuestra aplicación como rol Empleado</h1>
+      <p>Estamos emocionados de tenerte a bordo, tu usuario y contraseña, asignados son los siguietes: </p>
+      <p>Usuario: ${userEmail}</p>
+      <p>Contraseña: ${password}</p>
+      <img src="../../assets/img/LogoRc.png" alt="Logo de la aplicación" width="200" height="200">
+      <p>¡Esperamos que tengas una excelente experiencia como Empleado!</p>
+    `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("Correo enviado correctamente");
+  } catch (error) {
+    console.error("Error al enviar el correo: ", error);
+  }
+};
+
 class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
@@ -16,8 +63,23 @@ class User_Controller {
       .catch((error) => {
         return res.status(500).json({ error: "Error al obtener el permiso" });
       })
-      
   }
+
+  // Get_proveedores(req, res, next) {
+  //   UserModel.find({ role: "Proveedores" })
+  //     .populate({
+  //       path: "roleRef",
+  //       populate: { path: "categoriaServicio" },
+  //     })
+  //     .then((result) => {
+  //       res.status(200).send(result);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       res.status(500).json({ error: error });
+  //     })
+  //     .finally(() => next());
+  // }
 
   // //__________________________________________________________________________________________
 
@@ -38,23 +100,41 @@ class User_Controller {
 
   //__________________________________________________________________________________________
 
-  async Post(req, res, next) {
-    const { email, password, role, roleRef } = req.body;
+  async PostEmployed(req, res, next) {
+    const { nombre, documento, telefono, direccion, password, email } =
+      req.body;
+
     try {
+      //Guarda la contraseña sin encriptar
+      const passwordPlain = password;
       const passwordHash = await bycrypt.hash(password, 10);
-      const result = new UserModel({
+      const employed = new Employed_Model({
+        nombre,
+        documento,
+        telefono,
+        direccion,
+      });
+      const employed_created = await employed.save();
+
+      if (!employed_created)
+        return res.status(400).send("error al crear empleado");
+
+      const user = UserModel({
         email,
         password: passwordHash,
-        role,
-        roleRef,
+        role: "Employed",
+        roleRef: new ObjectId(employed_created._id),
       });
-      const user = await result.save();
+      const user_created = await user.save();
 
-      if (!user) return res.status(400).send("hubo algún error");
+      if (!user_created) return res.status(400).send("hubo algún error");
+
       res.status(201).json({
         message: "GOOD",
-        User: user,
+        Employed: employed_created,
+        User: user_created,
       });
+      CorreoConfirmacionEmpleado(user_created.email, passwordPlain);
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
@@ -65,21 +145,38 @@ class User_Controller {
 
   async Put(req, res, next) {
     const id = req.params.id;
-
+    const { nombre, documento, direccion, telefono, categoriaServicio } =
+      req.body;
     try {
-      const result = await UserModel.findOneAndUpdate(
-        { _id: new ObjectId(id) },
-        req.body,
-        { new: true }
-      );
-      if (result) {
-        res.status(200).json({ message: "Permiso actualizado ", result });
+      const result = await UserModel.findOne({ _id: new ObjectId(id) });
+
+      if (result.role == "Proveedores") {
+        const providerUpdated = await ProveedoresModels.findOneAndUpdate(
+          { _id: new ObjectId(result.roleRef) },
+          { nombre, documento, direccion, telefono, categoriaServicio },
+          { new: true }
+        );
+        res
+          .status(200)
+          .json({ message: "actualizado con éxito", User: providerUpdated });
+      } else if (result.role == "Employed") {
+        const employedUpdated = await Employed_Model.findOneAndUpdate(
+          { _id: new ObjectId(result.roleRef) },
+          { nombre, documento, direccion, telefono },
+          { new: true }
+        );
+        res
+          .status(200)
+          .json({ message: "actualizado con éxito", User: employedUpdated });
       } else {
-        res.status(500).json({ error: "Error al actualizar" });
+        res.status(404).json({ message: "Rol indefinido" });
       }
-    } catch (error) {
-      console.log(error);
-    } 
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Ha ocurrido un error.", error: err });
+    } finally {
+      next();
+    }
   }
 
   //__________________________________________________________________________________________
@@ -207,6 +304,7 @@ class User_Controller {
       });
       const saveUser = await newUser.save();
       console.log(saveUser);
+
       const Token = await CreateAccess({ id: saveUser._id });
       res.cookie("token", Token, {
         sameSite: "none",
@@ -214,6 +312,7 @@ class User_Controller {
         httpOnly: true,
       });
 
+      CorreoConfirmacion(saveUser.email);
       res.status(200).json({
         message: "Usuario Registrado",
         user: {
@@ -247,12 +346,20 @@ class User_Controller {
 
       const user = await UserModel.findById({
         _id: new ObjectId(verify.id),
-      }).populate("roleRef");
+      }).populate({
+        path: "roleRef",
+      });
+      let provider = null;
       if (!user)
         return res.status(400).json({
           message:
             "Acceso no autorizado, Verificación no hace referencia a ningún usuario ",
         });
+      if (user.role == "Proveedores") {
+        provider = await ProveedoresModels.findById({
+          _id: new ObjectId(user.roleRef._id),
+        }).populate("categoriaServicio");
+      }
       console.log("🐱‍👤 por aqui");
       console.log(user);
       return res.status(200).json({
@@ -265,6 +372,7 @@ class User_Controller {
         phone: user.roleRef.telefono,
         direction: user.roleRef.direccion,
         score: user.roleRef.id_calificacion,
+        category: provider ? provider.categoriaServicio : "",
       });
     } catch (error) {
       console.log(error);
@@ -287,6 +395,7 @@ class User_Controller {
 
       return res.status(200).json({
         id: user._id,
+        id_provider: user.roleRef._id,
         email: user.email,
         name: user.roleRef.nombre,
         cc: user.roleRef.documento,
