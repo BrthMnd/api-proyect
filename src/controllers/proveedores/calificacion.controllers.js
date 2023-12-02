@@ -36,19 +36,59 @@ class CalificacionesController {
 
   //__________________________________________________________________________________________
 
-  postCalificacion(req, res, next) {
-    const result = new CalificacionModel(req.body);
-    result
-      .save()
-      .then((result) => res.status(201).json(result))
-      .catch((error) =>
-        res.status(500).json({
-          error: "Error al injectar una calificacion ",
-          err: error.message,
-        })
-      )
+  // postCalificacion(req, res, next) {
+  //   const result = new CalificacionModel(req.body);
+  //   result
+  //     .save()
+  //     .then((result) => res.status(201).json(result))
+  //     .catch((error) =>
+  //       res.status(500).json({
+  //         error: "Error al injectar una calificacion ",
+  //         err: error.message,
+  //       })
+  //     )
       
+  // }
+
+  postCalificacion(req, res, next) {
+    const proveedorId = req.body.id_proveedor;
+  
+    ProveedoresModels.findById(proveedorId)
+      .then((proveedor) => {
+        if (!proveedor) {
+          return res.status(404).json({ error: "Proveedor no encontrado" });
+        }
+  
+        const calificacion = new CalificacionModel(req.body);
+        calificacion.proveedor = proveedorId;
+  
+        calificacion.save()
+          .then((result) => {
+            // Agregar el ID de la calificación al proveedor
+            proveedor.id_calificacion.push(result._id);
+  
+            // Guardar el proveedor con el nuevo ID de calificación
+            return proveedor.save();
+          })
+          .then(() => res.status(201).json({ message: "Calificación insertada exitosamente" }))
+          .catch((error) => {
+            console.error("Error al insertar una calificación:", error);
+            res.status(500).json({
+              error: "Error al insertar una calificación",
+              err: error.message,
+            });
+          });
+      })
+      .catch((error) => {
+        console.error("Error al buscar el proveedor:", error);
+        res.status(500).json({
+          error: "Error al buscar el proveedor",
+          err: error.message,
+        });
+      });
   }
+  
+  
   //__________________________________________________________________________________________
   async putCalificacion(req, res, next) {
     const id = req.params.id;
@@ -109,7 +149,7 @@ class CalificacionesController {
       if (reference.length > 0) {
         res.status(500).send({
           error:
-            "No se puede eliminar esta categoría, ya que se utiliza en otra parte.",
+            "No se puede eliminar esta calificación, ya que se utiliza en otra parte.",
         });
       } else {
         const result = await CalificacionModel.findOneAndDelete({
