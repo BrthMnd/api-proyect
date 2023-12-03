@@ -11,4 +11,24 @@ async function CreateAccess(payload) {
     return error;
   }
 }
-module.exports = { CreateAccess };
+async function CreateConfirmToken(payload) {
+  try {
+    const token = await jwt.sign(payload, Secret, {
+      expiresIn: "1h",
+    });
+
+    return token;
+  } catch (error) {
+    return error;
+  }
+}
+async function GetConfirmToken(token) {
+  try {
+    const isConfirm = jwt.verify(token, Secret);
+    return isConfirm;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+module.exports = { CreateAccess, CreateConfirmToken, GetConfirmToken };
