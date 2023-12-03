@@ -36,20 +36,6 @@ class CalificacionesController {
 
   //__________________________________________________________________________________________
 
-  // postCalificacion(req, res, next) {
-  //   const result = new CalificacionModel(req.body);
-  //   result
-  //     .save()
-  //     .then((result) => res.status(201).json(result))
-  //     .catch((error) =>
-  //       res.status(500).json({
-  //         error: "Error al injectar una calificacion ",
-  //         err: error.message,
-  //       })
-  //     )
-      
-  // }
-
   postCalificacion(req, res, next) {
     const proveedorId = req.body.id_proveedor;
   
@@ -64,10 +50,9 @@ class CalificacionesController {
   
         calificacion.save()
           .then((result) => {
-            // Agregar el ID de la calificación al proveedor
+      
             proveedor.id_calificacion.push(result._id);
-  
-            // Guardar el proveedor con el nuevo ID de calificación
+
             return proveedor.save();
           })
           .then(() => res.status(201).json({ message: "Calificación insertada exitosamente" }))
@@ -137,38 +122,32 @@ class CalificacionesController {
    //__________________________________________________________________________________________
 
   async deleteCalificacion(req, res, next) {
-    const id = req.params.id;
-
+    const calificacionId = req.params.id;
+  
     try {
-      const reference = await ProveedoresModels.find({
-        id_calificacion: new ObjectId(id),
+      await ProveedoresModels.updateMany(
+        { "id_calificacion._id": new ObjectId(calificacionId) },
+        { $pull: { id_calificacion: { _id: new ObjectId(calificacionId) } } }
+      );
+  
+      
+      const result = await CalificacionModel.findOneAndDelete({
+        _id: new ObjectId(calificacionId),
       });
-
-      console.log(reference);
-
-      if (reference.length > 0) {
-        res.status(500).send({
-          error:
-            "No se puede eliminar esta calificación, ya que se utiliza en otra parte.",
-        });
+  
+      if (result) {
+        res.status(200).send({ message: "Calificación borrada con éxito" });
       } else {
-        const result = await CalificacionModel.findOneAndDelete({
-          _id: new ObjectId(id),
-        });
-
-        if (result) {
-          res.status(200).send({ message: "Categoría borrada con éxito" });
-        } else {
-          res.status(500).send({ error: "Error al eliminar la categoría" });
-        }
+        res.status(500).send({ error: "Error al eliminar la calificación" });
       }
     } catch (error) {
-      console.log("Error al eliminar la categoría -> " + error.message);
-      res.status(500).send({ error: "Error.", err: error.message });
-    } 
+      console.error("Error al eliminar la calificación -> " + error.message);
+      res.status(500).send({ error: "Error al eliminar la calificación." });
+    }
   }
+  
+  
 }
-
 module.exports = {
   CalificacionesController,
 };
