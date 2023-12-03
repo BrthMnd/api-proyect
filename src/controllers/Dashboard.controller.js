@@ -26,6 +26,7 @@ const { CategoriaModel } = require("../models/Proveedores/categoria.models")
 const { ProveedoresModels } = require("../models/Proveedores/provedores.models")
 const { ServicioModels } = require("../models/Proveedores/servicios.models")
 const {OffersModel}=require("../models/Offers/offers.model")
+const {OffersStatus_Model} = require("../models/Offers/OfferStatus")
 
 class Dashboard {
     async Grafics_Get(req, res, next) {
@@ -35,6 +36,7 @@ class Dashboard {
             const proveedores = await ProveedoresModels.find()
             const inmuebles = await InmuebleModels.find()
             const offers = await OffersModel.find()
+            const offersStatus = await OffersStatus_Model.find()
             
 
             // Crear un objeto con los datos obtenidos
@@ -43,7 +45,8 @@ class Dashboard {
                 servicios: servicios,
                 proveedores: proveedores,
                 inmuebles:inmuebles,
-                offers: offers
+                offers: offers,
+                offersStatus:offersStatus
             };
 
             // Enviar el objeto como respuesta en formato JSON
