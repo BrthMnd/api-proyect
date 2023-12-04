@@ -354,9 +354,10 @@ class User_Controller {
       const codeIsConfirmed = await bycrypt.compare(code, isConfirmed.key);
       console.log(codeIsConfirmed);
       if (!codeIsConfirmed)
-        return res
-          .status(400)
-          .json({ message: "Error del codigo", error: codeIsConfirmed });
+        return res.status(400).json({
+          message: "El codigo ingresado es invalido",
+          error: codeIsConfirmed,
+        });
 
       console.log("all right");
 
@@ -383,7 +384,7 @@ class User_Controller {
       if (!response_user) {
         return res
           .status(400)
-          .json({ message: "El email no a sido encontrado", error: email });
+          .json({ message: "Error al actualizar", error: email });
       }
 
       res.status(200).json({ message: "actualizado con éxito." });

@@ -24,6 +24,7 @@ let OffersSchema = new Schema({
     ref: ServicioModels.modelName,
     required: true,
   },
+  estado: { type: Boolean, default: true },
 });
 //
 let OffersModel = model("Offers", OffersSchema, "offers_Offers");

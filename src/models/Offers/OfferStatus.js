@@ -10,6 +10,7 @@ const OffersStatus_Schema = new Schema({
   },
   description: { type: String, required: true },
   estado: { type: Boolean, default: true },
+  orden: { type: Number, require: true },
 });
 
 const OffersStatus_Model = model(
