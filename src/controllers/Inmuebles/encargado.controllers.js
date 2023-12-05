@@ -13,7 +13,7 @@ class EncargadoControllers {
           .status(500)
           .json({ error: "Erro al obtener datos", err: error.message });
       })
-      .finally(() => next());
+      
   }
 
   postEncargado(req, res, next) {
@@ -43,7 +43,7 @@ class EncargadoControllers {
             .json({ error: "Error al insertar Encargado ", err: error });
         }
       })
-      .finally(() => next());
+      
   }
 
   async getIdEncargado(req, res, next) {
@@ -59,9 +59,7 @@ class EncargadoControllers {
       }
     } catch (error) {
       console.log("error" + error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   async putEncargado(req, res, next) {
@@ -91,9 +89,7 @@ class EncargadoControllers {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   async deleteEncargado(req, res, next) {
@@ -125,9 +121,7 @@ class EncargadoControllers {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 

@@ -11,7 +11,7 @@ class Employed_Controller {
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener el Empleado", error });
       })
-      .finally(() => next());
+      
   }
 
   // //__________________________________________________________________________________________
@@ -28,52 +28,50 @@ class Employed_Controller {
     } catch (error) {
       console.log("Error: " + error);
       res.status(500).json({ error: "Error al obtener el Empleado" });
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
+//!ACA DEBO AGREGAR LO DEL CORREO DE EMPLEADO
+  // async Post(req, res, next) {
+  //   const { nombre, documento, telefono, direccion, password, email } =
+  //     req.body;
 
-  async Post(req, res, next) {
-    const { nombre, documento, telefono, direccion, password, email } =
-      req.body;
+  //   try {
+  //     const passwordHash = await bycrypt.hash(password, 10);
+  //     const employed = new Employed_Model({
+  //       nombre,
+  //       documento,
+  //       telefono,
+  //       direccion,
+  //     });
+  //     const employed_created = await employed.save();
 
-    try {
-      const passwordHash = await bycrypt.hash(password, 10);
-      const employed = new Employed_Model({
-        nombre,
-        documento,
-        telefono,
-        direccion,
-      });
-      const employed_created = await employed.save();
+  //     if (!employed_created)
+  //       return res.status(400).send("error al crear empleado");
 
-      if (!employed_created)
-        return res.status(400).send("error al crear empleado");
+  //     const user = UserModel({
+  //       email,
+  //       password: passwordHash,
+  //       role: "Employed",
+  //       roleRef: new ObjectId(employed_created._id),
+  //     });
+  //     const user_created = await user.save();
 
-      const user = UserModel({
-        email,
-        password: passwordHash,
-        role: "Employed",
-        roleRef: new ObjectId(employed_created._id),
-      });
-      const user_created = await user.save();
+  //     if (!user_created) return res.status(400).send("hubo algún error");
 
-      if (!user_created) return res.status(400).send("hubo algún error");
-
-      res.status(201).json({
-        message: "GOOD",
-        Employed: employed_created,
-        User: user_created,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send(error);
-    } finally {
-      next();
-    }
-  }
+  //     res.status(201).json({
+  //       message: "GOOD",
+  //       Employed: employed_created,
+  //       User: user_created,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //     res.status(500).send(error);
+  //   } finally {
+  //     next();
+  //   }
+  // }
 
   //__________________________________________________________________________________________
 
@@ -94,9 +92,7 @@ class Employed_Controller {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //__________________________________________________________________________________________
@@ -119,9 +115,7 @@ class Employed_Controller {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 module.exports = { Employed_Controller };

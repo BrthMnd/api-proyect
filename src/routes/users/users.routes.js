@@ -6,12 +6,18 @@ const routes = require("express").Router();
 
 routes.get("/", User.Get.bind());
 routes.get("/:id", User.GetById.bind());
-routes.post("/", User.Post.bind());
+routes.post("/", User.PostEmployed.bind());
 routes.put("/:id", User.Put.bind());
 routes.delete("/:id", User.Delete.bind());
-// LOGIN
-routes.post("/registro", User.register.bind());
+// Register
 routes.post("/verificar_registro", User.registerVerify.bind());
+routes.get("/confirmacion_correo/:token", User.VerifyConfirmToken.bind());
+// password
+routes.post("/recuperar_correo", User.CreateCodeToken.bind());
+routes.post("/actualizar_contrasena", User.UpdatePassword.bind());
+routes.post("/recuperar_correo/:tokenKey", User.VerifyCodeToken.bind());
+// Login
+routes.post("/registro", User.register.bind());
 routes.post("/login", User.Login.bind());
 routes.post("/logout", User.Logout.bind());
 routes.post("/VerifyToken", User.VerifyToken.bind());

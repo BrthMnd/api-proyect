@@ -28,9 +28,7 @@ class OffersControllers {
         type: "Bad",
         Error: error,
       });
-    } finally {
-      next();
-    }
+    } 
   }
 
   async Post(req, res, next) {
@@ -60,9 +58,7 @@ class OffersControllers {
         console.log(error);
         res.status(500).json({ error: "Error al crear el documento" });
       }
-    } finally {
-      next();
-    }
+    } 
   }
   async GetId(req, res, next) {
     const id = req.params.id;
@@ -81,9 +77,7 @@ class OffersControllers {
       }
     } catch (error) {
       console.log("Error al Obtener Datos por 'ID' >>>" + error.message);
-    } finally {
-      next();
-    }
+    } 
   }
   async Put(req, res, next) {
     const Update = req.body;
@@ -108,9 +102,7 @@ class OffersControllers {
         err: error.message,
       });
       console.log(error.message);
-    } finally {
-      next();
-    }
+    } 
   }
   async GetModalData(req, res, next) {
     try {
@@ -132,9 +124,7 @@ class OffersControllers {
       res.status(400).json({
         error: error,
       });
-    } finally {
-      next();
-    }
+    } 
   }
   async Delete_CandidateAndOffers(req, res, next) {
     const id = req.params.id;
@@ -167,9 +157,7 @@ class OffersControllers {
         error: "error.",
         err: error.message,
       });
-    } finally {
-      next();
-    }
+    } 
   }
   async GetId_CandidateForOffers(req, res, next) {
     const id = req.params.id;
@@ -190,9 +178,7 @@ class OffersControllers {
       }
     } catch (error) {
       console.log("error" + error.message);
-    } finally {
-      next();
-    }
+    } 
   }
   async Add_provider_for_offer(req, res, next) {
     const id = req.params.id;
@@ -215,9 +201,7 @@ class OffersControllers {
       }
     } catch (error) {
       console.log("error" + error.message);
-    } finally {
-      next();
-    }
+    } 
   }
 }
 module.exports = { OffersControllers };

@@ -1,26 +1,25 @@
+const { ObjectId } = require("mongodb");
+const {
+  ProveedoresModels,
+} = require("../../models/Proveedores/provedores.models");
 
-  const { ObjectId } = require("mongodb");
-  const {
-    ProveedoresModels,
-  } = require("../../models/Proveedores/provedores.models");
+const { CandidateModel } = require("../../models/Offers/candidate.model");
 
-  const { CandidateModel } = require("../../models/Offers/candidate.model");
-
-  class ProveedoresController {
-    getProveedores(req, res, next) {
-      ProveedoresModels.find({})
-        .populate("id_calificacion")
-        .populate("categoriaServicio")
-        .then((result) => {
-          res.status(200).json(result);
-        })
-        .catch((error) => {
-          res
-            .status(500)
-            .json({ error: "Error al obtener Estados", err: error.message });
-        })
-        .finally(() => next());
-    }
+class ProveedoresController {
+  getProveedores(req, res, next) {
+    ProveedoresModels.find({})
+      .populate("id_calificacion")
+      .populate("categoriaServicio")
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((error) => {
+        res
+          .status(500)
+          .json({ error: "Error al obtener Estados", err: error.message });
+      })
+      .finally(() => next());
+  }
 
   async getProveedorPorId(req, res, next) {
     const id = req.params.id;
@@ -39,9 +38,7 @@
       }
     } catch (error) {
       console.log("error" + error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //_____________________________________________________________________________________
@@ -79,9 +76,7 @@
           .status(500)
           .json({ error: "Error al crear el proveedor", err: error.message });
       }
-    } finally {
-      next();
-    }
+    } 
   }
 
   //_____________________________________________________________________________________
@@ -114,9 +109,7 @@
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //_____________________________________________________________________________________
@@ -150,9 +143,7 @@
     } catch (error) {
       console.log("Error al eliminar proveedor -> " + error.message);
       res.status(500).send({ error: "Error.", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7////
@@ -175,9 +166,7 @@
       return res
         .status(500)
         .json({ error: "Proveedor no encontrado.", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 
   /////////////////////////////////////////////////////////////
@@ -197,9 +186,7 @@
       res.status(200).json(result);
     } catch (error) {
       console.log(error.message);
-    } finally {
-      next();
-    }
+    } 
   }
 
   //___________________________________________Metodos_Categoria________________________
@@ -223,9 +210,7 @@
         error: "Error al agregar categorías de servicio",
         err: error.message,
       });
-    } finally {
-      next();
-    }
+    } 
   }
 
   async eliminateCategoriasServicio(req, res, next) {
@@ -247,9 +232,7 @@
         error: "Error al eliminar categorías de servicio",
         err: error.message,
       });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 

@@ -14,7 +14,7 @@ class OffersStatus_Controller {
           err: error.message,
         });
       })
-      .finally(() => next());
+      
   }
 
   Post(req, res, next) {
@@ -36,7 +36,7 @@ class OffersStatus_Controller {
           res.status(500).json({ error: "Error al crear el documento" });
         }
       })
-      .finally(() => next());
+      
   }
   async GetId(req, res, next) {
     const id = req.params.id;
@@ -47,9 +47,7 @@ class OffersStatus_Controller {
       res.status(200).send(result);
     } catch (error) {
       console.log("*** El Error es: ***" + error.message);
-    } finally {
-      next();
-    }
+    } 
   }
   async Put(req, res, next) {
     const Update = req.body;
@@ -70,9 +68,7 @@ class OffersStatus_Controller {
       }
     } catch (error) {
       console.log("Error -> " + error.message);
-    } finally {
-      next();
-    }
+    } 
   }
   async Delete(req, res, next) {
     const id = req.params.id;
@@ -97,9 +93,7 @@ class OffersStatus_Controller {
       res.status(500).send({
         error: "error.",
       });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 module.exports = { OffersStatus_Controller };

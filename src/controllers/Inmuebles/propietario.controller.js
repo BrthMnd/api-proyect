@@ -15,7 +15,7 @@ class propietarioController {
           .status(500)
           .json({ error: "Error al obtener propietarios", err: error.message });
       })
-      .finally(() => next());
+      
   }
   async getIdPropietario(req, res, next) {
     const id = req.params.id;
@@ -30,9 +30,7 @@ class propietarioController {
       }
     } catch (error) {
       console.log("error" + error);
-    } finally {
-      next();
-    }
+    } 
   }
   postPropietario(req, res, next) {
     const result = new PropietarioModels(req.body);
@@ -52,7 +50,7 @@ class propietarioController {
           res.status(500).json({ error: "Error al insertar Propietario", err: error.message });
         }
       })
-      .finally(() => next());
+      
   }
 
   async putPropietario(req, res, next) {
@@ -79,9 +77,7 @@ class propietarioController {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      next();
-    }
+    } 
   }
 
   async deletePropietario(req, res, next) {
@@ -113,9 +109,7 @@ class propietarioController {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } finally {
-      next();
-    }
+    } 
   }
 }
 module.exports = { propietarioController };
