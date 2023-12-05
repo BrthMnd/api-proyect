@@ -10,8 +10,7 @@ class Employed_Controller {
       })
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener el Empleado", error });
-      })
-      
+      });
   }
 
   // //__________________________________________________________________________________________
@@ -26,13 +25,13 @@ class Employed_Controller {
 
       res.status(200).send(result);
     } catch (error) {
-      console.log("Error: " + error);
+      "Error: " + error;
       res.status(500).json({ error: "Error al obtener el Empleado" });
-    } 
+    }
   }
 
   //__________________________________________________________________________________________
-//!ACA DEBO AGREGAR LO DEL CORREO DE EMPLEADO
+  //!ACA DEBO AGREGAR LO DEL CORREO DE EMPLEADO
   // async Post(req, res, next) {
   //   const { nombre, documento, telefono, direccion, password, email } =
   //     req.body;
@@ -66,7 +65,7 @@ class Employed_Controller {
   //       User: user_created,
   //     });
   //   } catch (error) {
-  //     console.log(error);
+  //     (error);
   //     res.status(500).send(error);
   //   } finally {
   //     next();
@@ -91,8 +90,8 @@ class Employed_Controller {
         res.status(500).json({ error: "Error al actualizar" });
       }
     } catch (error) {
-      console.log(error);
-    } 
+      error;
+    }
   }
 
   //__________________________________________________________________________________________
@@ -115,7 +114,7 @@ class Employed_Controller {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } 
+    }
   }
 }
 module.exports = { Employed_Controller };

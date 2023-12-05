@@ -12,7 +12,11 @@ const {
   ProveedoresModels,
 } = require("../../models/Proveedores/provedores.models.js");
 const { Employed_Model } = require("../../models/Users/employed.models.js");
-const { TemplateEmail, SendEmail } = require("../../tools/template.tools.js");
+const {
+  TemplateEmail,
+  SendEmail,
+  NotificationTemplate,
+} = require("../../tools/template.tools.js");
 const { EncodeToken, DecodeToken } = require("../../tools/encode.tools.js");
 
 const CorreoConfirmacion = async (userEmail) => {
@@ -30,7 +34,7 @@ const CorreoConfirmacion = async (userEmail) => {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log("Correo enviado correctamente");
+    ("Correo enviado correctamente");
   } catch (error) {
     console.error("Error al enviar el correo: ", error);
   }
@@ -53,7 +57,7 @@ const CorreoConfirmacionEmpleado = async (userEmail, password) => {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log("Correo enviado correctamente");
+    ("Correo enviado correctamente");
   } catch (error) {
     console.error("Error al enviar el correo: ", error);
   }
@@ -99,7 +103,7 @@ class User_Controller {
 
       res.status(200).send(result);
     } catch (error) {
-      console.log("Error: " + error);
+      "Error: " + error;
       res.status(500).json({ error: "Error al obtener el usuario" });
     }
   }
@@ -142,7 +146,7 @@ class User_Controller {
       });
       CorreoConfirmacionEmpleado(user_created.email, passwordPlain);
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).send(error);
     }
   }
@@ -178,7 +182,7 @@ class User_Controller {
         res.status(404).json({ message: "Rol indefinido" });
       }
     } catch (err) {
-      console.log(err);
+      err;
       res.status(500).json({ message: "Ha ocurrido un error.", error: err });
     } finally {
       next();
@@ -226,7 +230,7 @@ class User_Controller {
       }
 
       const Token = await CreateAccess({ id: Usuario._id });
-      console.log(Token);
+      Token;
       res.cookie("token", Token, {
         sameSite: "none",
         secure: true,
@@ -235,7 +239,7 @@ class User_Controller {
         .status(200)
         .json({ message: "Bienvenido", result: Usuario, token: Token });
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).json({ message: "Bad", error });
     }
   }
@@ -258,13 +262,13 @@ class User_Controller {
         email: email,
         password,
       });
-      console.log(tokenCode);
+      tokenCode;
       if (!tokenCode) {
         res.status(500).json({ message: "Error al crear token de acceso" });
       }
       const tok = EncodeToken(tokenCode);
-      console.log("con encode");
-      console.log(tok);
+      ("con encode");
+      tok;
       const template = TemplateEmail(
         email,
         "Para confirmar tu cuenta, ingresa al siguiente enlace",
@@ -273,19 +277,19 @@ class User_Controller {
       SendEmail(email, "Confirmacion de correo", template);
       res.status(200).json({ message: "Continuando con el registro" });
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).json({ message: "A ocurrido un error", error });
     }
   }
   async VerifyConfirmToken(req, res, next) {
-    console.log("Verificando paso...");
+    ("Verificando paso...");
     const { token } = req.params;
     try {
       const tokenDecode = DecodeToken(token);
-      console.log(tokenDecode);
-      console.log("arriba ");
+      tokenDecode;
+      ("arriba ");
       const confirmed = await GetConfirmToken(tokenDecode);
-      console.log(confirmed);
+      confirmed;
       if (!confirmed) {
         return res
           .status(400)
@@ -309,13 +313,13 @@ class User_Controller {
         });
 
       const randomNumber = String(Math.floor(Math.random() * 9000) + 1000);
-      console.log(randomNumber);
+      randomNumber;
 
       const key = await bycrypt.hash(randomNumber, 10);
-      console.log(key);
+      key;
 
       const keyToken = await CreateConfirmToken({ key, email });
-      console.log("mira");
+      ("mira");
 
       const template = await TemplateEmail(
         email,
@@ -334,7 +338,7 @@ class User_Controller {
         .status(200)
         .json({ message: "Continuando con el cambio de contraseña" });
     } catch (error) {
-      console.log(error);
+      error;
       return res.status(500).json({ message: "A ocurrido un error", error });
     }
   }
@@ -345,21 +349,21 @@ class User_Controller {
       const { code } = req.body;
 
       const isConfirmed = await GetConfirmToken(DecodeToken(tokenKey));
-      console.log(isConfirmed);
+      isConfirmed;
       if (!isConfirmed)
         return res
           .status(400)
           .json({ message: "Error del Token", error: isConfirmed });
 
       const codeIsConfirmed = await bycrypt.compare(code, isConfirmed.key);
-      console.log(codeIsConfirmed);
+      codeIsConfirmed;
       if (!codeIsConfirmed)
         return res.status(400).json({
           message: "El codigo ingresado es invalido",
           error: codeIsConfirmed,
         });
 
-      console.log("all right");
+      ("all right");
 
       //Devuelvo el email
       res.status(200).json({
@@ -367,7 +371,7 @@ class User_Controller {
         email: isConfirmed.email,
       });
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).json({ message: "A ocurrido un error", error });
     }
   }
@@ -380,16 +384,17 @@ class User_Controller {
         { password: passwordHash },
         { new: true }
       );
-      console.log(response_user);
+      response_user;
       if (!response_user) {
         return res
           .status(400)
           .json({ message: "Error al actualizar", error: email });
       }
-
+      
+      SendEmail(email,'Cambio de contrasena',NotificationTemplate(email, "Contrasena actualizada con exito."))
       res.status(200).json({ message: "actualizado con éxito." });
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).json({ message: "A ocurrido un error", error });
     }
   }
@@ -403,16 +408,16 @@ class User_Controller {
       telefono,
       categoriaServicio,
     } = req.body;
-    console.log(req.body);
+    req.body;
     try {
       const passwordHash = await bycrypt.hash(password, 10);
-      console.log(passwordHash);
+      passwordHash;
 
       const comprobando = await ProveedoresModels.findOne({
         documento: documento,
       });
       if (comprobando) {
-        console.log(comprobando);
+        comprobando;
         return res.status(409).json({
           message: "Documento ya se encuentra en la base de datos",
           error: comprobando,
@@ -446,7 +451,7 @@ class User_Controller {
         roleRef: saveProvider._id,
       });
       const saveUser = await newUser.save();
-      console.log(saveUser);
+      saveUser;
 
       const Token = await CreateAccess({ id: saveUser._id });
       res.cookie("token", Token, {
@@ -466,7 +471,7 @@ class User_Controller {
         token: Token,
       });
     } catch (error) {
-      console.log(error);
+      error;
       return res.status(500).json({
         message: "A ocurrido un error",
         error: error,
@@ -476,8 +481,8 @@ class User_Controller {
   async VerifyToken(req, res, next) {
     try {
       const { token } = req.cookies;
-      console.log(req.cookie);
-      console.log("Estamos verificando el token: " + token);
+      req.cookie;
+      "Estamos verificando el token: " + token;
       if (!token)
         return res.status(400).json({ message: "Acceso no autorizado" });
 
@@ -501,11 +506,13 @@ class User_Controller {
       if (user.role == "Proveedores") {
         provider = await ProveedoresModels.findById({
           _id: new ObjectId(user.roleRef._id),
-        }).populate("categoriaServicio").populate("id_calificacion")
+        })
+          .populate("categoriaServicio")
+          .populate("id_calificacion");
       }
-      console.log("🐱‍👤 por aqui");
-      console.log(user);
-      const forJson ={
+      ("🐱‍👤 por aqui");
+      user;
+      const forJson = {
         id: user._id,
         id_provider: user.roleRef._id,
         email: user.email,
@@ -514,21 +521,21 @@ class User_Controller {
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
         direction: user.roleRef.direccion,
-      }
-      if(user.role== 'Proveedores'){
-        forJson.score= provider.id_calificacion
-        forJson.category= provider ? provider.categoriaServicio : ""
+      };
+      if (user.role == "Proveedores") {
+        forJson.score = provider.id_calificacion;
+        forJson.category = provider ? provider.categoriaServicio : "";
       }
       return res.status(200).json(forJson);
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).json({ message: "Bad", error });
     }
   }
   async VerifyTokenMobile(req, res, next) {
     const { token } = req.body;
     try {
-      console.log("Estamos verificando el token: " + token);
+      "Estamos verificando el token: " + token;
       if (!token) return res.status(400).json({ message: "Unauthorized 1" });
 
       const verify = await jwt.verify(token, process.env.SECRET_KEY);
@@ -551,7 +558,7 @@ class User_Controller {
         score: user.roleRef.id_calificacion,
       });
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).json({ message: "Bad", error });
     }
   }

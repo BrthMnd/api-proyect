@@ -13,8 +13,7 @@ class OffersStatus_Controller {
           error: "Error al obtener estados de contrato",
           err: error.message,
         });
-      })
-      
+      });
   }
 
   Post(req, res, next) {
@@ -32,11 +31,10 @@ class OffersStatus_Controller {
             error: "El nombre del estado ya esta en uso",
           });
         } else {
-          console.log(error);
+          error;
           res.status(500).json({ error: "Error al crear el documento" });
         }
-      })
-      
+      });
   }
   async GetId(req, res, next) {
     const id = req.params.id;
@@ -46,8 +44,8 @@ class OffersStatus_Controller {
       });
       res.status(200).send(result);
     } catch (error) {
-      console.log("*** El Error es: ***" + error.message);
-    } 
+      "*** El Error es: ***" + error.message;
+    }
   }
   async Put(req, res, next) {
     const Update = req.body;
@@ -67,8 +65,8 @@ class OffersStatus_Controller {
         res.status(500).json({ error: "Error al actualizar el documento" });
       }
     } catch (error) {
-      console.log("Error -> " + error.message);
-    } 
+      "Error -> " + error.message;
+    }
   }
   async Delete(req, res, next) {
     const id = req.params.id;
@@ -89,11 +87,11 @@ class OffersStatus_Controller {
         res.status(200).send({ message: "Borrado con éxito", Result: result });
       }
     } catch (error) {
-      console.log("Error al eliminar el documento -> " + error.message);
+      "Error al eliminar el documento -> " + error.message;
       res.status(500).send({
         error: "error.",
       });
-    } 
+    }
   }
 }
 module.exports = { OffersStatus_Controller };
