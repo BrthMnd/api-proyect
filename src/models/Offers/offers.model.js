@@ -8,12 +8,7 @@ const { ObjectId } = require("mongodb");
 let OffersSchema = new Schema({
   publicationDate: { type: String, default: FechaActual, required: true },
   description: { type: String, maxLength: 500, required: true },
-  id_OfferStatus: {
-    type: Schema.Types.ObjectId,
-    ref: OffersStatus_Model.modelName,
-    required: true,
-    default: new ObjectId("65362881c8c96ecfeece3b99"),
-  },
+  state: { type: String, default: "Disponible" },
   id_property: {
     type: Schema.Types.ObjectId,
     ref: InmuebleModels.modelName,
