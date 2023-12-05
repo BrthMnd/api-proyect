@@ -358,11 +358,11 @@ class User_Controller {
       if (user.role == "Proveedores") {
         provider = await ProveedoresModels.findById({
           _id: new ObjectId(user.roleRef._id),
-        }).populate("categoriaServicio");
+        }).populate("categoriaServicio").populate("id_calificacion")
       }
       console.log("🐱‍👤 por aqui");
       console.log(user);
-      return res.status(200).json({
+      const forJson ={
         id: user._id,
         id_provider: user.roleRef._id,
         email: user.email,
@@ -371,9 +371,12 @@ class User_Controller {
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
         direction: user.roleRef.direccion,
-        score: user.roleRef.id_calificacion,
-        category: provider ? provider.categoriaServicio : "",
-      });
+      }
+      if(user.role== 'Proveedores'){
+        forJson.score= provider.id_calificacion
+        forJson.category= provider ? provider.categoriaServicio : ""
+      }
+      return res.status(200).json(forJson);
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error });

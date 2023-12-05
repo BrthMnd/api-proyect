@@ -31,11 +31,17 @@ const {OffersStatus_Model} = require("../models/Offers/OfferStatus")
 class Dashboard {
     async Grafics_Get(req, res, next) {
         try {
+            console.log('entre')
             const categorias = await CategoriaModel.find()
+            console.log('Categoria listo')
             const servicios = await ServicioModels.find()
+            console.log('servicio listo')
             const proveedores = await ProveedoresModels.find()
+            console.log('Proveedores listo')
             const inmuebles = await InmuebleModels.find()
+            console.log('inmuebles listo')
             const offers = await OffersModel.find()
+            console.log('inmuebles oferttaslisto')
             const offersStatus = await OffersStatus_Model.find()
             
 
