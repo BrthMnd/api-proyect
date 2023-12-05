@@ -3,11 +3,17 @@ const { ObjectId } = require("mongodb");
 const { UserModel } = require("../../models/Users/users.models.js");
 const jwt = require("jsonwebtoken");
 const bycrypt = require("bcrypt");
-const { CreateAccess } = require("../../libs/jwt.js");
+const {
+  CreateAccess,
+  CreateConfirmToken,
+  GetConfirmToken,
+} = require("../../libs/jwt.js");
 const {
   ProveedoresModels,
 } = require("../../models/Proveedores/provedores.models.js");
 const { Employed_Model } = require("../../models/Users/employed.models.js");
+const { TemplateEmail, SendEmail } = require("../../tools/template.tools.js");
+const { EncodeToken, DecodeToken } = require("../../tools/encode.tools.js");
 
 const CorreoConfirmacion = async (userEmail) => {
   try {
@@ -62,7 +68,7 @@ class User_Controller {
       })
       .catch((error) => {
         return res.status(500).json({ error: "Error al obtener el permiso" });
-      })
+      });
   }
 
   // Get_proveedores(req, res, next) {
@@ -95,7 +101,7 @@ class User_Controller {
     } catch (error) {
       console.log("Error: " + error);
       res.status(500).json({ error: "Error al obtener el usuario" });
-    } 
+    }
   }
 
   //__________________________________________________________________________________________
@@ -138,7 +144,7 @@ class User_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
-    } 
+    }
   }
 
   //__________________________________________________________________________________________
@@ -199,7 +205,7 @@ class User_Controller {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } 
+    }
   }
   // LOGIN
   async Login(req, res, next) {
@@ -231,22 +237,159 @@ class User_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error });
-    } 
+    }
   }
   Logout(req, res, next) {
     res.cookie("token", "", { expires: new Date(0) });
     res.status(200).send("Sesión Cerrada");
   }
   async registerVerify(req, res, next) {
-    const { email } = req.body;
     try {
+      const { email, password } = req.body;
       const verifyUser = await UserModel.findOne({ email: email });
       if (verifyUser)
         return res
           .status(409)
           .json({ message: "El usuario ya esta registrado" });
+
+      const randomNumber = Math.floor(Math.random() * 9000) + 1000;
+      const tokenCode = await CreateConfirmToken({
+        code: randomNumber,
+        email: email,
+        password,
+      });
+      console.log(tokenCode);
+      if (!tokenCode) {
+        res.status(500).json({ message: "Error al crear token de acceso" });
+      }
+      const tok = EncodeToken(tokenCode);
+      console.log("con encode");
+      console.log(tok);
+      const template = TemplateEmail(
+        email,
+        "Para confirmar tu cuenta, ingresa al siguiente enlace",
+        tok
+      );
+      SendEmail(email, "Confirmacion de correo", template);
       res.status(200).json({ message: "Continuando con el registro" });
     } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "A ocurrido un error", error });
+    }
+  }
+  async VerifyConfirmToken(req, res, next) {
+    console.log("Verificando paso...");
+    const { token } = req.params;
+    try {
+      const tokenDecode = DecodeToken(token);
+      console.log(tokenDecode);
+      console.log("arriba ");
+      const confirmed = await GetConfirmToken(tokenDecode);
+      console.log(confirmed);
+      if (!confirmed) {
+        return res
+          .status(400)
+          .json({ message: "No fue confirmado", error: confirmed });
+      }
+      return res
+        .status(200)
+        .json({ message: "Continuando con el registro", data: confirmed });
+    } catch (error) {
+      return res.status(500).json({ message: "A ocurrido un error", error });
+    }
+  }
+  async CreateCodeToken(req, res, next) {
+    const { email } = req.body;
+    try {
+      const response_user = await UserModel.findOne({ email });
+      if (!response_user)
+        return res.status(400).json({
+          message: "El E-mail ingresado no existe en el aplicativo",
+          error: response_user,
+        });
+
+      const randomNumber = String(Math.floor(Math.random() * 9000) + 1000);
+      console.log(randomNumber);
+
+      const key = await bycrypt.hash(randomNumber, 10);
+      console.log(key);
+
+      const keyToken = await CreateConfirmToken({ key, email });
+      console.log("mira");
+
+      const template = await TemplateEmail(
+        email,
+        `Código de verificación de recuperación de contraseña es: <strong>${randomNumber}</strong>`,
+        EncodeToken(keyToken),
+        "recuperar_correo/"
+      );
+      await SendEmail(
+        email,
+        "Código de verificación contraseña",
+        template,
+        "recuperar_correo/"
+      );
+
+      return res
+        .status(200)
+        .json({ message: "Continuando con el cambio de contraseña" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "A ocurrido un error", error });
+    }
+  }
+
+  async VerifyCodeToken(req, res) {
+    try {
+      const { tokenKey } = req.params;
+      const { code } = req.body;
+
+      const isConfirmed = await GetConfirmToken(DecodeToken(tokenKey));
+      console.log(isConfirmed);
+      if (!isConfirmed)
+        return res
+          .status(400)
+          .json({ message: "Error del Token", error: isConfirmed });
+
+      const codeIsConfirmed = await bycrypt.compare(code, isConfirmed.key);
+      console.log(codeIsConfirmed);
+      if (!codeIsConfirmed)
+        return res.status(400).json({
+          message: "El codigo ingresado es invalido",
+          error: codeIsConfirmed,
+        });
+
+      console.log("all right");
+
+      //Devuelvo el email
+      res.status(200).json({
+        message: "Continuando con el cambio de contraseña",
+        email: isConfirmed.email,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "A ocurrido un error", error });
+    }
+  }
+  async UpdatePassword(req, res) {
+    try {
+      const { email, password } = req.body;
+      const passwordHash = await bycrypt.hash(password, 10);
+      const response_user = await UserModel.findOneAndUpdate(
+        { email },
+        { password: passwordHash },
+        { new: true }
+      );
+      console.log(response_user);
+      if (!response_user) {
+        return res
+          .status(400)
+          .json({ message: "Error al actualizar", error: email });
+      }
+
+      res.status(200).json({ message: "actualizado con éxito." });
+    } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "A ocurrido un error", error });
     }
   }
@@ -328,7 +471,7 @@ class User_Controller {
         message: "A ocurrido un error",
         error: error,
       });
-    } 
+    }
   }
   async VerifyToken(req, res, next) {
     try {
@@ -358,11 +501,11 @@ class User_Controller {
       if (user.role == "Proveedores") {
         provider = await ProveedoresModels.findById({
           _id: new ObjectId(user.roleRef._id),
-        }).populate("categoriaServicio");
+        }).populate("categoriaServicio").populate("id_calificacion")
       }
       console.log("🐱‍👤 por aqui");
       console.log(user);
-      return res.status(200).json({
+      const forJson ={
         id: user._id,
         id_provider: user.roleRef._id,
         email: user.email,
@@ -371,13 +514,16 @@ class User_Controller {
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
         direction: user.roleRef.direccion,
-        score: user.roleRef.id_calificacion,
-        category: provider ? provider.categoriaServicio : "",
-      });
+      }
+      if(user.role== 'Proveedores'){
+        forJson.score= provider.id_calificacion
+        forJson.category= provider ? provider.categoriaServicio : ""
+      }
+      return res.status(200).json(forJson);
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error });
-    } 
+    }
   }
   async VerifyTokenMobile(req, res, next) {
     const { token } = req.body;
@@ -407,7 +553,7 @@ class User_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Bad", error });
-    } 
+    }
   }
 }
 module.exports = { User_Controller };
