@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
 const { CandidateModel } = require("../../models/Offers/candidate.model");
+const { OffersModel } = require("../../models/Offers/offers.model");
 
 class Contracting_Controller {
   Get(req, res, next) {
@@ -17,7 +18,7 @@ class Contracting_Controller {
       })
       .catch((error) => {
         res.status(500).json({ error: "Error al obtener Contrato", error });
-      })
+      });
   }
   // estado: { type: Boolean, default: true },
   // id_candidates: { type: Schema.Types.ObjectId, ref: CandidateModel.modelName },
@@ -31,6 +32,11 @@ class Contracting_Controller {
   async Post(req, res, next) {
     const { id_candidates, id_provider, id_offers } = req.body;
     try {
+      const response_offer = await OffersModel.findOneAndUpdate(
+        { _id: new ObjectId(id_offers) },
+        {},
+        { new: true }
+      );
       const result = new ContractingModal({
         id_candidates,
         id_provider,
@@ -82,7 +88,7 @@ class Contracting_Controller {
       }
     } catch (error) {
       console.log("error" + error);
-    } 
+    }
   }
   async Put(req, res, next) {
     const Update = req.body;
@@ -104,7 +110,7 @@ class Contracting_Controller {
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: error });
-    } 
+    }
   }
   async Delete(req, res, next) {
     const id = req.params.id;
@@ -120,7 +126,7 @@ class Contracting_Controller {
       }
     } catch (error) {
       console.log(error);
-    } 
+    }
   }
 }
 module.exports = { Contracting_Controller };
