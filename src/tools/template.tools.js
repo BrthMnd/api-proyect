@@ -35,10 +35,12 @@ function TemplateEmail(email, details, token, url = "confirmacion_correo/") {
     }
 
     img {
-      max-width: 100%;
-      height: auto;
+      max-width: 100px;
+      height: 100px;
       display: block;
       margin-bottom: 20px;
+      border-radius: 50%;
+      background: radial-gradient(black 60%, transparent 60%);
     }
 
     h2 {
@@ -58,7 +60,7 @@ function TemplateEmail(email, details, token, url = "confirmacion_correo/") {
 
 <body>
   <div id="email___content">
-    <img src="*" alt="Rc service Logo">
+    <img src="https://rcservice.onrender.com/api/img/LogoRc.png" alt="Rc service Logo">
     <h2>Hola <span style="font-weight: bold">${email}</span></h2>
     <p>${details}</p>
     <a target="_blank" href="http://localhost:5173/${url}${token}">Haz clic aquí para continuar</a>
