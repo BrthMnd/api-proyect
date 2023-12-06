@@ -28,24 +28,12 @@ class InmuebleControllers {
       .catch((error) => {
         console.log(error);
 
-        if (error.code === 11000) {
-          if (error.keyPattern.documento) {
-            res
-              .status(409)
-              .json({
-                error: "Este documento ya se encuentra registrado",
-                err: error,
-              });
-          } else {
-            res
-              .status(500)
-              .json({ error: "Algo esta mal con el campo único", err: error });
-          }
-        } else {
+        
+        
           res
             .status(500)
             .json({ error: "Error al insertar Inmueble", err: error.message });
-        }
+        
       })
       
   }
@@ -72,14 +60,7 @@ class InmuebleControllers {
     const Update = req.body;
     const id = req.params.id;
     try {
-      const existingUpdate = await InmuebleModels.findOne({
-        documento: Update.documento,
-      });
-      if (existingUpdate && existingUpdate._id !== id) {
-        return res.status(409).json({
-          error: "Este documento ya se encuentra registrado",
-        });
-      }
+      
       const result = await InmuebleModels.findOneAndUpdate(
         { _id: new ObjectId(id) },
         Update,
@@ -89,9 +70,9 @@ class InmuebleControllers {
       if (result) {
         res
           .status(200)
-          .json({ message: "Documento actualizado exitosamente\n", result });
+          .json({ message: "Inmueble actualizado exitosamente\n", result });
       } else {
-        res.status(500).json({ error: "Error al actualizar el documento" });
+        res.status(500).json({ error: "Error al actualizar el Inmueble" });
       }
     } catch (error) {
       console.log(error);
