@@ -20,23 +20,9 @@ class Contracting_Controller {
         res.status(500).json({ error: "Error al obtener Contrato", error });
       });
   }
-  // estado: { type: Boolean, default: true },
-  // id_candidates: { type: Schema.Types.ObjectId, ref: CandidateModel.modelName },
-  // id_provider: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: ProveedoresModels.modelName,
-  // },
-  // id_offers: { type: Schema.Types.ObjectId, ref: OffersModel.modelName },
-  // DateApplied: { type: String, default: FechaActual },
-
   async Post(req, res, next) {
     const { id_candidates, id_provider, id_offers } = req.body;
     try {
-      const response_offer = await OffersModel.findOneAndUpdate(
-        { _id: new ObjectId(id_offers) },
-        {},
-        { new: true }
-      );
       const result = new ContractingModal({
         id_candidates,
         id_provider,
@@ -55,20 +41,34 @@ class Contracting_Controller {
         },
         { new: true }
       );
+      
 
       if (!update_candidate) {
         return res
           .status(400)
           .json({ message: "A ocurrido un error 2", update_candidate });
       }
+      const update_offers = await OffersModel.findByIdAndUpdate(
+        { _id: new ObjectId(id_offers) },
+        {
+          state: 'Cotizando',
+        },
+        { new: true }
+      );
+      
+      if (!update_offers) {
+        return res
+          .status(400)
+          .json({ message: "A ocurrido un error 3", update_offers });
+      }
+
 
       res.status(201).json({ message: "Success", response: response });
     } catch (error) {
-      error;
+     console.log("🚀 ~ file: contracting.controller.js:68 ~ Contracting_Controller ~ Post ~ error:", error)
+     
       res.status(500).json({ message: "Error al crear el documento", error });
-    } finally {
-      next();
-    }
+    } 
   }
   async GetId(req, res, next) {
     const id = req.params.id;

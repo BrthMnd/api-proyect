@@ -20,7 +20,7 @@ db.on(
   console.error.bind(console, "Error de conexión a la base de datos:")
 );
 db.once("open", () => {
-  ("Conexión exitosa a la base de datos");
+  console.log("Conexión exitosa a la base de datos");
 });
 
 //middleware
