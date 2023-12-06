@@ -28,7 +28,7 @@ class OffersControllers {
         type: "Bad",
         Error: error,
       });
-    } 
+    }
   }
 
   async Post(req, res, next) {
@@ -55,10 +55,10 @@ class OffersControllers {
           error: "El nombre del estado ya esta en uso",
         });
       } else {
-        console.log(error);
+        error;
         res.status(500).json({ error: "Error al crear el documento" });
       }
-    } 
+    }
   }
   async GetId(req, res, next) {
     const id = req.params.id;
@@ -76,8 +76,8 @@ class OffersControllers {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("Error al Obtener Datos por 'ID' >>>" + error.message);
-    } 
+      "Error al Obtener Datos por 'ID' >>>" + error.message;
+    }
   }
   async Put(req, res, next) {
     const Update = req.body;
@@ -101,15 +101,15 @@ class OffersControllers {
         error: "Error al actualizar el documento",
         err: error.message,
       });
-      console.log(error.message);
-    } 
+      error.message;
+    }
   }
   async GetModalData(req, res, next) {
     try {
       const response_service = await ServicioModels.find();
       const response_property = await InmuebleModels.find();
       const response_offerStatus = await OffersStatus_Model.find();
-      console.log({
+      ({
         service: response_service,
         property: response_property,
         offerStatus: response_offerStatus,
@@ -120,11 +120,11 @@ class OffersControllers {
         offerStatus: response_offerStatus,
       });
     } catch (error) {
-      console.log(error);
+      error;
       res.status(400).json({
         error: error,
       });
-    } 
+    }
   }
   async Delete_CandidateAndOffers(req, res, next) {
     const id = req.params.id;
@@ -152,12 +152,12 @@ class OffersControllers {
         });
       }
     } catch (error) {
-      console.log("Error al eliminar el documento -> " + error.message);
+      "Error al eliminar el documento -> " + error.message;
       res.status(500).send({
         error: "error.",
         err: error.message,
       });
-    } 
+    }
   }
   async GetId_CandidateForOffers(req, res, next) {
     const id = req.params.id;
@@ -168,7 +168,7 @@ class OffersControllers {
         .populate("id_offers")
         .populate("id_ServiceProvider")
         .populate("id_CandidateStatus");
-      console.log(result);
+      result;
       if (result) {
         res.status(200).send(result);
       } else {
@@ -177,8 +177,8 @@ class OffersControllers {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("error" + error.message);
-    } 
+      "error" + error.message;
+    }
   }
   async Add_provider_for_offer(req, res, next) {
     const id = req.params.id;
@@ -191,7 +191,7 @@ class OffersControllers {
         .populate("id_offers")
         .populate("id_ServiceProvider")
         .populate("id_CandidateStatus");
-      console.log(result);
+      result;
       if (result) {
         res.status(200).send(result);
       } else {
@@ -200,8 +200,8 @@ class OffersControllers {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("error" + error.message);
-    } 
+      "error" + error.message;
+    }
   }
 }
 module.exports = { OffersControllers };

@@ -64,7 +64,7 @@ class Contracting_Controller {
 
       res.status(201).json({ message: "Success", response: response });
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).json({ message: "Error al crear el documento", error });
     } finally {
       next();
@@ -87,7 +87,7 @@ class Contracting_Controller {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("error" + error);
+      "error" + error;
     }
   }
   async Put(req, res, next) {
@@ -108,7 +108,7 @@ class Contracting_Controller {
         res.status(500).json({ error: "Error al actualizar el documento" });
       }
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).json({ error: error });
     }
   }
@@ -125,7 +125,7 @@ class Contracting_Controller {
         res.status(500).send({ error: "Error al eliminar el archivo" });
       }
     } catch (error) {
-      console.log(error);
+      error;
     }
   }
 }

@@ -14,11 +14,10 @@ class InmuebleControllers {
         res
           .status(500)
           .json({ error: "Error al obtener Estados", err: error.message });
-      })
-      
+      });
   }
 
-   postInmueble(req, res, next) {
+  postInmueble(req, res, next) {
     const result = new InmuebleModels(req.body);
     result
       .save()
@@ -26,10 +25,22 @@ class InmuebleControllers {
         res.status(201).json({ result: data, message: "Created" })
       )
       .catch((error) => {
-        console.log(error);
+        error;
 
-        
-        
+        if (error.code === 11000) {
+          if (error.keyPattern.documento) {
+            res
+              .status(409)
+              .json({
+                error: "Este documento ya se encuentra registrado",
+                err: error,
+              });
+          } else {
+            res
+              .status(500)
+              .json({ error: "Algo esta mal con el campo único", err: error });
+          }
+        } else {
           res
             .status(500)
             .json({ error: "Error al insertar Inmueble", err: error.message });
@@ -53,8 +64,8 @@ class InmuebleControllers {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("error" + error);
-    } 
+      "error" + error;
+    }
   }
   async putInmueble(req, res, next) {
     const Update = req.body;
@@ -75,8 +86,8 @@ class InmuebleControllers {
         res.status(500).json({ error: "Error al actualizar el Inmueble" });
       }
     } catch (error) {
-      console.log(error);
-    } 
+      error;
+    }
   }
   async deleteInmueble(req, res, next) {
     const id = req.params.id;
@@ -85,7 +96,7 @@ class InmuebleControllers {
       const reference = await OffersModel.find({
         id_property: new ObjectId(id),
       });
-      console.log(reference);
+      reference;
       if (reference.length > 0) {
         res.status(409).send({
           error:
@@ -107,7 +118,7 @@ class InmuebleControllers {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } 
+    }
   }
 }
 module.exports = { InmuebleControllers };
