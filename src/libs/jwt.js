@@ -27,7 +27,7 @@ async function GetConfirmToken(token) {
     const isConfirm = jwt.verify(token, Secret);
     return isConfirm;
   } catch (error) {
-    console.log(error);
+    error;
     return error;
   }
 }

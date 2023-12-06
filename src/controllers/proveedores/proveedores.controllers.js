@@ -37,8 +37,8 @@ class ProveedoresController {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("error" + error);
-    } 
+      "error" + error;
+    }
   }
 
   //_____________________________________________________________________________________
@@ -76,7 +76,7 @@ class ProveedoresController {
           .status(500)
           .json({ error: "Error al crear el proveedor", err: error.message });
       }
-    } 
+    }
   }
 
   //_____________________________________________________________________________________
@@ -108,8 +108,8 @@ class ProveedoresController {
         res.status(500).json({ error: "Error al actualizar el proveedor" });
       }
     } catch (error) {
-      console.log(error);
-    } 
+      error;
+    }
   }
 
   //_____________________________________________________________________________________
@@ -122,7 +122,7 @@ class ProveedoresController {
         id_ServiceProvider: new ObjectId(id),
       });
 
-      console.log(reference);
+      reference;
 
       if (reference.length > 0) {
         res.status(500).send({
@@ -141,9 +141,9 @@ class ProveedoresController {
         }
       }
     } catch (error) {
-      console.log("Error al eliminar proveedor -> " + error.message);
+      "Error al eliminar proveedor -> " + error.message;
       res.status(500).send({ error: "Error.", err: error.message });
-    } 
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7////
@@ -162,11 +162,11 @@ class ProveedoresController {
       }
       res.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
+      error.message;
       return res
         .status(500)
         .json({ error: "Proveedor no encontrado.", err: error.message });
-    } 
+    }
   }
 
   /////////////////////////////////////////////////////////////
@@ -185,8 +185,8 @@ class ProveedoresController {
       }
       res.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
-    } 
+      error.message;
+    }
   }
 
   //___________________________________________Metodos_Categoria________________________
@@ -205,12 +205,12 @@ class ProveedoresController {
       }
       res.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
+      error.message;
       return res.status(500).json({
         error: "Error al agregar categorías de servicio",
         err: error.message,
       });
-    } 
+    }
   }
 
   async eliminateCategoriasServicio(req, res, next) {
@@ -227,12 +227,12 @@ class ProveedoresController {
       }
       res.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
+      error.message;
       return res.status(500).json({
         error: "Error al eliminar categorías de servicio",
         err: error.message,
       });
-    } 
+    }
   }
 }
 

@@ -15,7 +15,7 @@ class Images_controllers {
         res.sendFile(pathImage);
       }
     } catch (error) {
-      console.log(error);
+      error;
     }
   }
 }

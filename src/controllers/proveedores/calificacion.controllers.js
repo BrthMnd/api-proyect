@@ -13,9 +13,9 @@ class CalificacionesController {
 
       res.status(200).send(result);
     } catch (error) {
-      console.log(error);
+      error;
       res.status(500).json({ error: "Error al obtener las calificaciones" });
-    } 
+    }
   }
 
   //__________________________________________________________________________________________
@@ -29,33 +29,37 @@ class CalificacionesController {
 
       res.status(200).send(result);
     } catch (error) {
-      console.log("Error: " + error);
+      "Error: " + error;
       res.status(500).json({ error: "Error al obtener la calificación" });
-    } 
+    }
   }
 
   //__________________________________________________________________________________________
 
   postCalificacion(req, res, next) {
     const proveedorId = req.body.id_proveedor;
-  
+
     ProveedoresModels.findById(proveedorId)
       .then((proveedor) => {
         if (!proveedor) {
           return res.status(404).json({ error: "Proveedor no encontrado" });
         }
-  
+
         const calificacion = new CalificacionModel(req.body);
         calificacion.proveedor = proveedorId;
-  
-        calificacion.save()
+
+        calificacion
+          .save()
           .then((result) => {
-      
             proveedor.id_calificacion.push(result._id);
 
             return proveedor.save();
           })
-          .then(() => res.status(201).json({ message: "Calificación insertada exitosamente" }))
+          .then(() =>
+            res
+              .status(201)
+              .json({ message: "Calificación insertada exitosamente" })
+          )
           .catch((error) => {
             console.error("Error al insertar una calificación:", error);
             res.status(500).json({
@@ -72,8 +76,7 @@ class CalificacionesController {
         });
       });
   }
-  
-  
+
   //__________________________________________________________________________________________
   async putCalificacion(req, res, next) {
     const id = req.params.id;
@@ -90,51 +93,51 @@ class CalificacionesController {
         res.status(500).json({ error: "Error al actualizar" });
       }
     } catch (error) {
-      console.log(error);
-    } 
+      error;
+    }
   }
   //__________________________________________________________________________________________
 
   async promedioCalificacion(req, res, next) {
     try {
       const calificaciones = await CalificacionModel.find({});
-      
+
       if (calificaciones.length === 0) {
         res.status(404).json({ error: "No hay calificaciones disponibles" });
         return;
       }
-  
+
       const sumaCalificaciones = calificaciones.reduce(
         (total, calificacion) => total + calificacion.CalificacionesFloat,
         0
       );
-  
+
       const promedio = sumaCalificaciones / calificaciones.length;
-  
+
       res.status(200).json({ promedio });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "Error al calcular el promedio de calificaciones" });
-    } 
+      error;
+      res
+        .status(500)
+        .json({ error: "Error al calcular el promedio de calificaciones" });
+    }
   }
-  
 
-   //__________________________________________________________________________________________
+  //__________________________________________________________________________________________
 
   async deleteCalificacion(req, res, next) {
     const calificacionId = req.params.id;
-  
+
     try {
       await ProveedoresModels.updateMany(
         { "id_calificacion._id": new ObjectId(calificacionId) },
         { $pull: { id_calificacion: { _id: new ObjectId(calificacionId) } } }
       );
-  
-      
+
       const result = await CalificacionModel.findOneAndDelete({
         _id: new ObjectId(calificacionId),
       });
-  
+
       if (result) {
         res.status(200).send({ message: "Calificación borrada con éxito" });
       } else {
@@ -145,8 +148,6 @@ class CalificacionesController {
       res.status(500).send({ error: "Error al eliminar la calificación." });
     }
   }
-  
-  
 }
 module.exports = {
   CalificacionesController,

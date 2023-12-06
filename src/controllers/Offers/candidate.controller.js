@@ -16,8 +16,7 @@ class Candidate_Controllers {
         res
           .status(500)
           .json({ error: "Error al obtener Estados", err: error.message });
-      })
-      
+      });
   }
   Post(req, res, next) {
     const result = new CandidateModel(req.body);
@@ -28,8 +27,7 @@ class Candidate_Controllers {
         res
           .status(500)
           .json({ Error: "ERROR CON ESTADO ***", err: error.message })
-      )
-      
+      );
   }
   async GetId(req, res, next) {
     const id = req.params.id;
@@ -48,8 +46,8 @@ class Candidate_Controllers {
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      console.log("error" + error);
-    } 
+      "error" + error;
+    }
   }
 
   async Put(req, res, next) {
@@ -70,14 +68,14 @@ class Candidate_Controllers {
         res.status(500).json({ error: "Error al actualizar el documento" });
       }
     } catch (error) {
-      console.log(error.message);
-    } 
+      error.message;
+    }
   }
   async AggregateNewCandidate(req, res, next) {
     const { id_ServiceProvider } = req.body;
     const offersId = req.params.id;
-    console.log("proveedor: " + id_ServiceProvider);
-    console.log("oferta: " + offersId);
+    "proveedor: " + id_ServiceProvider;
+    "oferta: " + offersId;
 
     try {
       const result = await CandidateModel.findOneAndUpdate(
@@ -87,14 +85,14 @@ class Candidate_Controllers {
       );
       if (!result)
         return res.status(404).json({ error: "Candidato no encontrado." });
-      console.log(result);
+      result;
       res.status(200).json(result);
     } catch (error) {
-      console.log(error);
+      error;
       return res
         .status(500)
         .json({ error: "Candidato no encontrado.", err: error.message });
-    } 
+    }
   }
   async SelectCandidate(req, res, next) {
     const { selectedCandidate } = req.body;
@@ -110,11 +108,11 @@ class Candidate_Controllers {
       }
       res.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
+      error.message;
       return res
         .status(500)
         .json({ error: "Candidato no seleccionado.", err: error.message });
-    } 
+    }
   }
   async EliminateCandidate(req, res, next) {
     const serviceProviderIdToDelete = req.body.id_ServiceProvider;
@@ -130,8 +128,8 @@ class Candidate_Controllers {
       }
       res.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
-    } 
+      error.message;
+    }
   }
   async Delete(req, res, next) {
     const id = req.params.id;
@@ -140,7 +138,7 @@ class Candidate_Controllers {
       const reference = await ContractingModal.find({
         id_CandidateStatus: new ObjectId(id),
       });
-      console.log(reference);
+      reference;
       if (reference.length > 0) {
         res.status(500).send({
           error:
@@ -154,11 +152,11 @@ class Candidate_Controllers {
         res.status(200).send({ message: "Borrado con éxito", Result: result });
       }
     } catch (error) {
-      console.log("Error al eliminar el documento -> " + error.message);
+      "Error al eliminar el documento -> " + error.message;
       res.status(500).send({
         error: "error.",
       });
-    } 
+    }
   }
 }
 module.exports = { Candidate_Controllers };

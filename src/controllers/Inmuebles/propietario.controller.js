@@ -14,8 +14,7 @@ class propietarioController {
         res
           .status(500)
           .json({ error: "Error al obtener propietarios", err: error.message });
-      })
-      
+      });
   }
   async getIdPropietario(req, res, next) {
     const id = req.params.id;
@@ -29,8 +28,8 @@ class propietarioController {
         res.status(404).send("No se encontro ningun coso en el ID ingresado ");
       }
     } catch (error) {
-      console.log("error" + error);
-    } 
+      "error" + error;
+    }
   }
   postPropietario(req, res, next) {
     const result = new PropietarioModels(req.body);
@@ -38,19 +37,30 @@ class propietarioController {
       .save()
       .then((result) => res.status(201).json(result))
       .catch((error) => {
-        console.log(error);
+        error;
 
         if (error.code === 11000) {
           if (error.keyPattern.documento) {
-            res.status(409).json({ error: "Este documento ya se encuentra registrado", err: error });
+            res
+              .status(409)
+              .json({
+                error: "Este documento ya se encuentra registrado",
+                err: error,
+              });
           } else {
-            res.status(500).json({ error: "Algo esta mal con el campo único", err: error });
+            res
+              .status(500)
+              .json({ error: "Algo esta mal con el campo único", err: error });
           }
         } else {
-          res.status(500).json({ error: "Error al insertar Propietario", err: error.message });
+          res
+            .status(500)
+            .json({
+              error: "Error al insertar Propietario",
+              err: error.message,
+            });
         }
-      })
-      
+      });
   }
 
   async putPropietario(req, res, next) {
@@ -76,8 +86,8 @@ class propietarioController {
         res.status(500).json({ error: "Error al actualizar" });
       }
     } catch (error) {
-      console.log(error);
-    } 
+      error;
+    }
   }
 
   async deletePropietario(req, res, next) {
@@ -87,7 +97,7 @@ class propietarioController {
       const reference = await InmuebleModels.find({
         id_propietario: new ObjectId(id),
       });
-      console.log(reference);
+      reference;
       if (reference.length > 0) {
         res.status(409).send({
           error:
@@ -109,7 +119,7 @@ class propietarioController {
       res
         .status(500)
         .send({ error: "Error interno del servidor", err: error.message });
-    } 
+    }
   }
 }
 module.exports = { propietarioController };
