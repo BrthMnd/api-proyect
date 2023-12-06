@@ -9,9 +9,9 @@ const InmuebleSchema = new Schema(
     fechCreacion: { type: String, default: FechaActual, required: true },
     tipoPropiedad: { type: String, require: true },
     direccion: { type: String, require: true },
-    metrosCuadrados: { type: Number, require: true },
-    nHabitaciones: { type: Number, require: true },
-    nBanos: { type: Number, require: true },
+    metrosCuadrados: { type: Number},
+    nHabitaciones: { type: Number},
+    nBanos: { type: Number },
     estado: { type: Boolean, default: true },
     fechConstruccion: { type: String, default: "2005-11-22", require: true },
     id_propietario: {
@@ -27,7 +27,7 @@ const InmuebleSchema = new Schema(
 
     ////////////////////////////////////////////////////
 
-    documento: { type: Number, unique: true, trim: true, sparse: true },
+    documento: { type: Number,  trim: true },
     nombre: { type: String },
     correo: { type: String, require: true, trim: true },
     telefono: { type: String, require: true, trim: true},

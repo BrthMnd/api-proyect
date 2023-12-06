@@ -543,7 +543,7 @@ class User_Controller {
 
       const user = await UserModel.findById({
         _id: new ObjectId(verify.id),
-      }).populate("roleRef");
+      }).populate({path:'roleRef',populate:{path:'id_calificacion'} })
       if (!user) return res.status(400).json({ message: "Unauthorized 3" });
 
       return res.status(200).json({
