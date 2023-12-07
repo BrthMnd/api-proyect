@@ -51,7 +51,7 @@ class Contracting_Controller {
       const update_offers = await OffersModel.findByIdAndUpdate(
         { _id: new ObjectId(id_offers) },
         {
-          state: 'Cotizando',
+          state: 'Cotizado',
         },
         { new: true }
       );

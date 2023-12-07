@@ -74,8 +74,6 @@ class Candidate_Controllers {
   async AggregateNewCandidate(req, res, next) {
     const { id_ServiceProvider } = req.body;
     const offersId = req.params.id;
-    "proveedor: " + id_ServiceProvider;
-    "oferta: " + offersId;
 
     try {
       const result = await CandidateModel.findOneAndUpdate(
