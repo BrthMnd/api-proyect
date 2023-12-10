@@ -21,9 +21,10 @@ const proveedoresSchema = new Schema(
         ref: CategoriaModel.modelName,
       },
     ],
+    Contratado: {type: Boolean, default: false}
   },
   {
-    versionKey: false, // __v: 0
+    versionKey: false,
   }
 );
 const ProveedoresModels = mongoose.model(
