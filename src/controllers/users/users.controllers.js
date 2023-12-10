@@ -67,11 +67,28 @@ class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
       .populate("roleRef")
+      .then((users) => {
+        const populatedUsers = users.map((user) => {
+          if (
+            user.role === "Proveedores" &&
+            user.roleRef &&
+            user.roleRef.categoriaServicio
+          ) {
+            return UserModel.populate(user, {
+              path: "roleRef.categoriaServicio",
+            });
+          } else {
+            return user;
+          }
+        });
+
+        return Promise.all(populatedUsers);
+      })
       .then((result) => {
         return res.status(200).send(result);
       })
       .catch((error) => {
-        return res.status(500).json({ error: "Error al obtener el permiso" });
+        return res.status(500).json({ error: error.message });
       });
   }
 

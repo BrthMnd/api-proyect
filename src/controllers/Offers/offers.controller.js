@@ -3,14 +3,14 @@ const { OffersModel } = require("../../models/Offers/offers.model");
 const { CandidateModel } = require("../../models/Offers/candidate.model");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
 const { InmuebleModels } = require("../../models/Inmueble/inmueble.models");
-const { CategoriaModel } = require("../../models/Proveedores/categoria.models");
+const { ServicioModels } = require("../../models/Proveedores/servicios.models");
 
 class OffersControllers {
   async Get(req, res, next) {
     try {
       const response_offers = await OffersModel.find()
         .populate("id_property")
-        .populate("id_Category_service")
+        .populate("id_service")
       const response_candidate = await CandidateModel.find()
         .populate("id_offers")
         .populate("id_ServiceProvider")
@@ -59,7 +59,7 @@ class OffersControllers {
         _id: new ObjectId(id),
       })
         .populate("id_property")
-        .populate("id_Category_service");
+        .populate("id_service");
       if (result) {
         res.status(200).send(result);
       } else {
@@ -98,7 +98,7 @@ class OffersControllers {
   }
   async GetModalData(req, res, next) {
     try {
-      const response_service = await CategoriaModel.find();
+      const response_service = await ServicioModels.find();
       const response_property = await InmuebleModels.find();
       ({
         service: response_service,
