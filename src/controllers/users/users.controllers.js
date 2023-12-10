@@ -390,8 +390,12 @@ class User_Controller {
           .status(400)
           .json({ message: "Error al actualizar", error: email });
       }
-      
-      SendEmail(email,'Cambio de contrasena',NotificationTemplate(email, "Contrasena actualizada con exito."))
+
+      SendEmail(
+        email,
+        "Cambio de contrasena",
+        NotificationTemplate(email, "Contrasena actualizada con exito.")
+      );
       res.status(200).json({ message: "actualizado con éxito." });
     } catch (error) {
       error;
@@ -543,7 +547,7 @@ class User_Controller {
 
       const user = await UserModel.findById({
         _id: new ObjectId(verify.id),
-      }).populate({path:'roleRef',populate:{path:'id_calificacion'} })
+      }).populate({ path: "roleRef", populate: { path: "id_calificacion" } });
       if (!user) return res.status(400).json({ message: "Unauthorized 3" });
 
       return res.status(200).json({
