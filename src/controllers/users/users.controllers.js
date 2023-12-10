@@ -201,8 +201,23 @@ class User_Controller {
     } catch (err) {
       err;
       res.status(500).json({ message: "Ha ocurrido un error.", error: err });
-    } finally {
-      next();
+    }
+  }
+  async PutStateProvider(req, res, next) {
+    const id = req.params.id;
+    const { estado } = req.body;
+    try {
+      const providerUpdated = await UserModel.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { estado },
+        { new: true }
+      );
+      res
+        .status(200)
+        .json({ message: "actualizado con éxito", User: providerUpdated });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Ha ocurrido un error.", error: err });
     }
   }
 
