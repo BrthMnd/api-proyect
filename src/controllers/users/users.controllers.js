@@ -26,10 +26,23 @@ const CorreoConfirmacion = async (userEmail) => {
       to: userEmail,
       subject: "Bienvenido a la aplicación",
       html: `
-        <h1>Bienvenido a nuestra aplicación</h1>
-        <p>Gracias por registrarte. Estamos emocionados de tenerte a bordo.</p>
-        <img src="../../assets/img/LogoRc.png" alt="Logo de la aplicación" width="200" height="200">
-        <p>¡Esperamos que disfrutes de tu experiencia!</p>
+      <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Correo de Bienvenido</title>
+</head>
+<body style="font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #000000; text-align: center;">
+    <div id="email___content" style="max-width: 600px; margin: 40px auto; padding: 20px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1); border-radius: 8px; border: 1px solid #d1d9e6;">
+    <img src="https://rcservice.onrender.com/api/img/LogoRc.png" alt="Rc service Logo" style="max-width: 100px; height: 100px; display: block; margin: 0 auto 20px; border-radius: 50%; background: radial-gradient(black 60%, transparent 60%);">
+    <h2 style="color: #333; font-size: 24px; margin-bottom: 10px;">Bienvenido a nuestra aplicación</h2>
+        <p style="color: #555; line-height: 1.6; margin-bottom: 20px;">Gracias por registrarte. Estamos emocionados de tenerte a bordo.</p>
+        
+        <p style="color: #555; line-height: 1.6; margin-bottom: 20px;">¡Esperamos que disfrutes de tu experiencia!</p>
+        </div>
+        </body>
+      </html>
       `,
     };
 
@@ -47,12 +60,25 @@ const CorreoConfirmacionEmpleado = async (userEmail, password) => {
       to: userEmail,
       subject: "Bienvenido a la aplicación",
       html: `
-      <h1>Bienvenido a nuestra aplicación como rol Empleado</h1>
-      <p>Estamos emocionados de tenerte a bordo, tu usuario y contraseña, asignados son los siguietes: </p>
-      <p>Usuario: ${userEmail}</p>
-      <p>Contraseña: ${password}</p>
-      <img src="../../assets/img/LogoRc.png" alt="Logo de la aplicación" width="200" height="200">
-      <p>¡Esperamos que tengas una excelente experiencia como Empleado!</p>
+      <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+</head>
+<body style="font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #000000; text-align: center;">
+    <div id="email___content" style="max-width: 600px; margin: 40px auto; padding: 20px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1); border-radius: 8px; border: 1px solid #d1d9e6;">
+<img src="https://rcservice.onrender.com/api/img/LogoRc.png" alt="Rc service Logo" style="max-width: 100px; height: 100px; display: block; margin: 0 auto 20px; border-radius: 50%; background: radial-gradient(black 60%, transparent 60%);">
+      <h1 style="color: #333; font-size: 24px; margin-bottom: 10px;>Bienvenido a nuestra aplicación como rol Empleado</h1>
+      <p style="color: #555; line-height: 1.6; margin-bottom: 20px;">Estamos emocionados de tenerte a bordo, tu usuario y contraseña, asignados son los siguientes: </p>
+      <p style="color: #555; line-height: 1.6; margin-bottom: 20px;">Usuario: ${userEmail}</p>
+      <p style="color: #555; line-height: 1.6; margin-bottom: 20px;">Contraseña: ${password}</p>
+      
+      <p style="color: #555; line-height: 1.6; margin-bottom: 20px;">¡Esperamos que tengas una excelente experiencia como Empleado!</p>
+      </div>
+  </body>
+</html>
     `,
     };
 
@@ -390,8 +416,12 @@ class User_Controller {
           .status(400)
           .json({ message: "Error al actualizar", error: email });
       }
-      
-      SendEmail(email,'Cambio de contrasena',NotificationTemplate(email, "Contrasena actualizada con exito."))
+
+      SendEmail(
+        email,
+        "Cambio de contrasena",
+        NotificationTemplate(email, "Contrasena actualizada con exito.")
+      );
       res.status(200).json({ message: "actualizado con éxito." });
     } catch (error) {
       error;
@@ -543,7 +573,7 @@ class User_Controller {
 
       const user = await UserModel.findById({
         _id: new ObjectId(verify.id),
-      }).populate({path:'roleRef',populate:{path:'id_calificacion'} })
+      }).populate({ path: "roleRef", populate: { path: "id_calificacion" } });
       if (!user) return res.status(400).json({ message: "Unauthorized 3" });
 
       return res.status(200).json({
