@@ -14,6 +14,7 @@ const UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     refPath: "role",
   },
+  estado: { type: Boolean, default: false },
 });
 
 const UserModel = model("user", UserSchema, "user_User");

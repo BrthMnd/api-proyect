@@ -67,11 +67,28 @@ class User_Controller {
   Get(req, res, next) {
     UserModel.find({})
       .populate("roleRef")
+      .then((users) => {
+        const populatedUsers = users.map((user) => {
+          if (
+            user.role === "Proveedores" &&
+            user.roleRef &&
+            user.roleRef.categoriaServicio
+          ) {
+            return UserModel.populate(user, {
+              path: "roleRef.categoriaServicio",
+            });
+          } else {
+            return user;
+          }
+        });
+
+        return Promise.all(populatedUsers);
+      })
       .then((result) => {
         return res.status(200).send(result);
       })
       .catch((error) => {
-        return res.status(500).json({ error: "Error al obtener el permiso" });
+        return res.status(500).json({ error: error.message });
       });
   }
 
@@ -390,8 +407,12 @@ class User_Controller {
           .status(400)
           .json({ message: "Error al actualizar", error: email });
       }
-      
-      SendEmail(email,'Cambio de contrasena',NotificationTemplate(email, "Contrasena actualizada con exito."))
+
+      SendEmail(
+        email,
+        "Cambio de contrasena",
+        NotificationTemplate(email, "Contrasena actualizada con exito.")
+      );
       res.status(200).json({ message: "actualizado con éxito." });
     } catch (error) {
       error;
@@ -543,7 +564,7 @@ class User_Controller {
 
       const user = await UserModel.findById({
         _id: new ObjectId(verify.id),
-      }).populate({path:'roleRef',populate:{path:'id_calificacion'} })
+      }).populate({ path: "roleRef", populate: { path: "id_calificacion" } });
       if (!user) return res.status(400).json({ message: "Unauthorized 3" });
 
       return res.status(200).json({
