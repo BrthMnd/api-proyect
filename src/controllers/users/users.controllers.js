@@ -292,7 +292,11 @@ class User_Controller {
         "roleRef"
       );
       if (!Usuario) return res.status(404).send("El usuario no existe");
-
+      if (Usuario.role == "Employed" && Usuario.estado == false) {
+        return res
+          .status(400)
+          .json({ response: "Este usuario esta inhabilitado." });
+      }
       const Coincide = await bycrypt.compare(password, Usuario.password);
 
       if (!Coincide) {

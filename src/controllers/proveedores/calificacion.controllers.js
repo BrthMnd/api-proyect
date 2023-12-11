@@ -5,6 +5,9 @@ const {
 const {
   CalificacionModel,
 } = require("../../models/Proveedores/calificacion.models");
+const { ContractingModal } = require("../../models/Offers/contracting.model");
+const { UserModel } = require("../../models/Users/users.models");
+const { OffersModel } = require("../../models/Offers/offers.model");
 
 class CalificacionesController {
   async getCalificaciones(req, res, next) {
@@ -36,45 +39,59 @@ class CalificacionesController {
 
   //__________________________________________________________________________________________
 
-  postCalificacion(req, res, next) {
-    const proveedorId = req.body.id_proveedor;
+  async postCalificacion(req, res, next) {
+    const data = req.body;
 
-    ProveedoresModels.findById(proveedorId)
-      .then((proveedor) => {
-        if (!proveedor) {
-          return res.status(404).json({ error: "Proveedor no encontrado" });
-        }
+    try {
+      const contract = await ContractingModal.findOne({ id_offers: data.id });
 
-        const calificacion = new CalificacionModel(req.body);
-        calificacion.proveedor = proveedorId;
-
-        calificacion
-          .save()
-          .then((result) => {
-            proveedor.id_calificacion.push(result._id);
-
-            return proveedor.save();
-          })
-          .then(() =>
-            res
-              .status(201)
-              .json({ message: "Calificación insertada exitosamente" })
-          )
-          .catch((error) => {
-            console.error("Error al insertar una calificación:", error);
-            res.status(500).json({
-              error: "Error al insertar una calificación",
-              err: error.message,
-            });
-          });
-      })
-      .catch((error) => {
-        console.error("Error al buscar el proveedor:", error);
-        res.status(500).json({
-          error: "Error al buscar el proveedor",
-          err: error.message,
-        });
+      const proveedor = await ProveedoresModels.findById(contract.id_provider);
+      if (!proveedor) {
+        return res.status(404).json({ message: "Proveedor no encontrado" });
+      }
+      const rating = new CalificacionModel({
+        Comentarios: data.Comentarios,
+        CalificacionesFloat: data.CalificacionesFloat,
       });
+      const rating_save = await rating.save();
+      if (!rating_save) {
+        return res.status(400).json({ message: "error al crear calificacion" });
+      }
+      proveedor.id_calificacion.push(rating_save._id);
+      const insertRating = await proveedor.save();
+      if (!insertRating) {
+        return res
+          .status(400)
+          .json({ message: "Error al insertar la calificacion al proveedor" });
+      }
+      const user_response = await UserModel.findOneAndUpdate(
+        { roleRef: proveedor._id },
+        { status: false },
+        { new: true }
+      );
+      if (!user_response) {
+        return res
+          .status(400)
+          .json({ message: "Error al cambiar el estado de usuario." });
+      }
+      const offer_response = await OffersModel.findOneAndUpdate(
+        { _id: data.id },
+        { state: "Finalizado", estado: false },
+        { new: true }
+      );
+      res.status(200).json({
+        message: "Los datos fueron insertados de forma correcta",
+        resultOfInsert: insertRating,
+        resultOfUser: user_response,
+        resultOfOffers: offer_response,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        message: "Error al buscar el proveedor",
+        err: error.message,
+      });
+    }
   }
 
   //__________________________________________________________________________________________
