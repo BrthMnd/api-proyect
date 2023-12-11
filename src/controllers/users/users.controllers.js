@@ -238,6 +238,19 @@ class User_Controller {
         { estado },
         { new: true }
       );
+      if (estado) {
+        await SendEmail(
+          user.email,
+          "Haz sido Habilitado.",
+          NotificationTemplate(user.email, `Has sido Habilitado `)
+        );
+      } else {
+        await SendEmail(
+          user.email,
+          "Haz sido Inabilitado.",
+          NotificationTemplate(user.email, `Has sido Inhabilitado `)
+        );
+      }
       res
         .status(200)
         .json({ message: "actualizado con éxito", User: providerUpdated });
