@@ -9,6 +9,7 @@ routes.get("/:id", User.GetById.bind());
 routes.post("/", User.PostEmployed.bind());
 routes.put("/:id", User.Put.bind());
 routes.delete("/:id", User.Delete.bind());
+routes.put("/state/:id", User.PutStateProvider.bind());
 // Register
 routes.post("/verificar_registro", User.registerVerify.bind());
 routes.get("/confirmacion_correo/:token", User.VerifyConfirmToken.bind());
