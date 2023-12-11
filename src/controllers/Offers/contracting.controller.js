@@ -6,13 +6,15 @@ const { OffersModel } = require("../../models/Offers/offers.model");
 class Contracting_Controller {
   Get(req, res, next) {
     ContractingModal.find()
-
       .populate({
         path: "id_candidates",
         populate: { path: "selectedCandidate" },
       })
       .populate("id_provider")
-      .populate("id_offers")
+      .populate({
+        path: "id_offers",
+        populate: [{ path: "id_property" }, { path: "id_service" }],
+      })
       .then((result) => {
         res.status(200).json(result);
       })
@@ -20,6 +22,7 @@ class Contracting_Controller {
         res.status(500).json({ error: "Error al obtener Contrato", error });
       });
   }
+
   async Post(req, res, next) {
     const { id_candidates, id_provider, id_offers } = req.body;
     try {
@@ -41,7 +44,6 @@ class Contracting_Controller {
         },
         { new: true }
       );
-      
 
       if (!update_candidate) {
         return res
@@ -51,24 +53,26 @@ class Contracting_Controller {
       const update_offers = await OffersModel.findByIdAndUpdate(
         { _id: new ObjectId(id_offers) },
         {
-          state: 'Cotizado',
+          state: "Cotizado",
         },
         { new: true }
       );
-      
+
       if (!update_offers) {
         return res
           .status(400)
           .json({ message: "A ocurrido un error 3", update_offers });
       }
 
-
       res.status(201).json({ message: "Success", response: response });
     } catch (error) {
-     console.log("🚀 ~ file: contracting.controller.js:68 ~ Contracting_Controller ~ Post ~ error:", error)
-     
+      console.log(
+        "🚀 ~ file: contracting.controller.js:68 ~ Contracting_Controller ~ Post ~ error:",
+        error
+      );
+
       res.status(500).json({ message: "Error al crear el documento", error });
-    } 
+    }
   }
   async GetId(req, res, next) {
     const id = req.params.id;
