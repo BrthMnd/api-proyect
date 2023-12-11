@@ -240,15 +240,15 @@ class User_Controller {
       );
       if (estado) {
         await SendEmail(
-          user.email,
+          providerUpdated.email,
           "Haz sido Habilitado.",
-          NotificationTemplate(user.email, `Has sido Habilitado `)
+          NotificationTemplate(providerUpdated.email, `Has sido Habilitado `)
         );
       } else {
         await SendEmail(
-          user.email,
+          providerUpdated.email,
           "Haz sido Inabilitado.",
-          NotificationTemplate(user.email, `Has sido Inhabilitado `)
+          NotificationTemplate(providerUpdated.email, `Has sido Inhabilitado `)
         );
       }
       res
