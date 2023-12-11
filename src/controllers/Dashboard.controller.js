@@ -6,13 +6,14 @@ const {
 const { ServicioModels } = require("../models/Proveedores/servicios.models");
 const { OffersModel } = require("../models/Offers/offers.model");
 const { OffersStatus_Model } = require("../models/Offers/OfferStatus");
+const { UserModel } = require("../models/Users/users.models")
 
 class Dashboard {
   async Grafics_Get(req, res, next) {
     ("Hello");
     try {
       ("entre");
-      const categorias = await CategoriaModel.find();
+      const categorias = await CategoriaModel.find()
       ("Categoria listo");
       const servicios = await ServicioModels.find();
       ("servicio listo");
@@ -23,6 +24,7 @@ class Dashboard {
       const offers = await OffersModel.find();
       ("inmuebles oferttaslisto");
       const offersStatus = await OffersStatus_Model.find();
+      const usuarios = await UserModel.find();
 
       // Crear un objeto con los datos obtenidos
       const data = {
@@ -32,6 +34,7 @@ class Dashboard {
         inmuebles: inmuebles,
         offers: offers,
         offersStatus: offersStatus,
+        usuarios:usuarios,
       };
 
       // Enviar el objeto como respuesta en formato JSON
