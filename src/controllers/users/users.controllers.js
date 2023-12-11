@@ -572,8 +572,7 @@ class User_Controller {
           .populate("categoriaServicio")
           .populate("id_calificacion");
       }
-      ("🐱‍👤 por aqui");
-      user;
+      console.log(user);
       const forJson = {
         id: user._id,
         id_provider: user.roleRef._id,
@@ -583,6 +582,8 @@ class User_Controller {
         cc: user.roleRef.documento,
         phone: user.roleRef.telefono,
         direction: user.roleRef.direccion,
+        isConfirmed: user.estado,
+        isContracted: user.status,
       };
       if (user.role == "Proveedores") {
         forJson.score = provider.id_calificacion;

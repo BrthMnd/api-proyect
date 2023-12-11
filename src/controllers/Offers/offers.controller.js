@@ -10,12 +10,13 @@ class OffersControllers {
     try {
       const response_offers = await OffersModel.find()
         .populate("id_property")
-        .populate("id_service")
+        .populate("id_service");
       const response_candidate = await CandidateModel.find()
         .populate("id_offers")
-        .populate("id_ServiceProvider")
+        .populate("id_ServiceProvider");
       res.status(200).json({ response_offers, response_candidate });
     } catch (error) {
+      console.log(error);
       res.status(400).json({
         type: "Bad",
         Error: error,
@@ -155,8 +156,8 @@ class OffersControllers {
         id_offers: new ObjectId(id),
       })
         .populate("id_offers")
-        .populate("id_ServiceProvider")
-        // .populate("id_calificacion");
+        .populate("id_ServiceProvider");
+      // .populate("id_calificacion");
       result;
       if (result) {
         res.status(200).send(result);
