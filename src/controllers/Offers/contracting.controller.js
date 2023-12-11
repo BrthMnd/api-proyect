@@ -58,7 +58,7 @@ class Contracting_Controller {
         { _id: new ObjectId(id_offers) },
         { state: "Cotizado" },
         { new: true }
-      );
+      ).populate("id_property");
       if (!update_offers) {
         return res
           .status(400)
@@ -81,7 +81,7 @@ class Contracting_Controller {
         "¡Felicidades! Fuiste elegido en una oferta de RcService.",
         NotificationTemplate(
           user.email,
-          `Has sido elegido para la oferta con la siguiente descripción: ${update_offers.description}`
+          `Has sido elegido para la oferta con la siguiente descripción: ${update_offers.description}. Direccion: ${update_offers.id_property.direccion}`
         )
       );
 

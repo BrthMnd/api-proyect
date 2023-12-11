@@ -154,7 +154,7 @@ class User_Controller {
   //__________________________________________________________________________________________
 
   async PostEmployed(req, res, next) {
-    const { nombre, documento, telefono, direccion, password, email } =
+    const { nombre, documento, telefono, direccion, password, email, estado } =
       req.body;
 
     try {
@@ -177,6 +177,7 @@ class User_Controller {
         password: passwordHash,
         role: "Employed",
         roleRef: new ObjectId(employed_created._id),
+        estado,
       });
       const user_created = await user.save();
 
