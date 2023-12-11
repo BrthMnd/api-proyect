@@ -12,13 +12,15 @@ const { UserModel } = require("../../models/Users/users.models");
 class Contracting_Controller {
   Get(req, res, next) {
     ContractingModal.find()
-
       .populate({
         path: "id_candidates",
         populate: { path: "selectedCandidate" },
       })
       .populate("id_provider")
-      .populate("id_offers")
+      .populate({
+        path: "id_offers",
+        populate: [{ path: "id_property" }, { path: "id_service" }],
+      })
       .then((result) => {
         res.status(200).json(result);
       })
@@ -26,6 +28,7 @@ class Contracting_Controller {
         res.status(500).json({ error: "Error al obtener Contrato", error });
       });
   }
+
   async Post(req, res, next) {
     const { id_candidates, id_provider, id_offers } = req.body;
     try {
