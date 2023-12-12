@@ -4,6 +4,7 @@ const { CandidateModel } = require("../../models/Offers/candidate.model");
 const { ContractingModal } = require("../../models/Offers/contracting.model");
 const { InmuebleModels } = require("../../models/Inmueble/inmueble.models");
 const { ServicioModels } = require("../../models/Proveedores/servicios.models");
+const { UserModel } = require("../../models/Users/users.models");
 
 class OffersControllers {
   async Get(req, res, next) {
@@ -157,17 +158,18 @@ class OffersControllers {
       })
         .populate("id_offers")
         .populate("id_ServiceProvider");
-      // .populate("id_calificacion");
-      result;
+
+      const user = await UserModel.find();
       if (result) {
-        res.status(200).send(result);
+        res.status(200).json({ result, user });
       } else {
         res
           .status(404)
           .send("No se encontró ningún documento con el ID proporcionado.");
       }
     } catch (error) {
-      "error" + error.message;
+      console.log(error);
+      res.status(500).json({ message: "Error ." });
     }
   }
   async Add_provider_for_offer(req, res, next) {
