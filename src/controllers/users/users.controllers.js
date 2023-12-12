@@ -158,9 +158,27 @@ class User_Controller {
       req.body;
 
     try {
+      console.log(req.body)
+      const veri_user = await UserModel.findOne({$or: [{ email: email }, { documento: documento }]})
+      if (veri_user) {
+        console.log("pasoeamil")
+        console.log(veri_user)
+        if(veri_user.email == email) return  res.status(400).json({message:'Ya hay un usuario con ese correo...'})
+        if(veri_user.documento == documento )return res.status(400).json({message:'Ya hay un usuario con ese documento...'})
+      }
+    console.log("paso")
+
       //Guarda la contraseña sin encriptar
       const passwordPlain = password;
-      const passwordHash = await bycrypt.hash(password, 10);
+let passwordHash;
+
+if (passwordPlain) {
+  passwordHash = await bycrypt.hash(passwordPlain, 10);
+} else {
+  // Manejar el caso en el que passwordPlain es undefined o null
+  return res.status(400).json({ message: 'La contraseña es obligatoria.' });
+}
+
       const employed = new Employed_Model({
         nombre,
         documento,
@@ -182,16 +200,16 @@ class User_Controller {
       const user_created = await user.save();
 
       if (!user_created) return res.status(400).send("hubo algún error");
+      CorreoConfirmacionEmpleado(user_created.email, passwordPlain);
 
       res.status(201).json({
         message: "GOOD",
         Employed: employed_created,
         User: user_created,
       });
-      CorreoConfirmacionEmpleado(user_created.email, passwordPlain);
     } catch (error) {
-      error;
-      res.status(500).send(error);
+      console.log(error)
+      res.status(500).json({message: 'Error desconocido',error});
     }
   }
 
