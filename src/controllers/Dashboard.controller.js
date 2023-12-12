@@ -10,19 +10,19 @@ const { UserModel } = require("../models/Users/users.models")
 
 class Dashboard {
   async Grafics_Get(req, res, next) {
-    ("Hello");
+    
     try {
-      ("entre");
-      const categorias = await CategoriaModel.find()
-      ("Categoria listo");
-      const servicios = await ServicioModels.find();
-      ("servicio listo");
+     
+      const categorias = await CategoriaModel.find();
+      
+      const servicios = await ServicioModels.find().populate('Categoria_Servicio');
+      
       const proveedores = await ProveedoresModels.find();
-      ("Proveedores listo");
+      
       const inmuebles = await InmuebleModels.find();
-      ("inmuebles listo");
+      
       const offers = await OffersModel.find();
-      ("inmuebles oferttaslisto");
+     
       const offersStatus = await OffersStatus_Model.find();
       const usuarios = await UserModel.find();
 
@@ -47,3 +47,23 @@ class Dashboard {
 }
 
 module.exports = { Dashboard };
+
+
+
+//class Dashboard {
+  // async Grafics_Get(req, res, next) {
+  //   ("Hello");
+  //   try {
+  //     ("entre");
+  //     const categorias = await CategoriaModel.find();
+  //     ("Categoria listo");
+  //     const servicios = await ServicioModels.find();
+  //     ("servicio listo");
+  //     const proveedores = await ProveedoresModels.find();
+  //     ("Proveedores listo");
+  //     const inmuebles = await InmuebleModels.find();
+  //     ("inmuebles listo");
+  //     const offers = await OffersModel.find();
+  //     ("inmuebles oferttaslisto");
+  //     const offersStatus = await OffersStatus_Model.find();
+  //     const usuarios = await UserModel.find();
