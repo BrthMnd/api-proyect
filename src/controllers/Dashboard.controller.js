@@ -40,6 +40,7 @@ class Dashboard {
       // Enviar el objeto como respuesta en formato JSON
       res.status(200).json(data);
     } catch (error) {
+      
       error;
       return res.status(500).send("Error al obtener los datos");
     }
