@@ -11,7 +11,10 @@ class OffersControllers {
     try {
       const response_offers = await OffersModel.find()
         .populate("id_property")
-        .populate("id_service");
+        .populate({
+          path: "id_service",
+          populate: { path: "Categoria_Servicio" },
+        });
       const response_candidate = await CandidateModel.find()
         .populate("id_offers")
         .populate("id_ServiceProvider");
@@ -24,6 +27,7 @@ class OffersControllers {
       });
     }
   }
+
 
   async Post(req, res, next) {
     try {

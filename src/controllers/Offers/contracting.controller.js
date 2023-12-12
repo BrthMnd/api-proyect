@@ -31,6 +31,7 @@ class Contracting_Controller {
 
   async Post(req, res, next) {
     const { id_candidates, id_provider, id_offers } = req.body;
+    console.log('entro')
     try {
       const result = new ContractingModal({
         id_candidates,
@@ -84,7 +85,7 @@ class Contracting_Controller {
           `Has sido elegido para la oferta con la siguiente descripción: ${update_offers.description}. Direccion: ${update_offers.id_property.direccion}`
         )
       );
-
+          console.log('gootd')
       res.status(201).json({ message: "Success", response: response });
     } catch (error) {
       console.log(error);
